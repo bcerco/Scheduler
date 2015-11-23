@@ -6,5 +6,7 @@ public class driver{
             System.out.println("File has to be command line arg.");
             System.exit(-1);
         }
+	cp.fillclassList();
+	cp.outputclassList();
     }
 }

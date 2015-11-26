@@ -31,14 +31,17 @@ public class ClassNode{
 	hard = (byte) args[6];
 	if (comma == 10){
 	    fillDays(args[7], args[8]);
+	    room = args[8];
+	    instructor = args[10];
+	    createId();
 	}
-
-	
-	fillDays(args[7]);
-	room = args[8];
-	fillTimes(args[9]);
-	instructor = args[10];
-	createId();
+	else{
+	    fillDays(args[7],args[9]);
+	    fillDays(args[8],args[11]);
+	    room = args[12];
+	    instructor = args[13];
+	    createId();
+	}
     }
     //TODO: need to fix this
     public void outputClassNode(){
@@ -48,6 +51,8 @@ public class ClassNode{
 	System.out.println("\tTitle: " + title);
 	System.out.println("\tSoft: " + soft);
 	System.out.println("\tHard: " + hard);
+
+	//TODO: output days and times correctly
 	System.out.println("\tDays: " + days);
 	System.out.println("\tRoom: " + room);
 	System.out.println("\tTimes: " + times);

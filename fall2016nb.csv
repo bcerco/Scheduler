@@ -1,9 +1,3 @@
-Fall 2016 Schedule,,,,,,,,,,
-11/22/2015 21:39,,,,,,,,,,
-(Sorted by Course),,,,,,,,,,
-,,,,,,,,,,
-Course,No,Sec,Cr,Title,Soft,Hard,Day,Time,Room,Instructor
- , , , ,,,, , ,, 
 CMPSC,101,001,3,Intro C++ Prog,35,35,MWF ,2:30-3:20P,Comp Lab,Kunkle
 CMPSC,121,001,3,Intro Prog Tech,35,35,MWF ,10:10-11A,Comp Lab,Chang
 CMPSC,121,002,3,Intro Prog Tech,35,35,R,6:00-8:45P,Comp Lab,Melusky
@@ -24,13 +18,11 @@ CMPSC,470,001,3,Compiler Const,35,40,TR ,1:35-2:50P,,El Ariss
 CMPSC,472,001,3,Op Sys Concepts,35,40,TR,3:05-4:20P,,Null
 CMPSC,478W,001,3,SWE Design,35,40,W ,6:00-8:45P,,Lobur
 CMPSC,497A,001,1,Contest Prog,,,F,2:30-3:20P,Sun Lab,Blum
- , , , ,,,, , ,, 
 COMP ,505,001,3,Theory of Comp,30,30,T ,6:00-8:45P,,Bui
 COMP,516,001,3,Adv Prog Lang,30,30,MW,4:00-5:15P,,El Ariss
 COMP,517,001,3,Computer Security,30,45,TR,4:35-5:50P,,Blum
 COMP ,519,001,3,Adv Topics DB,30,30,M ,6:00-8:45P,,Null
 COMP,594,001,3,MS Studies,30,30,W ,6:00-8:45P,,Chang
- , , , ,,,, , ,, 
 MATH ,003,001,3,Basic Skills,30,35,TR ,4:35-5:50P,,Morrow
 MATH,004,001,3,Int Alg,30,35,TR,9:05-10:20A,,Smith
 MATH,004,002,3,Int Alg,30,35,MW,6:00-7:15P,,Morrow
@@ -174,7 +166,6 @@ MATH,425,001,3,Intro Op Research,25,30,MW ,4:00-5:15P,,Walker
 MATH,430,001,3,Linear Alg I,30,30,MWF,9:05-9:55A,,Boman
 MATH,435,001,3,Basic Abs Alg,25,25,MWF,2:30-3:20P,,Mareno
 MATH,475W,001,3,Hist Math,25,30,MW,11:15-12:30P,,Boman
- , , , ,,,, , ,, 
 STAT,200,001,4,Elem Stats,40,45,"TR
 M","9:05-10:20A
 8:00-8:50A",,Tabatabai
@@ -200,4 +191,3 @@ M","3:05-4:20P
 STAT,401,001,3,Exp Methods,35,40,MWF ,2:30-3:20P,,Hsu
 STAT,401,002,3,Exp Methods,35,40,MWF ,3:35-4:25P,,Tabatabai
 STAT,460,001,3,Int Applied Stats,35,35,MWF ,1:25-2:15P,,Hsu
- ,,,,,,, ,,, 

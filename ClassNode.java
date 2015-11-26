@@ -1,4 +1,5 @@
 import java.util.*;
+import java.time.*;
 
 //Class for class objects
 public class ClassNode{
@@ -6,7 +7,7 @@ public class ClassNode{
     private String course;
     private byte number;
     private byte section;
-    private byte credits;2
+    private byte credits;
     private String title;
     private byte soft;
     private byte hard;
@@ -14,8 +15,12 @@ public class ClassNode{
     private String room;
     private String [] times;
     private String id;
+
+    private String [] startTime;
+    private String [] endTime;
+    private int [] offSet;
     
-    ClassNode(String line){
+    ClassNode(String line, int comma){
 	String [] args = line.split(",");
 	course = args[0];
 	number = (byte) args[1];
@@ -24,6 +29,11 @@ public class ClassNode{
 	title = args[4];
 	soft = (byte) args[5];
 	hard = (byte) args[6];
+	if (comma == 10){
+	    fillDays(args[7], args[8]);
+	}
+
+	
 	fillDays(args[7]);
 	room = args[8];
 	fillTimes(args[9]);
@@ -50,10 +60,55 @@ public class ClassNode{
     public void getId(){
 	return id;
     }
-    public void fillDays(String arg){
-
+    //TODO: add something for am/pm
+    public void fillDays(String day, String time){
+	String times = time.split("-");
+	int sos = Integer.parseInt(times[0].split(":")[1]);
+	int eos = Integer.parseInt(times[1].split(":")[1]);
+	for (int i = 0; i < day.length(); i++) {
+	    switch(day.charAt(i)){
+	    case 'M':
+		startTime[0] = times[0];
+		endTime[0] = times[1];
+		startOffset[0] = sos;
+		endOffset[0] = eos;
+		break;
+	    case 'T':
+		startTime[1] = times[0];
+		endTime[1] = times[1];
+		startOffset[1] = sos;
+		endOffset[1] = eos;
+		break;
+	    case 'W':
+		startTime[2] = times[0];
+		endTime[2] = times[1];
+		startOffset[2] = sos;
+		endOffset[2] = eos;
+		break;
+	    case 'R':
+		startTime[3] = times[0];
+		endTime[3] = times[1];
+		startOffset[3] = sos;
+		endOffset[3] = eos;
+		break;
+	    case 'F':
+		startTime[4] = times[0];
+		endTime[4] = times[1];
+		startOffset[4] = sos;
+		endOffset[4] = eos;
+		break;
+	    case 'S':
+		startTime[5] = times[0];
+		endTime[5] = times[1];
+		startOffset[5] = sos;
+		endOffset[5] = eos;
+		break;
+	    }
+	}
     }
-    public void setInstructor(String ins){
+    public void setInstructor(String ins, HashMap<String, HashSet<String> > instructorList){
+	instructorList.get(instructor).remove(id);
+	instructorList.get(ins).add(id);
 	instructor = ins;
     }
     public String getInstructor(){

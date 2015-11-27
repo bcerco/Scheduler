@@ -5,41 +5,70 @@ import java.time.*;
 public class ClassNode{
     private String instructor;
     private String course;
-    private byte number;
-    private byte section;
-    private byte credits;
+    private String number;
+    private short section;
+    private float credits;
     private String title;
-    private byte soft;
-    private byte hard;
-    private byte [] days;
+    private short soft;
+    private short hard;
     private String room;
-    private String [] times;
     private String id;
-
+    //arrays for days and times, may change later
     private String [] startTime;
     private String [] endTime;
-    private int [] offSet;
+    private int [] startOffset;
+    private int [] endOffset;
     
     ClassNode(String line, int comma){
 	String [] args = line.split(",");
+	startTime = new String[6];
+	endTime = new String[6];
+	startOffset = new int[6];
+	endOffset = new int[6];
 	course = args[0];
-	number = (byte) args[1];
-	section = (byte) args[2];
-	credits = (byte) args[3];
+	number = args[1];
+	section = Short.parseShort(args[2]);
+	credits = Float.parseFloat(args[3]);
+	//TODO: fix this
+	int index = 5;
 	title = args[4];
-	soft = (byte) args[5];
-	hard = (byte) args[6];
-	if (comma == 10){
-	    fillDays(args[7], args[8]);
-	    room = args[8];
-	    instructor = args[10];
+	if (!args[index].equals("")){
+	    if(Character.isLetter(args[index].charAt(0))){
+		title = title + "," + args[index++];
+		if (!args[index].equals(""))
+		    soft = Short.parseShort(args[index++]);
+	    }
+	    else
+		soft = Short.parseShort(args[index++]);
+	    /*try {
+		soft = Short.parseShort(args[index]);
+		index++;
+	    }
+	    catch (NumberFormatException e){
+		title = title + "," + args[index++];
+		if (!args[index].equals("")){
+		    soft = Short.parseShort(args[index++]);
+		}
+		}*/
+	}
+	else
+	    index++;
+	if (!args[index].equals(""))
+	    hard = Short.parseShort(args[index]);
+	if (comma <= 11){
+	    index++;
+	    fillDays(args[index], args[++index]);
+	    room = args[++index];
+	    instructor = args[++index];
 	    createId();
 	}
 	else{
-	    fillDays(args[7],args[9]);
-	    fillDays(args[8],args[11]);
-	    room = args[12];
-	    instructor = args[13];
+	    System.out.println(index);
+	    index++;
+	    fillDays(args[index],args[index+2]);
+	    fillDays(args[index+1],args[index+3]);
+	    room = args[index+4];
+	    instructor = args[index+5];
 	    createId();
 	}
     }
@@ -52,24 +81,38 @@ public class ClassNode{
 	System.out.println("\tSoft: " + soft);
 	System.out.println("\tHard: " + hard);
 
-	//TODO: output days and times correctly
-	System.out.println("\tDays: " + days);
+	System.out.println("\tDays: ");
+	for (int i = 0; i < startTime.length; i++) {
+	    if (startTime[i] != null) {
+		switch(i){
+		case 0: System.out.printf("\t\tM: "); break;
+		case 1: System.out.printf("\t\tT: "); break;
+		case 2: System.out.printf("\t\tW: "); break;
+		case 3: System.out.printf("\t\tR: "); break;
+		case 4: System.out.printf("\t\tF: "); break;
+		case 5: System.out.printf("\t\tS: "); break;
+		}
+		System.out.println(startTime[i] + "-" + endTime[i]);
+	    }
+	}
 	System.out.println("\tRoom: " + room);
-	System.out.println("\tTimes: " + times);
 	System.out.println("\tInstructor: " + instructor);
 	System.out.println();
     }
     public void createId(){
 	id = course + number + section;
     }
-    public void getId(){
+    public String getId(){
 	return id;
     }
     //TODO: add something for am/pm
     public void fillDays(String day, String time){
-	String times = time.split("-");
+	day = day.replace("\"","");
+	time = time.replace("\"","");
+	String [] times = time.split("-");
+	System.out.println(times[0]+times[1]);
 	int sos = Integer.parseInt(times[0].split(":")[1]);
-	int eos = Integer.parseInt(times[1].split(":")[1]);
+	int eos = Integer.parseInt(times[1].split(":")[1].substring(0,2));
 	for (int i = 0; i < day.length(); i++) {
 	    switch(day.charAt(i)){
 	    case 'M':
@@ -118,5 +161,17 @@ public class ClassNode{
     }
     public String getInstructor(){
 	return instructor;
+    }
+    public String getRoom(){
+	return room;
+    }
+    public void setRoom(String r){
+	room = r;
+    }
+    public String getTitle(){
+	return title;
+    }
+    public void setTitle(String t){
+	title = t;
     }
 }

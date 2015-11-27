@@ -28,14 +28,20 @@ public class ClassParser{
 		if (num == 0)
 		    continue;
 		if (num != 10){
-		    String line2 = reader.readLine();
-		    String line3 = reader.readLine();
-		    line+=",";
-		    line+=line2;
-		    line+=",";
-		    line+=line3;
+		    String temp = null;
+		    while ((temp = reader.readLine()) != null){
+			if (!temp.substring(0,4).eqauls("MATH") &&
+			    !temp.substring(0,4).equals("COMP") &&
+			    !temp.substring(0,4).equals("CMPS") &&
+			    !temp.substring(0,4).equals("STAT")){
+			    line = line + "," + temp;
+			}
+			else{
+			    //TODO: figure this shit out
+		    }
 		}
-		ClassNode cur = new ClassNode(line,num);
+		System.out.println(line);
+		ClassNode cur = new ClassNode(line,countCommas(line));
 		classList.put(cur.getId(), cur);
 		if (instructorList.containsKey(cur.getInstructor()))
 		    instructorList.get(cur.getInstructor()).add(cur.getId());

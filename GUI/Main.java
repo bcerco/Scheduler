@@ -9,7 +9,7 @@ public class Main extends JFrame {
 	JScrollPane  scheduleScrollPane = new JScrollPane();
 	
 	MenuBar      menuBar            = new MenuBar();
-	ScheduleView scheduleView       = new ScheduleView(7, 17);
+	ScheduleView scheduleView       = new ScheduleView(7, 15);
 	StatusBar    statusBar          = new StatusBar();
 
 	public Main() {

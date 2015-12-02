@@ -67,6 +67,9 @@ public class ScheduleView extends JPanel {
 					case 6:
 						scheduleGrid[x][y] = new JLabel("Saturday");
 						break;
+                    case 7:
+                        scheduleGrid[x][y] = new JLabel("Sunday");
+                        break;
 					}
 					
 					scheduleGrid[x][y].setBorder(BorderFactory.createSoftBevelBorder(SoftBevelBorder.RAISED));

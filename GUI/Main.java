@@ -6,19 +6,39 @@ import javax.swing.JScrollPane;
 public class Main extends JFrame {
 	private static final long serialVersionUID = 1L;
 	
+    Weekends     includeWeekends;
+
 	JScrollPane  scheduleScrollPane = new JScrollPane();
 	
 	MenuBar      menuBar            = new MenuBar();
-	ScheduleView scheduleView       = new ScheduleView(7, 15);
+	ScheduleView scheduleView       = new ScheduleView(8, 15);
 	StatusBar    statusBar          = new StatusBar();
+
+    static enum Weekends {
+        EXCLUDE(6),
+        INCLUDE(8);
+
+        private final int value;
+
+        Weekends(int value) {
+            this.value = value;
+        }
+
+        public int GetValue() {
+            return this.value;
+        }
+    }
 
 	public Main() {
 		Initialize();
 	}
 	
 	public void Initialize() {
+        this.includeWeekends = Weekends.INCLUDE;
 		this.setTitle("Class Scheduler");
 		this.setLayout(new BorderLayout());
+
+        scheduleView = new ScheduleView(includeWeekends.GetValue(), 15);
 		
 		this.setBounds(0, 0, 1280, 720);
 		this.setResizable(true);
@@ -40,5 +60,20 @@ public class Main extends JFrame {
 		@SuppressWarnings("unused")
 		Main program = new Main();
 	}
+
+    public void IncludeWeekends(boolean b) {
+        if (b) {
+            includeWeekends = Weekends.INCLUDE;
+        }
+        else {
+            includeWeekends = Weekends.EXCLUDE;
+        }
+
+        InvalidateSchedule();
+    }
+
+    public void InvalidateSchedule() {
+        scheduleView = new ScheduleView(includeWeekends.GetValue(), 15);
+    }
 
 }

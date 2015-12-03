@@ -12,7 +12,7 @@ public class Main extends JFrame {
 	
 	MenuBar      menuBar            = new MenuBar();
 	ScheduleView scheduleView       = new ScheduleView(8, 15);
-	StatusBar    statusBar          = new StatusBar(this);
+	ToolBar      toolBar            = new ToolBar(this);
 
     static enum Weekends {
         EXCLUDE(6),
@@ -50,7 +50,7 @@ public class Main extends JFrame {
 		
 		this.add(menuBar, BorderLayout.NORTH);
 		this.add(scheduleScrollPane, BorderLayout.CENTER);
-		this.add(statusBar, BorderLayout.SOUTH);
+		this.add(toolBar, BorderLayout.EAST);
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		

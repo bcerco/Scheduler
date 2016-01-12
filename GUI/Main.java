@@ -19,6 +19,9 @@ public class Main extends JFrame implements MouseMotionListener, MouseListener {
 	ScheduleView scheduleView       = new ScheduleView(8, 15);
 	ToolBar      toolBar            = new ToolBar(this);
 
+    int topLeftX = -1;
+    int topLeftY = -1;
+
     static enum Weekends {
         EXCLUDE(6),
         INCLUDE(8);
@@ -90,6 +93,9 @@ public class Main extends JFrame implements MouseMotionListener, MouseListener {
         int mouseX      = e.getX();
         int mouseY      = e.getY();
 
+        int topLeftX    = mouseX;
+        int topLeftY    = mouseY;
+
         JLabel tempCell = scheduleView.scheduleGrid[1][1];
 
         int cellWidth  = tempCell.getWidth();
@@ -152,6 +158,9 @@ public class Main extends JFrame implements MouseMotionListener, MouseListener {
                 currCell.setText("");
             }
         }
+
+        topLeftX = -1;
+        topLeftY = -1;
     }
 
     @Override

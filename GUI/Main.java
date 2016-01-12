@@ -1,9 +1,14 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 
-public class Main extends JFrame {
+public class Main extends JFrame implements MouseMotionListener, MouseListener {
 	private static final long serialVersionUID = 1L;
 
     Weekends     statusWeekends;
@@ -47,6 +52,9 @@ public class Main extends JFrame {
 		scheduleScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scheduleScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scheduleScrollPane.getViewport().add(scheduleView);
+
+        scheduleView.addMouseListener(this);
+        scheduleView.addMouseMotionListener(this);
 		
 		this.add(menuBar, BorderLayout.NORTH);
 		this.add(scheduleScrollPane, BorderLayout.CENTER);
@@ -71,6 +79,86 @@ public class Main extends JFrame {
         scheduleScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scheduleScrollPane.getViewport().add(scheduleView);
 
+        scheduleView.addMouseListener(this);
+        scheduleView.addMouseMotionListener(this);
+
         this.add(scheduleScrollPane, BorderLayout.CENTER);
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        int mouseX      = e.getX();
+        int mouseY      = e.getY();
+
+        JLabel tempCell = scheduleView.scheduleGrid[1][1];
+
+        int cellWidth  = tempCell.getWidth();
+        int cellHeight = tempCell.getHeight();
+
+        for (int x = 1; x < statusWeekends.GetValue(); x++) {
+            for (int y = 1; y < 15; y++) {
+                JLabel currCell = scheduleView.scheduleGrid[x][y];
+                if ((mouseX > currCell.getX() && mouseX < currCell.getX() + cellWidth) &&
+                    (mouseY > currCell.getY() && mouseY < currCell.getY() + cellHeight)) {
+                    currCell.setText("Test");
+                }
+            }
+        }
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        //System.out.println("Dragged Event");
+        int mouseX      = e.getX();
+        int mouseY      = e.getY();
+
+        JLabel tempCell = scheduleView.scheduleGrid[1][1];
+
+        int cellWidth  = tempCell.getWidth();
+        int cellHeight = tempCell.getHeight();
+
+        for (int x = 1; x < statusWeekends.GetValue(); x++) {
+            for (int y = 1; y < 15; y++) {
+                JLabel currCell = scheduleView.scheduleGrid[x][y];
+                if ((mouseX > currCell.getX() && mouseX < currCell.getX() + cellWidth) &&
+                    (mouseY > currCell.getY() && mouseY < currCell.getY() + cellHeight)) {
+                    currCell.setText("Test");
+                }
+            }
+        }
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        int mouseX      = e.getX();
+        int mouseY      = e.getY();
+
+        JLabel tempCell = scheduleView.scheduleGrid[1][1];
+
+        int cellWidth  = tempCell.getWidth();
+        int cellHeight = tempCell.getHeight();
+
+        for (int x = 1; x < statusWeekends.GetValue(); x++) {
+            for (int y = 1; y < 15; y++) {
+                JLabel currCell = scheduleView.scheduleGrid[x][y];
+                currCell.setText("");
+            }
+        }
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
     }
 }

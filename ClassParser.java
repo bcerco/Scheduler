@@ -25,14 +25,48 @@ public class ClassParser{
 	    String line = null;
 	    while ((line = reader.readLine()) != null){
 		int num = countCommas(line);
-		if (num == 0)
+		ClassNode cur;
+		switch (num) {
+		case 0:
+		    break;
+		case 10:
+		    cur = new ClassNode(line,num);
+		    classList.put(cur.getId(),cur);
+		    break;
+		case 7:
+		    for (int i = 0; i < 2; i++) {
+			line += "," + reader.readLine();
+		    }
+		    num = countCommas(line);
+		    cur = new ClassNode(line, num);
+		    classList.put(cur.getId(),cur);
+		    break;
+		case 4:
+		    for (int i = 0; i < 3; i++) {
+			String temp = reader.readLine();
+			if (countCommas(temp) == 6){
+			    line += "," + temp;
+			    break;
+			}
+			else
+			    line += "," + temp;
+		    }
+		    num = countCommas(line);
+		    cur = new ClassNode(line, num);
+		    classList.put(cur.getId(),cur);
+		    break;
+		default:
+		    break;
+		}
+		//System.out.println(line);
+		/*if (num == 0)
 		    continue;
 		if (num != 10){
 		    String temp = null;
 		    while ((temp = reader.readLine()) != null){
 			if (!temp.substring(0,4).eqauls("MATH") &&
 			    !temp.substring(0,4).equals("COMP") &&
-			    !temp.substring(0,4).equals("CMPS") &&
+			    !temp.substring(0,5).equals("CMPSC") &&
 			    !temp.substring(0,4).equals("STAT")){
 			    line = line + "," + temp;
 			}
@@ -48,7 +82,7 @@ public class ClassParser{
 		else{
 		    instructorList.put(cur.getInstructor(), new HashSet<String>());
 		    instructorList.get(cur.getInstructor()).add(cur.getId());
-		}
+		    }*/
 	    }
 	}
 	catch(FileNotFoundException e){
@@ -67,6 +101,7 @@ public class ClassParser{
 	}
     }
     public void outputclassList(){
+	System.out.println(classList.size());
 	for (ClassNode cur : classList.values())
 	    cur.outputClassNode();
     }

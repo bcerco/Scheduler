@@ -29,8 +29,57 @@ public class ClassNode{
 	number = args[1];
 	section = Short.parseShort(args[2]);
 	credits = Float.parseFloat(args[3]);
+	createId();
+	switch(comma) {
+	case 10:
+	    title = args[4];
+	    try {soft = Short.parseShort(args[5]);}
+	    catch (NumberFormatException e) {soft = 0;}
+	    try {hard = Short.parseShort(args[6]);}
+	    catch (NumberFormatException e) {hard = 0;}
+	    fillDays(args[7], args[8]);
+	    room = args[9];
+	    instructor = args[10];
+	    break;
+	case 12:
+	    title = args[4];
+	    try {soft = Short.parseShort(args[5]);}
+	    catch (NumberFormatException e) {soft = 0;}
+	    try {hard = Short.parseShort(args[6]);}
+	    catch (NumberFormatException e) {hard = 0;}
+	    fillDays(args[7], args[9]);
+	    fillDays(args[8], args[10]);
+	    room = args[11];
+	    instructor = args[12];
+	    break;
+	case 13:
+	    //make sure the title it correct
+	    //might need to remove excess quotes
+	    title = args[4] + "," + args[5];
+	    try {soft = Short.parseShort(args[6]);}
+	    catch (NumberFormatException e) {soft = 0;}
+	    try {hard = Short.parseShort(args[7]);}
+	    catch (NumberFormatException e) {hard = 0;}
+	    fillDays(args[8], args[10]);
+	    fillDays(args[9], args[11]);
+	    room = args[12];
+	    instructor = args[13];
+	    break;
+	case 11:
+	    title = args[4] + "," + args[5];
+	    try {soft = Short.parseShort(args[6]);}
+	    catch (NumberFormatException e) {soft = 0;}
+	    try {hard = Short.parseShort(args[7]);}
+	    catch (NumberFormatException e) {hard = 0;}
+	    fillDays(args[8], args[9]);
+	    room = args[10];
+	    instructor = args[11];
+	    break;
+	default:
+	    break;
+	}
 	//TODO: fix this
-	int index = 5;
+	/*int index = 5;
 	title = args[4];
 	if (!args[index].equals("")){
 	    if(Character.isLetter(args[index].charAt(0))){
@@ -40,7 +89,7 @@ public class ClassNode{
 	    }
 	    else
 		soft = Short.parseShort(args[index++]);
-	    /*try {
+	    try {
 		soft = Short.parseShort(args[index]);
 		index++;
 	    }
@@ -49,7 +98,7 @@ public class ClassNode{
 		if (!args[index].equals("")){
 		    soft = Short.parseShort(args[index++]);
 		}
-		}*/
+		}
 	}
 	else
 	    index++;
@@ -70,7 +119,7 @@ public class ClassNode{
 	    room = args[index+4];
 	    instructor = args[index+5];
 	    createId();
-	}
+	}*/
     }
     //TODO: need to fix this
     public void outputClassNode(){
@@ -110,7 +159,7 @@ public class ClassNode{
 	day = day.replace("\"","");
 	time = time.replace("\"","");
 	String [] times = time.split("-");
-	System.out.println(times[0]+times[1]);
+	//System.out.println(times[0]+times[1]);
 	int sos = Integer.parseInt(times[0].split(":")[1]);
 	int eos = Integer.parseInt(times[1].split(":")[1].substring(0,2));
 	for (int i = 0; i < day.length(); i++) {

@@ -77,6 +77,7 @@ public class ScheduleView extends JPanel {
 				else {
 					scheduleGrid[x][y] = new JLabel();
 					
+                    scheduleGrid[x][y].setBackground(Color.cyan);
 					scheduleGrid[x][y].setBorder(BorderFactory.createLineBorder(Color.WHITE));
 				}
 				

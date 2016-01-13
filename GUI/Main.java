@@ -19,8 +19,12 @@ public class Main extends JFrame implements MouseMotionListener, MouseListener {
 	ScheduleView scheduleView       = new ScheduleView(8, 15);
 	ToolBar      toolBar            = new ToolBar(this);
 
-    int topLeftX = -1;
-    int topLeftY = -1;
+    int mouseClickX   = -1;
+    int mouseClickY   = -1;
+    int tlSelectionX  = -1;
+    int tlSelectionY  = -1;
+    int brSelectionX  = -1;
+    int brSelectionY  = -1;
 
     static enum Weekends {
         EXCLUDE(6),
@@ -93,20 +97,25 @@ public class Main extends JFrame implements MouseMotionListener, MouseListener {
         int mouseX      = e.getX();
         int mouseY      = e.getY();
 
-        int topLeftX    = mouseX;
-        int topLeftY    = mouseY;
+        this.mouseClickX = mouseX;
+        this.mouseClickY = mouseY;
 
         JLabel tempCell = scheduleView.scheduleGrid[1][1];
 
         int cellWidth  = tempCell.getWidth();
         int cellHeight = tempCell.getHeight();
 
+        this.tlSelectionX  = (int)Math.floor(mouseClickX/cellWidth) * cellWidth;
+        this.tlSelectionY  = (int)Math.floor(mouseClickY/cellHeight) * cellHeight;
+        this.brSelectionX  = (int)tlSelectionX + cellWidth;
+        this.brSelectionY  = (int)tlSelectionY + cellHeight;
+
         for (int x = 1; x < statusWeekends.GetValue(); x++) {
             for (int y = 1; y < 15; y++) {
                 JLabel currCell = scheduleView.scheduleGrid[x][y];
                 if ((mouseX > currCell.getX() && mouseX < currCell.getX() + cellWidth) &&
                     (mouseY > currCell.getY() && mouseY < currCell.getY() + cellHeight)) {
-                    currCell.setText("Test");
+                    currCell.setOpaque(true);
                 }
             }
         }
@@ -114,7 +123,6 @@ public class Main extends JFrame implements MouseMotionListener, MouseListener {
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        //System.out.println("Dragged Event");
         int mouseX      = e.getX();
         int mouseY      = e.getY();
 
@@ -123,12 +131,68 @@ public class Main extends JFrame implements MouseMotionListener, MouseListener {
         int cellWidth  = tempCell.getWidth();
         int cellHeight = tempCell.getHeight();
 
+        int cellHalfWidth  = cellWidth / 2;
+        int cellHalfHeight = cellHeight / 2;
+
+        if (mouseX >= mouseClickX && mouseY >= mouseClickY) {
+            this.tlSelectionX  = (int)Math.floor(mouseClickX/cellWidth) * cellWidth;
+            this.tlSelectionY  = (int)Math.floor(mouseClickY/cellHeight) * cellHeight;
+            this.brSelectionX  = ((int)Math.floor(mouseX/cellWidth) * cellWidth) + cellWidth;
+            this.brSelectionY  = ((int)Math.floor(mouseY/cellHeight) * cellHeight) + cellHeight;
+        }
+        else if(mouseX >= mouseClickX && mouseY < mouseClickY) {
+            this.tlSelectionX  = (int)Math.floor(mouseClickX/cellWidth) * cellWidth;
+            this.brSelectionY  = (int)Math.floor(mouseClickY/cellHeight) * cellHeight;
+            this.brSelectionX  = ((int)Math.floor(mouseX/cellWidth) * cellWidth) + cellWidth;
+            this.tlSelectionY  = ((int)Math.floor(mouseY/cellHeight) * cellHeight);
+        }
+        else if (mouseX < mouseClickX && mouseY >= mouseClickY) {
+            this.brSelectionX  = (int)Math.floor(mouseClickX/cellWidth) * cellWidth;
+            this.tlSelectionY  = (int)Math.floor(mouseClickY/cellHeight) * cellHeight;
+            this.tlSelectionX  = ((int)Math.floor(mouseX/cellWidth) * cellWidth);
+            this.brSelectionY  = ((int)Math.floor(mouseY/cellHeight) * cellHeight) + cellHeight;
+        }
+        else if (mouseX < mouseClickX && mouseY < mouseClickY) {
+            this.brSelectionX  = (int)Math.floor(mouseClickX/cellWidth) * cellWidth;
+            this.brSelectionY  = (int)Math.floor(mouseClickY/cellHeight) * cellHeight;
+            this.tlSelectionX  = ((int)Math.floor(mouseX/cellWidth) * cellWidth);
+            this.tlSelectionY  = ((int)Math.floor(mouseY/cellHeight) * cellHeight);
+        }
+
         for (int x = 1; x < statusWeekends.GetValue(); x++) {
             for (int y = 1; y < 15; y++) {
                 JLabel currCell = scheduleView.scheduleGrid[x][y];
-                if ((mouseX > currCell.getX() && mouseX < currCell.getX() + cellWidth) &&
-                    (mouseY > currCell.getY() && mouseY < currCell.getY() + cellHeight)) {
-                    currCell.setText("Test");
+                currCell.setOpaque(false);
+                currCell.setText("");
+                int midPointX = currCell.getX() + cellHalfWidth;
+                int midPointY = currCell.getY() + cellHalfHeight;
+                if (mouseX >= mouseClickX && mouseY >= mouseClickY) {
+                    if ((midPointX > this.tlSelectionX && midPointX <= this.brSelectionX) &&
+                        (midPointY > this.tlSelectionY && midPointY <= this.brSelectionY)) {
+                        currCell.setOpaque(true);
+                        currCell.setText(" ");
+                    }
+                }
+                else if (mouseX >= mouseClickX && mouseY < mouseClickY) {
+                    if ((midPointX > this.tlSelectionX && midPointX <= this.brSelectionX) &&
+                        (midPointY > this.tlSelectionY && midPointY <= this.brSelectionY + cellHeight)) {
+                        currCell.setOpaque(true);
+                        currCell.setText(" ");
+                    }
+                }
+                else if (mouseX < mouseClickX && mouseY >= mouseClickY) {
+                    if ((midPointX > this.tlSelectionX && midPointX <= this.brSelectionX + cellWidth) &&
+                        (midPointY > this.tlSelectionY && midPointY <= this.brSelectionY)) {
+                        currCell.setOpaque(true);
+                        currCell.setText(" ");
+                    }
+                }
+                else if (mouseX < mouseClickX && mouseY < mouseClickY) {
+                    if ((midPointX > this.tlSelectionX && midPointX <= this.brSelectionX + cellWidth) &&
+                        (midPointY > this.tlSelectionY && midPointY <= this.brSelectionY + cellHeight)) {
+                        currCell.setOpaque(true);
+                        currCell.setText(" ");
+                    }
                 }
             }
         }
@@ -155,12 +219,17 @@ public class Main extends JFrame implements MouseMotionListener, MouseListener {
         for (int x = 1; x < statusWeekends.GetValue(); x++) {
             for (int y = 1; y < 15; y++) {
                 JLabel currCell = scheduleView.scheduleGrid[x][y];
+                currCell.setOpaque(false);
                 currCell.setText("");
             }
         }
 
-        topLeftX = -1;
-        topLeftY = -1;
+        this.mouseClickX  = -1;
+        this.mouseClickY  = -1;
+        this.tlSelectionX = -1;
+        this.tlSelectionY = -1;
+        this.brSelectionX = -1;
+        this.brSelectionY = -1;
     }
 
     @Override

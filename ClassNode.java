@@ -78,48 +78,7 @@ public class ClassNode{
 	default:
 	    break;
 	}
-	//TODO: fix this
-	/*int index = 5;
-	title = args[4];
-	if (!args[index].equals("")){
-	    if(Character.isLetter(args[index].charAt(0))){
-		title = title + "," + args[index++];
-		if (!args[index].equals(""))
-		    soft = Short.parseShort(args[index++]);
-	    }
-	    else
-		soft = Short.parseShort(args[index++]);
-	    try {
-		soft = Short.parseShort(args[index]);
-		index++;
-	    }
-	    catch (NumberFormatException e){
-		title = title + "," + args[index++];
-		if (!args[index].equals("")){
-		    soft = Short.parseShort(args[index++]);
-		}
-		}
-	}
-	else
-	    index++;
-	if (!args[index].equals(""))
-	    hard = Short.parseShort(args[index]);
-	if (comma <= 11){
-	    index++;
-	    fillDays(args[index], args[++index]);
-	    room = args[++index];
-	    instructor = args[++index];
-	    createId();
-	}
-	else{
-	    System.out.println(index);
-	    index++;
-	    fillDays(args[index],args[index+2]);
-	    fillDays(args[index+1],args[index+3]);
-	    room = args[index+4];
-	    instructor = args[index+5];
-	    createId();
-	}*/
+
     }
     //TODO: need to fix this
     public void outputClassNode(){

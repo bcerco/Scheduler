@@ -53,9 +53,23 @@ public class ToolBarView extends ToolBar {
 		    int[] sTimes = cur.getStartTime();
 		    int[] eTimes = cur.getEndTime();
 		    for (int i = 0; i < 6; i++) {
-		    	if (sTimes[i] != 0) {
+		    	if (sTimes[i] != 0 ) {
+		    		cur.outputClassNode();
 		    		Pane tempPane = (Pane)tracks.getChildren().get(i+1 + 2);
-		    		CompactCourseView curCourseView = new CompactCourseView(cur.getCourse(),  cur.getNumber(),  cur.getSection(), sTimes[i], eTimes[i], "#444444");
+		    		String color = "";
+		    		if (cur.getCourse().equals("MATH")) {
+		    			color = "#FF7777";
+		    		}
+		    		else if (cur.getCourse().equals("CMPSC")) {
+		    			color = "#77FF77";
+		    		}
+		    		else if (cur.getCourse().equals("COMP")) {
+		    			color = "#7777FF";
+		    		}
+		    		else {
+		    			color = "#000000";
+		    		}
+		    		CompactCourseView curCourseView = new CompactCourseView(cur.getCourse(),  cur.getNumber(),  cur.getSection(), sTimes[i], eTimes[i], color);
 		    		curCourseView.setTranslateY((sTimes[i] - (8 * 60))); // Base on track heights
 		    		tempPane.getChildren().add(curCourseView);
 		    	}

@@ -122,7 +122,7 @@ public class ClassNode{
 	int end = (Integer.parseInt(times[1].split(":")[0]) * 60) +
 	    Integer.parseInt(times[1].split(":")[1].substring(0,2));
 	if (times[1].split(":")[1].charAt(2) == 'P'){
-	    end += 720;
+	    if( end < 720) end += 720;
 	    if (start < 540) start += 720;
 	}
 	System.out.printf("%d, %d\n",start,end);

@@ -14,17 +14,13 @@ public class ClassNode{
     private String room;
     private String id;
     //arrays for days and times, may change later
-    private String [] startTime;
-    private String [] endTime;
-    private int [] startOffset;
-    private int [] endOffset;
+    private int [] startTime;
+    private int [] endTime;
     
     ClassNode(String line, int comma){
 	String [] args = line.split(",");
-	startTime = new String[6];
-	endTime = new String[6];
-	startOffset = new int[6];
-	endOffset = new int[6];
+	startTime = new int[6];
+	endTime = new int[6];
 	course = args[0];
 	number = args[1];
 	section = Short.parseShort(args[2]);
@@ -91,7 +87,7 @@ public class ClassNode{
 
 	System.out.println("\tDays: ");
 	for (int i = 0; i < startTime.length; i++) {
-	    if (startTime[i] != null) {
+	    if (startTime[i] != 0) {
 		switch(i){
 		case 0: System.out.printf("\t\tM: "); break;
 		case 1: System.out.printf("\t\tT: "); break;
@@ -117,50 +113,54 @@ public class ClassNode{
     public void fillDays(String day, String time){
 	day = day.replace("\"","");
 	time = time.replace("\"","");
+	time = time.replace(" ","");
 	String [] times = time.split("-");
-	//System.out.println(times[0]+times[1]);
-	int sos = Integer.parseInt(times[0].split(":")[1]);
-	int eos = Integer.parseInt(times[1].split(":")[1].substring(0,2));
+	System.out.println(times[0]+times[1]);
+	int start = (Integer.parseInt(times[0].split(":")[0]) * 60) +
+	    Integer.parseInt(times[0].split(":")[1]);
+	int end = (Integer.parseInt(times[1].split(":")[0]) * 60) +
+	    Integer.parseInt(times[1].split(":")[1].substring(0,2));
+	if (times[1].split(":")[1].charAt(2) == 'P'){
+	    end += 720;
+	    if (start < 540) start += 720;
+	}
+	System.out.printf("%d, %d\n",start,end);
 	for (int i = 0; i < day.length(); i++) {
 	    switch(day.charAt(i)){
 	    case 'M':
-		startTime[0] = times[0];
-		endTime[0] = times[1];
-		startOffset[0] = sos;
-		endOffset[0] = eos;
+		startTime[0] = start;
+		endTime[0] = end;
 		break;
 	    case 'T':
-		startTime[1] = times[0];
-		endTime[1] = times[1];
-		startOffset[1] = sos;
-		endOffset[1] = eos;
+		startTime[1] = start;
+		endTime[1] = end;
 		break;
 	    case 'W':
-		startTime[2] = times[0];
-		endTime[2] = times[1];
-		startOffset[2] = sos;
-		endOffset[2] = eos;
+		startTime[2] = start;
+		endTime[2] = end;
 		break;
 	    case 'R':
-		startTime[3] = times[0];
-		endTime[3] = times[1];
-		startOffset[3] = sos;
-		endOffset[3] = eos;
+		startTime[3] = start;
+		endTime[3] = end;
 		break;
 	    case 'F':
-		startTime[4] = times[0];
-		endTime[4] = times[1];
-		startOffset[4] = sos;
-		endOffset[4] = eos;
+		startTime[4] = start;
+		endTime[4] = end;
 		break;
 	    case 'S':
-		startTime[5] = times[0];
-		endTime[5] = times[1];
-		startOffset[5] = sos;
-		endOffset[5] = eos;
+		startTime[5] = start;
+		endTime[5] = end;
 		break;
 	    }
 	}
+    }
+    //This returns the interger array of start times, in minutes
+    public int[] getStartTime(){
+	return startTime;	
+    }
+    //This returns the integer array of end times, in minutes
+    public int[] getEndTime(){
+	return endTime;
     }
     public void setInstructor(String ins, HashMap<String, HashSet<String> > instructorList){
 	instructorList.get(instructor).remove(id);

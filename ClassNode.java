@@ -182,4 +182,40 @@ public class ClassNode{
     public void setTitle(String t){
 	title = t;
     }
+    public string getCourse(){
+	return course;
+    }
+    public void setCourse(String c){
+	course = c;
+    }
+    public string getNumber(){
+	return number;
+    }
+    public void setNumber(String n){
+	number = n;
+    }
+    public short getSection(){
+	return section;
+    }
+    public void setSection(short s){
+	section = s;
+    }
+    public float getCredits(){
+	return credits;
+    }
+    public void setCredits(float f){
+	credits = f;
+    }
+    public short getHard(){
+	return hard;
+    }
+    public void setHard(short h){
+	hard = h;
+    }
+    public short getSoft(){
+	return soft;
+    }
+    public void setSoft(short s){
+	soft = s;
+    }
 }

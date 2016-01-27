@@ -1,0 +1,36 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.ScheduleHeaderText {
+	-fx-font-weight      : bold;
+	-fx-text-fill        : #FFFFFF;
+}
+.ScheduleHeaderCell {
+	-fx-background-color : #7AA5B3;
+}
+
+.ScheduleCell {
+	/* -fx-background-color : #EFF8FA; */
+	-fx-background-color : #FFFFFF;
+	-fx-border-color     : #7AA5B3;
+	-fx-border-width     : 0 1 1 0;
+}
+
+.CompactCourse {
+	-fx-background-color : #FFB347;
+	/* -fx-background-radius: 5 5 5 5; */
+}
+
+.CompactCourseText {
+	-fx-font-size        : 10;
+	-fx-font-weight      : bold;
+	-fx-text-fill        : #FFFFFF;
+}
+
+.TrackHeaderText {
+	-fx-font-weight      : bold;
+	-fx-text-fill        : transparent;
+}
+
+.Temp {
+	-fx-background-color : #FFB347;
+}

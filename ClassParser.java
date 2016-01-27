@@ -3,10 +3,10 @@ import java.io.*;
 
 public class ClassParser{
     private File inFile;
-    private HashMap<String, ClassNode> classList;
-    private HashMap<String, HashSet<String> > instructorList;
+    public static HashMap<String, ClassNode> classList;
+    public static HashMap<String, HashSet<String> > instructorList;
     private BufferedReader reader = null;
-    ClassParser(String fileToRead){
+    public ClassParser(String fileToRead){
 	inFile = new File(fileToRead);
 	classList = new HashMap<String, ClassNode>();
 	instructorList = new HashMap<String,HashSet<String> >();

@@ -17,7 +17,7 @@ public class ClassNode{
     private int [] startTime;
     private int [] endTime;
     
-    ClassNode(String line, int comma){
+    public ClassNode(String line, int comma){
 	String [] args = line.split(",");
 	startTime = new int[6];
 	endTime = new int[6];

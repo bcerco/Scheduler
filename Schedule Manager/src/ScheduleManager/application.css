@@ -18,11 +18,11 @@
 .CompactCourse {
 	-fx-opacity          : 0.4;
 	-fx-background-color : #FFB347;
-	/* -fx-background-radius: 5 5 5 5; */
+	-fx-background-radius: 5 5 5 5;
 }
 
 .CompactCourseText {
-	-fx-font-size        : 10;
+	-fx-font-size        : 8;
 	-fx-font-weight      : bold;
 	-fx-text-fill        : #FFFFFF;
 }

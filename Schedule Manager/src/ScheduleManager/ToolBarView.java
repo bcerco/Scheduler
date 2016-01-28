@@ -79,7 +79,7 @@ public class ToolBarView extends ToolBar {
 			    		double pixelMinutes = (heightOfCell / 60);
 			    		double positionOfClass = pixelMinutes * (sTimes[i] - (WeeklyScheduleView.startHour * 60));
 			    		CompactCourseView curCourseView = new CompactCourseView(cur.getCourse(),  cur.getNumber(),  cur.getSection(), sTimes[i], eTimes[i], color);
-			    		curCourseView.setTranslateY(positionOfClass); // Base on track heights
+			    		curCourseView.setTranslateY(positionOfClass+1);
 			    		tempPane.getChildren().add(curCourseView);
 			    	}
 			    }

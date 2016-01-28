@@ -22,8 +22,8 @@ public class WeeklyScheduleView extends GridPane {
 		"Saturday"
 	};
 
-	private int               startHour    = 8;
-	private int               endHour      = 22;
+	public  static int        startHour    = 8;
+	public  static int        endHour      = 22;
 	private int               showSunday   = 1;
 	private int               showSaturday = 1;
 	private int               numRows;
@@ -36,8 +36,8 @@ public class WeeklyScheduleView extends GridPane {
 
 	public WeeklyScheduleView(int sHour, int eHour) {
 
-		this.startHour = sHour;
-		this.endHour   = eHour;
+		WeeklyScheduleView.startHour = sHour;
+		WeeklyScheduleView.endHour   = eHour;
 
 		numRows = (endHour - startHour);
 		numCols = 5 + showSunday + showSaturday;

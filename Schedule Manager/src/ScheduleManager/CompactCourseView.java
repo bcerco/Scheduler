@@ -18,7 +18,13 @@ public class CompactCourseView extends VBox {
 		this.number  = number;
 		this.section = section;
 
-		this.setPrefHeight(eTime - sTime); // Base on track heights
+		System.out.println(WeeklyScheduleCourseTracks.height);
+
+		double heightOfCell = (WeeklyScheduleCourseTracks.height)/(WeeklyScheduleView.endHour - WeeklyScheduleView.startHour);
+		double pixelMinutes = (heightOfCell / 60);
+		double heightOfClass = pixelMinutes * (eTime - sTime);
+
+		this.setPrefHeight(heightOfClass); // Base on track heights
 
 		BuildCompactCourseView();
 	}

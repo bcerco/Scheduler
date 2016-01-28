@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
@@ -18,6 +19,10 @@ import javafx.scene.layout.RowConstraints;
 
 public class Main extends Application {
 	public static File spreadsheet = null;
+
+	public static double height;
+
+	ToolBarView toolBarView;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -48,7 +53,7 @@ public class Main extends Application {
 			scheduleTracks.getChildren().add(weeklyTracks);
 			schedulePane.add(scheduleTracks, 0, 0);
 
-			ToolBarView toolBarView = new ToolBarView(primaryStage, weeklyTracks);
+			toolBarView = new ToolBarView(primaryStage, weeklyTracks);
 
 			root.setCenter(schedulePane);
 			root.setTop(toolBarView);
@@ -67,9 +72,9 @@ public class Main extends Application {
 			        weeklyTracks.setPrefHeight((double)newSceneHeight - toolBarView.getHeight());
 			        Label topLabel = (Label)weeklyTracks.getChildren().get(1);
 			        WeeklyScheduleCourseTracks.height = (double)newSceneHeight - toolBarView.getHeight() - topLabel.getHeight();
+			        toolBarView.PopulateTracks();
 			    }
 			});
-
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();

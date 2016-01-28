@@ -51,12 +51,13 @@ public class WeeklyScheduleCourseTracks extends GridPane {
 		tempLabel.getStyleClass().add("TrackHeaderText");
 		this.add(tempLabel, 1, 0);
 
+		Pane tempPane = new Pane();
 		for (int i = 0; i < 7; i++) {
 			if (i == 0) {
 				this.getRowConstraints().add(rcRowGrow);
 			}
 			this.getColumnConstraints().add(ccColGrow);
-			Pane tempPane = new Pane();
+			tempPane = new Pane();
 			this.add(tempPane, i+1, 1);
 		}
 	}

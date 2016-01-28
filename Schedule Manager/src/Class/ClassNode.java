@@ -116,7 +116,7 @@ public class ClassNode{
 	time = time.replace("\"","");
 	time = time.replace(" ","");
 	String [] times = time.split("-");
-	System.out.println(times[0]+times[1]);
+	//System.out.println(times[0]+times[1]);
 	int start = (Integer.parseInt(times[0].split(":")[0]) * 60) +
 	    Integer.parseInt(times[0].split(":")[1]);
 	int end = (Integer.parseInt(times[1].split(":")[0]) * 60) +
@@ -125,7 +125,7 @@ public class ClassNode{
 	    if( end < 720) end += 720;
 	    if (start < 540) start += 720;
 	}
-	System.out.printf("%d, %d\n",start,end);
+	//System.out.printf("%d, %d\n",start,end);
 	for (int i = 0; i < day.length(); i++) {
 	    switch(day.charAt(i)){
 	    case 'M':

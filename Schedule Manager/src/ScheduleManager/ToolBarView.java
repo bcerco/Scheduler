@@ -48,32 +48,42 @@ public class ToolBarView extends ToolBar {
 		this.getItems().add(btExport);
 	}
 
-	private void PopulateTracks() {
-		for (ClassNode cur : ClassParser.classList.values()) {
-		    int[] sTimes = cur.getStartTime();
-		    int[] eTimes = cur.getEndTime();
-		    for (int i = 0; i < 6; i++) {
-		    	if (sTimes[i] != 0 ) {
-		    		cur.outputClassNode();
-		    		Pane tempPane = (Pane)tracks.getChildren().get(i+1 + 2);
-		    		String color = "";
-		    		if (cur.getCourse().equals("MATH")) {
-		    			color = "#FF7777";
-		    		}
-		    		else if (cur.getCourse().equals("CMPSC")) {
-		    			color = "#77FF77";
-		    		}
-		    		else if (cur.getCourse().equals("COMP")) {
-		    			color = "#7777FF";
-		    		}
-		    		else {
-		    			color = "#000000";
-		    		}
-		    		CompactCourseView curCourseView = new CompactCourseView(cur.getCourse(),  cur.getNumber(),  cur.getSection(), sTimes[i], eTimes[i], color);
-		    		curCourseView.setTranslateY((sTimes[i] - (8 * 60))); // Base on track heights
-		    		tempPane.getChildren().add(curCourseView);
-		    	}
-		    }
+	public void PopulateTracks() {
+	    for (int i = 0; i < 6; i++) {
+	    	Pane tempPane = (Pane)tracks.getChildren().get(i+1 + 2);
+	    	tempPane.getChildren().clear();
 	    }
+
+		if (Main.spreadsheet != null && Main.spreadsheet.exists()) {
+			for (ClassNode cur : ClassParser.classList.values()) {
+			    int[] sTimes = cur.getStartTime();
+			    int[] eTimes = cur.getEndTime();
+			    for (int i = 0; i < 6; i++) {
+			    	if (sTimes[i] != 0 ) {
+			    		Pane tempPane = (Pane)tracks.getChildren().get(i+1 + 2);
+			    		String color = "";
+			    		if (cur.getCourse().equals("MATH")) {
+			    			color = "#FF7777";
+			    		}
+			    		else if (cur.getCourse().equals("CMPSC")) {
+			    			color = "#77FF77";
+			    		}
+			    		else if (cur.getCourse().equals("COMP")) {
+			    			color = "#7777FF";
+			    		}
+			    		else {
+			    			color = "#000000";
+			    		}
+
+			    		double heightOfCell = (WeeklyScheduleCourseTracks.height)/(WeeklyScheduleView.endHour - WeeklyScheduleView.startHour);
+			    		double pixelMinutes = (heightOfCell / 60);
+			    		double positionOfClass = pixelMinutes * (sTimes[i] - (WeeklyScheduleView.startHour * 60));
+			    		CompactCourseView curCourseView = new CompactCourseView(cur.getCourse(),  cur.getNumber(),  cur.getSection(), sTimes[i], eTimes[i], color);
+			    		curCourseView.setTranslateY(positionOfClass); // Base on track heights
+			    		tempPane.getChildren().add(curCourseView);
+			    	}
+			    }
+		    }
+		}
 	}
 }

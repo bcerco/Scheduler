@@ -1,5 +1,7 @@
 package ScheduleManager;
 
+import java.io.File;
+
 import Class.ClassNode;
 import Class.ClassParser;
 import javafx.event.ActionEvent;
@@ -31,14 +33,15 @@ public class ToolBarView extends ToolBar {
 		btImport.setFocusTraversable(false);
 		btImport.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override public void handle(ActionEvent e) {
-		        Main.spreadsheet = chooserImport.showOpenDialog(stage);
+		    	File checkFile = chooserImport.showOpenDialog(stage);
 
-		        if (Main.spreadsheet != null && Main.spreadsheet.exists()) {
-		        	String pathString = Main.spreadsheet.getAbsolutePath();
+		    	if (checkFile != null && checkFile.exists()) {
+		    		Main.spreadsheet = checkFile;
+		    		String pathString = Main.spreadsheet.getAbsolutePath();
 		        	parser = new ClassParser(pathString);
 		        	parser.fillclassList();
 		        	PopulateTracks();
-		        }
+		    	}
 		    }
 		});
 

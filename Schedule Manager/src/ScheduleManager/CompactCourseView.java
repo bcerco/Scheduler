@@ -7,6 +7,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+/*
+ * DRAG AND DROP IS GLITCHY RIGHT NOW
+ * Only happens when crossing columns
+ * When a classview moves into another column, physically move it into that column's track.
+ * Otherwise the track blocks drag and drop of elements under it (any class obstructed by the pane)
+ */
+
 public class CompactCourseView extends VBox {
 	private String course;
 	private String number;
@@ -28,18 +35,13 @@ public class CompactCourseView extends VBox {
 
 			@Override
 			public void handle(MouseEvent event) {
-				double newX = event.getX();
-				double newY = event.getY();
 
-				double newWidth = CompactCourseView.this.getWidth();
-				double newHeight = CompactCourseView.this.getHeight();
+				if (event.getY() < (CompactCourseView.this.getHeight() - 5) && CompactCourseView.this.isDragging == false) {
+					double halfWidth = CompactCourseView.this.getWidth() / 2;
+					double halfHeight = CompactCourseView.this.getHeight() / 2;
 
-				if (newY < (newHeight - 5) && CompactCourseView.this.isDragging == false) {
-					double halfWidth = newWidth / 2;
-					double halfHeight = newHeight / 2;
-
-					CompactCourseView.this.setLayoutX(CompactCourseView.this.getLayoutX() + newX - halfWidth);
-					CompactCourseView.this.setLayoutY(CompactCourseView.this.getLayoutY() + newY - halfHeight);
+					CompactCourseView.this.setLayoutX(CompactCourseView.this.getLayoutX() + event.getX() - halfWidth);
+					CompactCourseView.this.setLayoutY(CompactCourseView.this.getLayoutY() + event.getY() - halfHeight);
 				}
 				else {
 					CompactCourseView.this.isDragging = true;

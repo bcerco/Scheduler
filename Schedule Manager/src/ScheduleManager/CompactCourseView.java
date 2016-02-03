@@ -1,7 +1,9 @@
 package ScheduleManager;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -12,13 +14,54 @@ public class CompactCourseView extends VBox {
 	private short  section;
 	private String start;
 	private String end;
+	private boolean isDragging;
 
 	public CompactCourseView(String course, String number, short section, int sTime, int eTime, String color) {
+		this.isDragging = false;
 		this.getStyleClass().add("CompactCourse");
 		this.setStyle("-fx-background-color: " + color);
 		this.course  = course;
 		this.number  = number;
 		this.section = section;
+
+		this.setOnMouseDragged(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent event) {
+				double newX = event.getX();
+				double newY = event.getY();
+
+				double newWidth = CompactCourseView.this.getWidth();
+				double newHeight = CompactCourseView.this.getHeight();
+
+				if (newY < (newHeight - 5) && CompactCourseView.this.isDragging == false) {
+					double halfWidth = newWidth / 2;
+					double halfHeight = newHeight / 2;
+
+					CompactCourseView.this.setLayoutX(CompactCourseView.this.getLayoutX() + newX - halfWidth);
+					CompactCourseView.this.setLayoutY(CompactCourseView.this.getLayoutY() + newY - halfHeight);
+				}
+				else {
+					CompactCourseView.this.isDragging = true;
+					CompactCourseView.this.setMinHeight(event.getY());
+					CompactCourseView.this.setMaxHeight(event.getY());
+				}
+
+				event.consume();
+			}
+
+		});
+
+		this.setOnMouseReleased(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent event) {
+				CompactCourseView.this.isDragging = false;
+
+				event.consume();
+			}
+
+		});
 
 		int    startHour = (int)Math.floor(sTime/60);
 		String startAMPM = "";

@@ -14,6 +14,10 @@ import javafx.scene.layout.VBox;
  * Otherwise the track blocks drag and drop of elements under it (any class obstructed by the pane)
  */
 
+/*
+ * Dragging gets lost when the mouse leaves the class view area. Make this work no matter what!
+ */
+
 public class CompactCourseView extends VBox {
 	private String course;
 	private String number;

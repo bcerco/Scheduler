@@ -2,7 +2,7 @@ CMPSC,101,001,3,Intro C++ Prog,35,35,MWF ,2:30-3:20P,Comp Lab,Kunkle
 CMPSC,121,001,3,Intro Prog Tech,35,35,MWF ,10:10-11:00A,Comp Lab,Chang
 CMPSC,121,002,3,Intro Prog Tech,35,35,R,6:00-8:45P,Comp Lab,Melusky
 CMPSC,121,003,3,Intro Prog Tech,35,35,MWF ,1:25-2:15P,Comp Lab,Shams-Boromand
-CMPSC ,121,004,3,Intro Prog Tech,35,35,MWF,2:30-3:20P,Comp Lab,Shams-Boromand
+CMPSC,121,004,3,Intro Prog Tech,35,35,MWF,2:30-3:20P,Comp Lab,Shams-Boromand
 CMPSC,122,001,3,Interm Prog,30,45,TR ,1:35-2:50P,,?
 CMPSC,122,002,3,Interm Prog,30,45,TR ,1:35-2:50P,,?Closed
 CMPSC,200,001,3,Prog for Eng MATLAB,35,35,TR ,4:35-5:50P,Comp Lab,Elaraby
@@ -18,12 +18,12 @@ CMPSC,470,001,3,Compiler Const,35,40,TR ,1:35-2:50P,,El Ariss
 CMPSC,472,001,3,Op Sys Concepts,35,40,TR,3:05-4:20P,,Null
 CMPSC,478W,001,3,SWE Design,35,40,W ,6:00-8:45P,,Lobur
 CMPSC,497A,001,1,Contest Prog,,,F,2:30-3:20P,Sun Lab,Blum
-COMP ,505,001,3,Theory of Comp,30,30,T ,6:00-8:45P,,Bui
+COMP,505,001,3,Theory of Comp,30,30,T ,6:00-8:45P,,Bui
 COMP,516,001,3,Adv Prog Lang,30,30,MW,4:00-5:15P,,El Ariss
 COMP,517,001,3,Computer Security,30,45,TR,4:35-5:50P,,Blum
-COMP ,519,001,3,Adv Topics DB,30,30,M ,6:00-8:45P,,Null
+COMP,519,001,3,Adv Topics DB,30,30,M ,6:00-8:45P,,Null
 COMP,594,001,3,MS Studies,30,30,W ,6:00-8:45P,,Chang
-MATH ,003,001,3,Basic Skills,30,35,TR ,4:35-5:50P,,Morrow
+MATH,003,001,3,Basic Skills,30,35,TR ,4:35-5:50P,,Morrow
 MATH,004,001,3,Int Alg,30,35,TR,9:05-10:20A,,Smith
 MATH,004,002,3,Int Alg,30,35,MW,6:00-7:15P,,Morrow
 MATH,017,001,3,Fin Math,30,35,MWF ,1:25-2:15P,,Wright

@@ -164,8 +164,11 @@ public class ClassNode{
 	return endTime;
     }
     public void setInstructor(String ins, HashMap<String, HashSet<String> > instructorList){
+	//TODO: handle instructor change
+	/*
 	instructorList.get(instructor).remove(id);
 	instructorList.get(ins).add(id);
+	*/
 	instructor = ins;
     }
     public String getInstructor(){
@@ -189,7 +192,7 @@ public class ClassNode{
     public String getNumber() {
     	return number;
     }
-	public short getSection() {
-		return section;
-	}
+    public short getSection() {
+	return section;
+    }
 }

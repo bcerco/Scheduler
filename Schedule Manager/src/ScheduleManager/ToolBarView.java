@@ -6,11 +6,12 @@ import Class.ClassNode;
 import Class.ClassParser;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -34,7 +35,6 @@ public class ToolBarView extends ToolBar {
 				new ExtensionFilter("Text CSV", "*.csv"));
 
 		btImport = new Button("Import");
-		btImport.setFocusTraversable(false);
 		btImport.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override public void handle(ActionEvent e) {
 		    	File checkFile = chooserImport.showOpenDialog(stage);
@@ -50,18 +50,34 @@ public class ToolBarView extends ToolBar {
 		});
 
 		tfFilterEdit = new TextField();
+		tfFilterEdit.setPromptText("Enter Filter");
+		tfFilterEdit.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+			@Override
+			public void handle(KeyEvent event) {
+				if (event.getCode().equals(KeyCode.ENTER)) {
+					for (int i = 0; i < 6; i++) {
+				    	Pane tempPane = (Pane)tracks.getChildren().get(i+1 + 2);
+				    	for (Node cur: tempPane.getChildren()) {
+				    		CompactCourseView tempCourse = (CompactCourseView)cur;
+				    		if (tempCourse.getCid().equals(tfFilterEdit.getText())) {
+				    			tempCourse.setVisible(false);
+				    		}
+				    		else {
+				    			tempCourse.setVisible(true);
+				    		}
+				    	}
+				    }
+				}
+			}
+
+		});
 
 		btExport = new Button("Export");
-		btExport.setFocusTraversable(false);
-		BorderPane toolBox   = new BorderPane();
-		HBox       buttonBox = new HBox();
-		buttonBox.getChildren().add(btImport);
-		buttonBox.getChildren().add(btExport);
 
-		toolBox.setLeft(buttonBox);
-		toolBox.setRight(tfFilterEdit);
-
-		this.getItems().add(toolBox);
+		this.getItems().add(btImport);
+		this.getItems().add(btExport);
+		this.getItems().add(tfFilterEdit);
 	}
 
 	public void PopulateTracks() {

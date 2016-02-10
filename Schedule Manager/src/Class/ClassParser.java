@@ -7,11 +7,13 @@ public class ClassParser{
     private File inFile;
     public static HashMap<String, ClassNode> classList;
     public static HashMap<String, HashSet<String> > instructorList;
+    public static HashMap<String, HashSet<String> > departmentList;
     private BufferedReader reader = null;
     public ClassParser(String fileToRead){
 	inFile = new File(fileToRead);
 	classList = new HashMap<String, ClassNode>();
 	instructorList = new HashMap<String,HashSet<String> >();
+	departmentList = new HashMap<String,HashSet<String> >();
     }
     public int countCommas(String line){
 	int comma = 0;
@@ -34,6 +36,8 @@ public class ClassParser{
 		case 10:
 		    cur = new ClassNode(line,num);
 		    classList.put(cur.getId(),cur);
+		    updateInstructorList(cur.getInstructor(), cur.getId());
+		    updateDepartmentList(cur.getCourse(), cur.getId());
 		    break;
 		case 7:
 		    for (int i = 0; i < 2; i++) {
@@ -42,6 +46,8 @@ public class ClassParser{
 		    num = countCommas(line);
 		    cur = new ClassNode(line, num);
 		    classList.put(cur.getId(),cur);
+		    updateInstructorList(cur.getInstructor(), cur.getId());
+		    updateDepartmentList(cur.getCourse(), cur.getId());
 		    break;
 		case 4:
 		    for (int i = 0; i < 3; i++) {
@@ -56,11 +62,12 @@ public class ClassParser{
 		    num = countCommas(line);
 		    cur = new ClassNode(line, num);
 		    classList.put(cur.getId(),cur);
+		    updateInstructorList(cur.getInstructor(), cur.getId());
+		    updateDepartmentList(cur.getCourse(), cur.getId());
 		    break;
 		default:
 		    break;
 		}
-
 	    }
 	}
 	catch(FileNotFoundException e){
@@ -82,5 +89,23 @@ public class ClassParser{
 	System.out.println(classList.size());
 	for (ClassNode cur : classList.values())
 	    cur.outputClassNode();
+    }
+    public void updateDepartmentList(String course, String id){
+	if (departmentList.containsKey(course)){
+	    departmentList.get(course).add(id);
+	}
+	else{
+	    departmentList.put(course, new HashSet<String>());
+	    departmentList.get(course).add(id);
+	}    
+    }
+    public void updateInstructorList(String instructor, String id){
+	if (instructorList.containsKey(instructor)){
+	    instructorList.get(instructor).add(id);
+	}
+	else{
+	    instructorList.put(instructor, new HashSet<String>());
+	    instructorList.get(instructor).add(id);
+	}
     }
 }

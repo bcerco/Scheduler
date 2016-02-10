@@ -8,6 +8,7 @@ public class ClassParser{
     public static HashMap<String, ClassNode> classList;
     public static HashMap<String, HashSet<String> > instructorList;
     public static HashMap<String, HashSet<String> > departmentList;
+    public static HashMap<String, HashSet<String> > sectionList;
     private BufferedReader reader = null;
     public ClassParser(String fileToRead){
 	inFile = new File(fileToRead);
@@ -38,6 +39,7 @@ public class ClassParser{
 		    classList.put(cur.getId(),cur);
 		    updateInstructorList(cur.getInstructor(), cur.getId());
 		    updateDepartmentList(cur.getCourse(), cur.getId());
+		    updateSectionList(cur.getCourse() + cur.getNumber(), cur.getId());
 		    break;
 		case 7:
 		    for (int i = 0; i < 2; i++) {
@@ -48,6 +50,7 @@ public class ClassParser{
 		    classList.put(cur.getId(),cur);
 		    updateInstructorList(cur.getInstructor(), cur.getId());
 		    updateDepartmentList(cur.getCourse(), cur.getId());
+		    updateSectionList(cur.getCourse() + cur.getNumber(), cur.getId());
 		    break;
 		case 4:
 		    for (int i = 0; i < 3; i++) {
@@ -64,6 +67,7 @@ public class ClassParser{
 		    classList.put(cur.getId(),cur);
 		    updateInstructorList(cur.getInstructor(), cur.getId());
 		    updateDepartmentList(cur.getCourse(), cur.getId());
+		    updateSectionList(cur.getCourse() + cur.getNumber(), cur.getId());
 		    break;
 		default:
 		    break;
@@ -89,6 +93,15 @@ public class ClassParser{
 	System.out.println(classList.size());
 	for (ClassNode cur : classList.values())
 	    cur.outputClassNode();
+    }
+    public void updateSectionList(String courseNumber, String id){
+	if (sectionList.containsKey(courseNumber)){
+	    sectionList.get(courseNumber).add(id);
+	}
+	else{
+	    sectionList.put(courseNumber, new HashSet<String>());
+	    sectionList.get(courseNumber).add(id);
+	}
     }
     public void updateDepartmentList(String course, String id){
 	if (departmentList.containsKey(course)){

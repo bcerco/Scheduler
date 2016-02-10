@@ -1,9 +1,11 @@
 package ScheduleManager;
 
 import java.io.File;
+import java.util.HashSet;
 
 import Class.ClassNode;
 import Class.ClassParser;
+import Class.Filter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -25,10 +27,14 @@ public class ToolBarView extends ToolBar {
 	private Button      btExport;
 	private TextField	tfFilterEdit;
 
+	private Filter      filter;
+
 	private WeeklyScheduleCourseTracks tracks;
 
 	public ToolBarView (Stage stage, WeeklyScheduleCourseTracks scheduleTracks) {
 		this.tracks = scheduleTracks;
+
+		this.filter = new Filter();
 
 		chooserImport.setTitle("File Import");
 		chooserImport.getExtensionFilters().addAll(
@@ -56,15 +62,19 @@ public class ToolBarView extends ToolBar {
 			@Override
 			public void handle(KeyEvent event) {
 				if (event.getCode().equals(KeyCode.ENTER)) {
+					HashSet<String> tempHashSet = filter.search(tfFilterEdit.getText());
 					for (int i = 0; i < 6; i++) {
 				    	Pane tempPane = (Pane)tracks.getChildren().get(i+1 + 2);
 				    	for (Node cur: tempPane.getChildren()) {
 				    		CompactCourseView tempCourse = (CompactCourseView)cur;
-				    		if (tempCourse.getCid().equals(tfFilterEdit.getText())) {
-				    			tempCourse.setVisible(false);
+				    		if (tfFilterEdit.getText().equals("")) {
+				    			tempCourse.setVisible(true);
+				    		}
+				    		else if (tempHashSet.contains(tempCourse.getCid())) {
+				    			tempCourse.setVisible(true);
 				    		}
 				    		else {
-				    			tempCourse.setVisible(true);
+				    			tempCourse.setVisible(false);
 				    		}
 				    	}
 				    }

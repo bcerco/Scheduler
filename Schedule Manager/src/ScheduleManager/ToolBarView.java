@@ -7,7 +7,10 @@ import Class.ClassParser;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -19,6 +22,7 @@ public class ToolBarView extends ToolBar {
 
 	private Button      btImport;
 	private Button      btExport;
+	private TextField	tfFilterEdit;
 
 	private WeeklyScheduleCourseTracks tracks;
 
@@ -45,10 +49,19 @@ public class ToolBarView extends ToolBar {
 		    }
 		});
 
+		tfFilterEdit = new TextField();
+
 		btExport = new Button("Export");
 		btExport.setFocusTraversable(false);
-		this.getItems().add(btImport);
-		this.getItems().add(btExport);
+		BorderPane toolBox   = new BorderPane();
+		HBox       buttonBox = new HBox();
+		buttonBox.getChildren().add(btImport);
+		buttonBox.getChildren().add(btExport);
+
+		toolBox.setLeft(buttonBox);
+		toolBox.setRight(tfFilterEdit);
+
+		this.getItems().add(toolBox);
 	}
 
 	public void PopulateTracks() {

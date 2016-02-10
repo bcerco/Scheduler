@@ -19,6 +19,8 @@ import javafx.scene.layout.VBox;
  */
 
 public class CompactCourseView extends VBox {
+	private String cid;
+
 	private String course;
 	private String number;
 	private String divider = "-";
@@ -31,6 +33,7 @@ public class CompactCourseView extends VBox {
 		this.isDragging = false;
 		this.getStyleClass().add("CompactCourse");
 		this.setStyle("-fx-background-color: " + color);
+		this.cid      = course + number + section;
 		this.course  = course;
 		this.number  = number;
 		this.section = section;
@@ -152,5 +155,9 @@ public class CompactCourseView extends VBox {
 		endTimeInformation.getChildren().addAll(endLabel, endTimeLabel);
 
 		this.getChildren().addAll(information, startTimeInformation, endTimeInformation);
+	}
+
+	public String getCid() {
+		return cid;
 	}
 }

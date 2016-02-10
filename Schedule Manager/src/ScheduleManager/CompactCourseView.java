@@ -52,8 +52,8 @@ public class CompactCourseView extends VBox {
 				}
 				else {
 					CompactCourseView.this.isDragging = true;
-					CompactCourseView.this.setMinHeight(event.getY());
-					CompactCourseView.this.setMaxHeight(event.getY());
+					CompactCourseView.this.setMinHeight(Math.round(event.getY()));
+					CompactCourseView.this.setMaxHeight(Math.round(event.getY()));
 				}
 
 				event.consume();
@@ -122,7 +122,7 @@ public class CompactCourseView extends VBox {
 		double heightOfClass = pixelMinutes * (eTime - sTime);
 
 		this.setPrefWidth(65);
-		this.setPrefHeight(heightOfClass);
+		this.setPrefHeight(Math.round(heightOfClass));
 
 		BuildCompactCourseView();
 	}

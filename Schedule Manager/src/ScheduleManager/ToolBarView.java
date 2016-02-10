@@ -14,7 +14,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
@@ -55,6 +57,7 @@ public class ToolBarView extends ToolBar {
 		    }
 		});
 
+		HBox filterBox = new HBox();
 		tfFilterEdit = new TextField();
 		tfFilterEdit.setPromptText("Enter Filter");
 		tfFilterEdit.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -87,7 +90,10 @@ public class ToolBarView extends ToolBar {
 
 		this.getItems().add(btImport);
 		this.getItems().add(btExport);
-		this.getItems().add(tfFilterEdit);
+		filterBox.getChildren().add(tfFilterEdit);
+		this.getItems().add(filterBox);
+		HBox.setHgrow(filterBox, Priority.ALWAYS);
+		HBox.setHgrow(tfFilterEdit, Priority.ALWAYS);
 	}
 
 	public void PopulateTracks() {

@@ -15,6 +15,7 @@ public class ClassParser{
 	classList = new HashMap<String, ClassNode>();
 	instructorList = new HashMap<String,HashSet<String> >();
 	departmentList = new HashMap<String,HashSet<String> >();
+	sectionList = new HashMap<String,HashSet<String> >();
     }
     public int countCommas(String line){
 	int comma = 0;

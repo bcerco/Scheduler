@@ -56,8 +56,7 @@ public class CompactCourseView extends VBox {
 				}
 				else {
 					CompactCourseView.this.isDragging = true;
-					if (event.getSceneY() > Main.appHeight || event.getSceneX() + halfWidth > Main.appWidth
-							|| event.getSceneX() - halfWidth < 75 || event.getSceneY() - halfHeight < Main.minAppHeight)
+					if (event.getSceneY() > Main.appHeight || event.getY() < CompactCourseView.this.getPrefHeight())
 						return;
 					CompactCourseView.this.setMinHeight(Math.round(event.getY()));
 					CompactCourseView.this.setMaxHeight(Math.round(event.getY()));

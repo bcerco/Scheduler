@@ -56,7 +56,7 @@ public class Main extends Application {
 			schedulePane.add(scheduleTracks, 0, 0);
 
 			toolBarView = new ToolBarView(primaryStage, weeklyTracks);
-			System.out.println(WeeklyScheduleCourseTracks.height);
+			//System.out.println(WeeklyScheduleCourseTracks.height);
 			root.setCenter(schedulePane);
 			root.setTop(toolBarView);
 			//System.out.println(weeklyTracks.getPrefHeight());

@@ -20,7 +20,10 @@ public class Main extends Application {
 	public static File spreadsheet = null;
 
 	public static double height;
-
+	public static double appHeight;
+	public static double appWidth;
+	public static double minAppWidth;
+	public static double minAppHeight;
 	ToolBarView toolBarView;
 
 	@Override
@@ -53,15 +56,17 @@ public class Main extends Application {
 			schedulePane.add(scheduleTracks, 0, 0);
 
 			toolBarView = new ToolBarView(primaryStage, weeklyTracks);
-
+			System.out.println(WeeklyScheduleCourseTracks.height);
 			root.setCenter(schedulePane);
 			root.setTop(toolBarView);
-
+			//System.out.println(weeklyTracks.getPrefHeight());
 			scene.widthProperty().addListener(new ChangeListener<Number>() {
 			    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
 			        schedule.setPrefWidth((double)newSceneWidth);
 			        weeklySchedule.setPrefWidth((double)newSceneWidth);
 			        weeklyTracks.setPrefWidth((double)newSceneWidth);
+			        appWidth = (double)newSceneWidth;
+			        //System.out.println(weeklyTracks.getPrefHeight());
 			    }
 			});
 			scene.heightProperty().addListener(new ChangeListener<Number>() {
@@ -71,6 +76,9 @@ public class Main extends Application {
 			        weeklyTracks.setPrefHeight((double)newSceneHeight - toolBarView.getHeight());
 			        Label topLabel = (Label)weeklyTracks.getChildren().get(1);
 			        WeeklyScheduleCourseTracks.height = (double)newSceneHeight - toolBarView.getHeight() - topLabel.getHeight();
+			        appHeight = (double)newSceneHeight;
+			        minAppHeight = 0 + toolBarView.getHeight() + topLabel.getHeight();
+			        //System.out.println(WeeklyScheduleCourseTracks.height);
 			        toolBarView.PopulateTracks();
 			    }
 			});

@@ -42,16 +42,23 @@ public class CompactCourseView extends VBox {
 
 			@Override
 			public void handle(MouseEvent event) {
+				double halfWidth = CompactCourseView.this.getWidth() / 2;
+				double halfHeight = CompactCourseView.this.getHeight() / 2;
 
 				if (event.getY() < (CompactCourseView.this.getHeight() - 5) && CompactCourseView.this.isDragging == false) {
-					double halfWidth = CompactCourseView.this.getWidth() / 2;
-					double halfHeight = CompactCourseView.this.getHeight() / 2;
+					if (event.getSceneY() + halfHeight > Main.appHeight || event.getSceneX() + halfWidth > Main.appWidth
+							|| event.getSceneX() - halfWidth < 75 || event.getSceneY() - halfHeight < Main.minAppHeight)
+						return;
 
 					CompactCourseView.this.setLayoutX(CompactCourseView.this.getLayoutX() + event.getX() - halfWidth);
 					CompactCourseView.this.setLayoutY(CompactCourseView.this.getLayoutY() + event.getY() - halfHeight);
+
 				}
 				else {
 					CompactCourseView.this.isDragging = true;
+					if (event.getSceneY() > Main.appHeight || event.getSceneX() + halfWidth > Main.appWidth
+							|| event.getSceneX() - halfWidth < 75 || event.getSceneY() - halfHeight < Main.minAppHeight)
+						return;
 					CompactCourseView.this.setMinHeight(Math.round(event.getY()));
 					CompactCourseView.this.setMaxHeight(Math.round(event.getY()));
 				}

@@ -102,6 +102,7 @@ public class WeeklyScheduleView extends GridPane {
 			tempLabel.getStyleClass().add("ScheduleHeaderText");
 			tempLabel.setPadding(labelPadding);
 			tempStackPane.getChildren().add(tempLabel);
+			System.out.println(tempStackPane.getPrefWidth());
 			this.add(tempStackPane, 0, i+1);
 		}
 

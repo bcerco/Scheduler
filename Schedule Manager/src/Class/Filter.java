@@ -6,7 +6,7 @@ import java.io.*;
 public class Filter{
 
     public Filter(){
-	
+
     }
 
     public HashSet<String> search(String query){
@@ -34,7 +34,7 @@ public class Filter{
 	searchTerms = query.split("!");
 	if (searchTerms.length > 1){
 	    HashSet<String> temp = new HashSet<String>();
-	    temp.addAll(ClassParser.classList.keySet());	    
+	    temp.addAll(ClassParser.classList.keySet());
 	    for (int i = 1; i < searchTerms.length; i++) {
 		temp.removeAll(recursiveSearch(searchTerms[i]));
 	    }
@@ -42,7 +42,7 @@ public class Filter{
 	    return result;
 	}
 	/*By the time we reach this point we have an atomic term*/
-	
+
 	result.addAll(atomicSearch(query));
 	return result;
     }

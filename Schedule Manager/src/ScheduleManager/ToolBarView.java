@@ -1,6 +1,7 @@
 package ScheduleManager;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import Class.ClassNode;
@@ -103,6 +104,9 @@ public class ToolBarView extends ToolBar {
 	    }
 
 		if (Main.spreadsheet != null && Main.spreadsheet.exists()) {
+			ArrayList<CompactCourseView> workingSet = new ArrayList<CompactCourseView>();
+			String workingCourseId = "";
+			String currentCourseId = "";
 			for (ClassNode cur : ClassParser.classList.values()) {
 			    int[] sTimes = cur.getStartTime();
 			    int[] eTimes = cur.getEndTime();
@@ -127,6 +131,21 @@ public class ToolBarView extends ToolBar {
 			    		double pixelMinutes = (heightOfCell / 60);
 			    		double positionOfClass = pixelMinutes * (sTimes[i] - (WeeklyScheduleView.startHour * 60));
 			    		CompactCourseView curCourseView = new CompactCourseView(cur.getCourse(),  cur.getNumber(),  cur.getSection(), sTimes[i], eTimes[i], color);
+
+			    		currentCourseId = cur.getCourse() + cur.getNumber() + cur.getSection();
+			    		if (!currentCourseId.equals(workingCourseId)) {
+			    			workingCourseId = currentCourseId;
+			    			workingSet.clear();
+			    			workingSet.add(curCourseView);
+			    		}
+			    		else {
+			    			for (CompactCourseView cv: workingSet) {
+			    				cv.sameCourses.add(curCourseView);
+			    				curCourseView.sameCourses.add(cv);
+			    			}
+			    			workingSet.add(curCourseView);
+			    		}
+
 			    		curCourseView.setTranslateY(positionOfClass);
 			    		tempPane.getChildren().add(curCourseView);
 			    	}

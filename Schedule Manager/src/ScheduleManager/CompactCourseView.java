@@ -1,8 +1,11 @@
 package ScheduleManager;
 
+import java.util.ArrayList;
+
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -29,14 +32,24 @@ public class CompactCourseView extends VBox {
 	private String end;
 	private boolean isDragging;
 
+	private boolean isRightClicked;
+	private boolean isLocked;
+
+	public ArrayList<CompactCourseView> sameCourses;
+
 	public CompactCourseView(String course, String number, short section, int sTime, int eTime, String color) {
+		this.sameCourses = new ArrayList<CompactCourseView>();
+
 		this.isDragging = false;
+		this.isLocked   = true;
 		this.getStyleClass().add("CompactCourse");
 		this.setStyle("-fx-background-color: " + color);
 		this.cid      = course + number + section;
 		this.course  = course;
 		this.number  = number;
 		this.section = section;
+		
+		isRightClicked = false;
 
 		this.setOnMouseDragged(new EventHandler<MouseEvent>() {
 
@@ -44,6 +57,10 @@ public class CompactCourseView extends VBox {
 			public void handle(MouseEvent event) {
 				double halfWidth = CompactCourseView.this.getWidth() / 2;
 				double halfHeight = CompactCourseView.this.getHeight() / 2;
+				
+				if (event.getButton() == MouseButton.SECONDARY) {
+					return;
+				}
 
 				if (event.getY() < (CompactCourseView.this.getHeight() - 5) && CompactCourseView.this.isDragging == false) {
 					if (event.getSceneY() + halfHeight > Main.appHeight || event.getSceneX() + halfWidth > Main.appWidth
@@ -53,6 +70,13 @@ public class CompactCourseView extends VBox {
 					CompactCourseView.this.setLayoutX(CompactCourseView.this.getLayoutX() + event.getX() - halfWidth);
 					CompactCourseView.this.setLayoutY(CompactCourseView.this.getLayoutY() + event.getY() - halfHeight);
 
+					if (isLocked) {
+						for (CompactCourseView cv: sameCourses) {
+							cv.setLayoutX(cv.getLayoutX() + event.getX() - halfWidth);
+							cv.setLayoutY(cv.getLayoutY() + event.getY() - halfHeight);
+						}
+					}
+
 				}
 				else {
 					CompactCourseView.this.isDragging = true;
@@ -60,6 +84,30 @@ public class CompactCourseView extends VBox {
 						return;
 					CompactCourseView.this.setMinHeight(Math.round(event.getY()));
 					CompactCourseView.this.setMaxHeight(Math.round(event.getY()));
+
+					if (isLocked) {
+						for (CompactCourseView cv: sameCourses) {
+							cv.setMinHeight(Math.round(event.getY()));
+							cv.setMaxHeight(Math.round(event.getY()));
+						}
+					}
+				}
+
+				event.consume();
+			}
+
+		});
+		
+		this.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent event) {
+				
+				if (event.getButton() == MouseButton.SECONDARY && isRightClicked == false) {
+					isRightClicked = true;
+					isLocked = !isLocked;
+					System.out.println(isLocked);
+					return;
 				}
 
 				event.consume();
@@ -71,6 +119,7 @@ public class CompactCourseView extends VBox {
 
 			@Override
 			public void handle(MouseEvent event) {
+				CompactCourseView.this.isRightClicked = false;
 				CompactCourseView.this.isDragging = false;
 
 				event.consume();

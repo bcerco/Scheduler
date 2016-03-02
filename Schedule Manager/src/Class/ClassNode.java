@@ -15,8 +15,8 @@ public class ClassNode{
     private String room;
     private String id;
     //arrays for days and times, may change later
-    private int [] startTime;
-    private int [] endTime;
+    public int [] startTime;
+    public int [] endTime;
 
     public ClassNode(String line, int comma){
 	String [] args = line.split(",");

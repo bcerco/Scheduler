@@ -74,7 +74,7 @@ public class Conflict{
 							if ((inner.startTime[i] <= outer.endTime[i] && inner.startTime[i] >= outer.startTime[i]) ||
 									(outer.startTime[i] <= inner.endTime[i] && outer.startTime[i] >= inner.startTime[i])){
 								ret += "\n" + prof + " is double booked with " + outer.getId() +
-										" and " + inner.getId() + " on day " + i;
+								    " and " + inner.getId() + " on " + getDay(i);
 								con = true;
 							}
 						}
@@ -87,4 +87,25 @@ public class Conflict{
 
 		return ret;
 	}
+
+    public String getDay(int i){
+	switch(i){
+	case 0:
+	    return "Monday";
+	case 1:
+	    return "Tuesday";
+	case 2:
+	    return "Wednesday";
+	case 3:
+	    return "Thursday";
+	case 4:
+	    return "Friday";
+	case 5:
+	    return "Saturday";
+	case 6:
+	    return "Sunday";
+	default:
+	    return "Error";
+	}
+    }
 }

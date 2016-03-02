@@ -6,6 +6,7 @@ import java.util.HashSet;
 
 import Class.ClassNode;
 import Class.ClassParser;
+import Class.Conflict;
 import Class.Filter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -31,6 +32,7 @@ public class ToolBarView extends ToolBar {
 	private TextField	tfFilterEdit;
 
 	private Filter      filter;
+	public static Conflict    conflict;
 
 	private WeeklyScheduleCourseTracks tracks;
 
@@ -38,6 +40,8 @@ public class ToolBarView extends ToolBar {
 		this.tracks = scheduleTracks;
 
 		this.filter = new Filter();
+
+		this.conflict = new Conflict("conflicts.txt");
 
 		chooserImport.setTitle("File Import");
 		chooserImport.getExtensionFilters().addAll(
@@ -130,7 +134,7 @@ public class ToolBarView extends ToolBar {
 			    		double heightOfCell = (WeeklyScheduleCourseTracks.height)/(WeeklyScheduleView.endHour - WeeklyScheduleView.startHour);
 			    		double pixelMinutes = (heightOfCell / 60);
 			    		double positionOfClass = pixelMinutes * (sTimes[i] - (WeeklyScheduleView.startHour * 60));
-			    		CompactCourseView curCourseView = new CompactCourseView(cur.getCourse(),  cur.getNumber(),  cur.getSection(), sTimes[i], eTimes[i], color);
+			    		CompactCourseView curCourseView = new CompactCourseView(cur.getCourse(),  cur.getNumber(),  cur.getSection(), i, sTimes[i], eTimes[i], color);
 
 			    		currentCourseId = cur.getCourse() + cur.getNumber() + cur.getSection();
 			    		if (!currentCourseId.equals(workingCourseId)) {

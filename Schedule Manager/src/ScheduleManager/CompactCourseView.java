@@ -22,6 +22,10 @@ import javafx.scene.layout.VBox;
  * Dragging gets lost when the mouse leaves the class view area. Make this work no matter what!
  */
 
+/*
+ * Use WeeklyScheduleCourseTracks.leftOffset in checking if classes cross track boundaries
+ */
+
 public class CompactCourseView extends VBox {
 	private String cid;
 
@@ -87,6 +91,8 @@ public class CompactCourseView extends VBox {
 		    		CompactCourseView.this.endTime = (int)(CompactCourseView.this.startTime + (CompactCourseView.this.getHeight()/pixelMinutes));
 
 		    		CompactCourseView.this.calculateDisplayTime();
+
+		    		// Calculate Schedule Track here
 
 					if (isLocked) {
 						for (CompactCourseView cv: sameCourses) {

@@ -14,11 +14,13 @@ public class ClassNode{
     private short hard;
     private String room;
     private String id;
+    private HashSet<String> links;
     //arrays for days and times, may change later
     public int [] startTime;
     public int [] endTime;
 
     public ClassNode(String line, int comma){
+	links = new HashSet<String>();
 	String [] args = line.split(",");
 	startTime = new int[6];
 	endTime = new int[6];
@@ -103,6 +105,118 @@ public class ClassNode{
 	System.out.println("\tRoom: " + room);
 	System.out.println("\tInstructor: " + instructor);
 	System.out.println();
+    }
+    public String exportClassNode(){
+	String ret = "";
+	ret += course + "," + number + "," + section + "," + title + "," + 
+	    soft + "," + hard + "," + exportDayTime() + "," + room + "," + instructor;
+	return ret;
+    }
+    public String exportDayTime(){
+	String ret = "";
+	Iterator<String> iter = links.iterator();
+	if (links.size() == 1){
+	    String link = iter.next();
+	    int index = dayToInt(link.charAt(0));
+	    ret += link + "," + timeToString(startTime[index], endTime[index]);
+	}
+	else{
+	    /*while(iter.hasNext()){
+		
+	      }*/
+	}
+	return ret;
+    }
+    public void generateLinks(){
+	links.clear();
+	HashSet<Character> visited = new HashSet<Character>();
+	for (int i = 0; i < 6; i++) {
+	    if (!visited.contains(intToDay(i)) && startTime[i] != 0){
+		String link = "";
+		link += intToDay(i);
+		visited.add(intToDay(i));
+		for (int j = 0; j < 6; j++) {
+		    if (i != j){
+			if (startTime[i] == startTime[j] && endTime[i] == endTime[j]){
+			    link += intToDay(j);
+			    visited.add(intToDay(j));
+			}
+		    }
+		}
+		links.add(link);
+	    }
+	}
+    }
+    public String timeToString(int sTime, int eTime){
+	int shour = sTime / 60;
+	int sminutes = sTime - (shour * 60);
+	int ehour = eTime / 60;
+	int eminutes = eTime - (ehour * 60);	
+	String end = "";
+	if (shour > 12)
+	    shour-= 12;
+	if (ehour > 12){
+	    ehour-=12;
+	    end = "P";
+	}
+	else
+	    end = "A";
+	String ret = Integer.toString(shour) + ":";
+	if (sminutes < 10){
+	    ret += "0" + Integer.toString(sminutes);
+	}
+	else{
+	    ret += Integer.toString(sminutes);
+	}
+	ret += "-" + Integer.toString(ehour) + ":";
+	if (eminutes < 10){
+	    ret += "0" + Integer.toString(eminutes);
+	}
+	else{
+	    ret += Integer.toString(eminutes);
+	}
+	ret += end;
+	return ret;
+    }
+    public char intToDay(int i){
+	switch(i){
+	case 0:
+	    return 'M';
+	case 1:
+	    return 'T';
+	case 2:
+	    return 'W';
+	case 3:
+	    return 'R';
+	case 4:
+	    return 'F';
+	case 5:
+	    return 'S';
+	case 6:
+	    return 'U';
+	default:
+	    return 'E';
+	}
+    }
+    public int dayToInt(char d){
+	switch(d){
+	case 'M':
+	    return 0;
+	case 'T':
+	    return 1;
+	case 'W':
+	    return 2;
+	case 'R':
+	    return 3;
+	case 'F':
+	    return 4;
+	case 'S':
+	    return 5;
+	case 'U':
+	    return 6;
+	default:
+	    return -1;
+	}
     }
     public void createId(){
 	id = course + number + section;
@@ -194,5 +308,17 @@ public class ClassNode{
     }
     public short getSection() {
 	return section;
+    }
+    public short getHard(){
+	return hard;
+    }
+    public short getSoft(){
+	return soft;
+    }
+    public void setHard(short h){
+	hard = h;
+    }
+    public void setSoft(short s){
+	soft = s;
     }
 }

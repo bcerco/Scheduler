@@ -31,7 +31,7 @@ public class ToolBarView extends ToolBar {
 	private Button      btExport;
 	private TextField	tfFilterEdit;
 
-	private Filter      filter;
+	private static Filter      filter;
 	public static Conflict    conflict;
 
 	public static WeeklyScheduleCourseTracks tracks;
@@ -39,7 +39,7 @@ public class ToolBarView extends ToolBar {
 	public ToolBarView (Stage stage, WeeklyScheduleCourseTracks scheduleTracks) {
 		ToolBarView.tracks = scheduleTracks;
 
-		this.filter = new Filter();
+		ToolBarView.filter = new Filter();
 
 		ToolBarView.conflict = new Conflict("conflicts.txt");
 

@@ -41,6 +41,8 @@ public class ClassParser{
 		    updateInstructorList(cur.getInstructor(), cur.getId());
 		    updateDepartmentList(cur.getCourse(), cur.getId());
 		    updateSectionList(cur.getCourse() + cur.getNumber(), cur.getId());
+		    cur.generateLinks();
+		    System.out.println(cur.exportClassNode());
 		    break;
 		case 7:
 		    for (int i = 0; i < 2; i++) {

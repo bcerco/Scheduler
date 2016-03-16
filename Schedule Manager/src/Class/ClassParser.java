@@ -111,7 +111,7 @@ public class ClassParser{
 	else{
 	    departmentList.put(course, new HashSet<String>());
 	    departmentList.get(course).add(id);
-	}    
+	}
     }
     public void updateInstructorList(String instructor, String id){
 	if (instructorList.containsKey(instructor)){

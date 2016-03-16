@@ -195,4 +195,16 @@ public class ClassNode{
     public short getSection() {
 	return section;
     }
+    public short getHard(){
+	return hard;
+    }
+    public short getSoft(){
+	return soft;
+    }
+    public void setHard(short h){
+	hard = h;
+    }
+    public void setSoft(short s){
+	soft = s;
+    }
 }

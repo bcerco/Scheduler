@@ -12,6 +12,8 @@ import javafx.scene.layout.RowConstraints;
 public class WeeklyScheduleCourseTracks extends GridPane {
 
 	public static double height;
+	public static double width;
+	public static double leftOffset;
 
 	private ColumnConstraints ccColDefault;
 	private RowConstraints    rcRowDefault;

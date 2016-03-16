@@ -68,7 +68,7 @@ public class Main extends Application {
 			        Label leftLabel = (Label)weeklyTracks.getChildren().get(0);
 			        WeeklyScheduleCourseTracks.width = ((double)newSceneWidth - leftLabel.getWidth()) / 7;
 			        WeeklyScheduleCourseTracks.leftOffset = leftLabel.getWidth();
-			        System.out.println(WeeklyScheduleCourseTracks.width);
+			        //System.out.println(WeeklyScheduleCourseTracks.width);
 			        appWidth = (double)newSceneWidth;
 			        //System.out.println(weeklyTracks.getPrefHeight());
 			    }

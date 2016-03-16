@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 /*
@@ -39,6 +40,8 @@ public class CompactCourseView extends VBox {
 	private int    day;
 	private int    startTime;
 	private int    endTime;
+
+	private int    track;
 
 	private boolean isRightClicked;
 	private boolean isLocked;
@@ -85,22 +88,28 @@ public class CompactCourseView extends VBox {
 					CompactCourseView.this.setLayoutX(CompactCourseView.this.getLayoutX() + event.getX() - halfWidth);
 					CompactCourseView.this.setLayoutY(CompactCourseView.this.getLayoutY() + event.getY() - halfHeight);
 
-					double heightOfCell = (WeeklyScheduleCourseTracks.height)/(WeeklyScheduleView.endHour - WeeklyScheduleView.startHour);
+					double heightOfCell = (WeeklyScheduleCourseTracks.height) / (WeeklyScheduleView.endHour - WeeklyScheduleView.startHour);
 		    		double pixelMinutes = (heightOfCell / 60);
-		    		CompactCourseView.this.startTime = (int)((CompactCourseView.this.getLayoutY() + CompactCourseView.this.getTranslateY())/pixelMinutes)+(WeeklyScheduleView.startHour * 60);
-		    		CompactCourseView.this.endTime = (int)(CompactCourseView.this.startTime + (CompactCourseView.this.getHeight()/pixelMinutes));
+		    		CompactCourseView.this.startTime = (int)((CompactCourseView.this.getLayoutY() + CompactCourseView.this.getTranslateY()) / pixelMinutes) + (WeeklyScheduleView.startHour * 60);
+		    		CompactCourseView.this.endTime = (int)(CompactCourseView.this.startTime + (CompactCourseView.this.getHeight() / pixelMinutes));
 
 		    		CompactCourseView.this.calculateDisplayTime();
 
 		    		// Calculate Schedule Track here
+		    		// -1 = Move one track left
+		    		//  1 = Move one track right
+		    		CompactCourseView.this.track = (int)Math.floor((CompactCourseView.this.getLayoutX() + CompactCourseView.this.getTranslateX() + halfWidth) / WeeklyScheduleCourseTracks.width);
+		    		//System.out.println(track);
+		    		//System.out.println(CompactCourseView.this.day + 3);
+		    		//System.out.println(CompactCourseView.this.day + track + 3);
 
 					if (isLocked) {
 						for (CompactCourseView cv: sameCourses) {
 							cv.setLayoutX(cv.getLayoutX() + event.getX() - halfWidth);
 							cv.setLayoutY(cv.getLayoutY() + event.getY() - halfHeight);
 
-				    		cv.startTime = (int)((cv.getLayoutY() + cv.getTranslateY())/pixelMinutes)+(WeeklyScheduleView.startHour * 60);
-				    		cv.endTime = (int)(cv.startTime + (cv.getHeight()/pixelMinutes));
+				    		cv.startTime = (int)((cv.getLayoutY() + cv.getTranslateY()) / pixelMinutes) + (WeeklyScheduleView.startHour * 60);
+				    		cv.endTime = (int)(cv.startTime + (cv.getHeight() / pixelMinutes));
 				    		cv.calculateDisplayTime();
 						}
 					}
@@ -146,6 +155,11 @@ public class CompactCourseView extends VBox {
 					isRightClicked = true;
 					isLocked = !isLocked;
 					System.out.println(isLocked);
+
+					for (CompactCourseView cv: sameCourses) {
+			    		cv.isLocked = isLocked;
+					}
+
 					return;
 				}
 
@@ -164,9 +178,39 @@ public class CompactCourseView extends VBox {
 				ClassParser.classList.get(cid).startTime[day] = startTime;
 				ClassParser.classList.get(cid).endTime[day] = endTime;
 
+				if ((CompactCourseView.this.day + 3) != ((CompactCourseView.this.day + CompactCourseView.this.track + 3))) {
+	    			Pane fromTrackPane = (Pane)ToolBarView.tracks.getChildren().get(CompactCourseView.this.day + 3);
+	    			Pane toTrackPane = (Pane)ToolBarView.tracks.getChildren().get(CompactCourseView.this.day + CompactCourseView.this.track + 3);
+
+	    			boolean coursePresent = false;
+
+	    			Object[] courseArray = toTrackPane.getChildren().toArray();
+					for (int i = 0; i < courseArray.length; i++) {
+						CompactCourseView curCourse = (CompactCourseView)courseArray[i];
+						if (CompactCourseView.this.cid.equals(curCourse.cid)) {
+							coursePresent = true;
+						}
+					}
+
+					if (coursePresent == false) {
+						fromTrackPane.getChildren().remove(CompactCourseView.this);
+						toTrackPane.getChildren().add(CompactCourseView.this);
+
+						CompactCourseView.this.day = CompactCourseView.this.day + CompactCourseView.this.track;
+						//System.out.println(CompactCourseView.this.day + 3);
+						//System.out.println(fromTrackPane.getChildren().toString());
+						//System.out.println(toTrackPane.getChildren().toString());
+					}
+
+	    			//Pane currentTrack = (Pane)ToolBarView.tracks.getChildren().get(day + track + 3);
+		    		//System.out.println(currentTrack.getChildren().toString());
+	    		}
+				CompactCourseView.this.setLayoutX(0);
+
 				for (CompactCourseView cv: sameCourses) {
 					ClassParser.classList.get(cv.cid).startTime[cv.day] = cv.startTime;
 					ClassParser.classList.get(cv.cid).endTime[cv.day] = cv.endTime;
+					cv.setLayoutX(0);
 				}
 
 				System.out.println(ToolBarView.conflict.professorCheck(ClassParser.classList.get(cid).getInstructor()));
@@ -228,6 +272,7 @@ public class CompactCourseView extends VBox {
 		String startAMPM = "";
 		if (startHour > 12) {
 			startHour = startHour - 12;
+
 			startAMPM = "PM";
 		}
 		else if (startHour == 12) {
@@ -271,5 +316,10 @@ public class CompactCourseView extends VBox {
 
 		this.startTimeLabel.setText(this.start);
 		this.endTimeLabel.setText(this.end);
+	}
+
+	@Override
+	public String toString() {
+		return this.cid;
 	}
 }

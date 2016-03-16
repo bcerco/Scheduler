@@ -34,14 +34,14 @@ public class ToolBarView extends ToolBar {
 	private Filter      filter;
 	public static Conflict    conflict;
 
-	private WeeklyScheduleCourseTracks tracks;
+	public static WeeklyScheduleCourseTracks tracks;
 
 	public ToolBarView (Stage stage, WeeklyScheduleCourseTracks scheduleTracks) {
-		this.tracks = scheduleTracks;
+		ToolBarView.tracks = scheduleTracks;
 
 		this.filter = new Filter();
 
-		this.conflict = new Conflict("conflicts.txt");
+		ToolBarView.conflict = new Conflict("conflicts.txt");
 
 		chooserImport.setTitle("File Import");
 		chooserImport.getExtensionFilters().addAll(
@@ -116,7 +116,7 @@ public class ToolBarView extends ToolBar {
 			    int[] eTimes = cur.getEndTime();
 			    for (int i = 0; i < 6; i++) {
 			    	if (sTimes[i] != 0 ) {
-			    		Pane tempPane = (Pane)tracks.getChildren().get(i+1 + 2);
+			    		Pane tempPane = (Pane)tracks.getChildren().get(i + 1 + 2);
 			    		String color = "";
 			    		if (cur.getCourse().equals("MATH")) {
 			    			color = "#FF7777";

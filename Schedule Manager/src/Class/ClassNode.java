@@ -107,9 +107,10 @@ public class ClassNode{
 	System.out.println();
     }
     public String exportClassNode(){
+	generateLinks();
 	String ret = "";
 	ret += course + "," + number + "," + section + "," + exportTitle() + "," +
-	    soft + "," + hard + "," + exportDayTime() + "," + room + "," + instructor;
+	    soft + "," + hard + "," + exportDayTime() + "," + room + "," + instructor + "\n";
 	return ret;
     }
     public String exportTitle(){

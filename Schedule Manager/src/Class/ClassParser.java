@@ -5,11 +5,13 @@ import java.io.*;
 
 public class ClassParser{
     private File inFile;
+    private File outFile;
     public static HashMap<String, ClassNode> classList;
     public static HashMap<String, HashSet<String> > instructorList;
     public static HashMap<String, HashSet<String> > departmentList;
     public static HashMap<String, HashSet<String> > sectionList;
     private BufferedReader reader = null;
+    private BufferedWriter writer = null;
     public ClassParser(String fileToRead){
 	inFile = new File(fileToRead);
 	classList = new HashMap<String, ClassNode>();
@@ -41,8 +43,6 @@ public class ClassParser{
 		    updateInstructorList(cur.getInstructor(), cur.getId());
 		    updateDepartmentList(cur.getCourse(), cur.getId());
 		    updateSectionList(cur.getCourse() + cur.getNumber(), cur.getId());
-		    cur.generateLinks();
-		    System.out.println(cur.exportClassNode());
 		    break;
 		case 7:
 		    for (int i = 0; i < 2; i++) {
@@ -54,8 +54,6 @@ public class ClassParser{
 		    updateInstructorList(cur.getInstructor(), cur.getId());
 		    updateDepartmentList(cur.getCourse(), cur.getId());
 		    updateSectionList(cur.getCourse() + cur.getNumber(), cur.getId());
-		    cur.generateLinks();
-		    System.out.println(cur.exportClassNode());
 		    break;
 		case 4:
 		    for (int i = 0; i < 3; i++) {
@@ -73,8 +71,6 @@ public class ClassParser{
 		    updateInstructorList(cur.getInstructor(), cur.getId());
 		    updateDepartmentList(cur.getCourse(), cur.getId());
 		    updateSectionList(cur.getCourse() + cur.getNumber(), cur.getId());
-		    cur.generateLinks();
-		    System.out.println(cur.exportClassNode());
 		    break;
 		default:
 		    break;
@@ -93,13 +89,49 @@ public class ClassParser{
 		    reader.close();
 	    }
 	    catch(IOException e){
+		e.printStackTrace();
 	    }
 	}
+	exportClassList("C:\\Users\\Brandon\\Desktop\\expr.csv");
     }
     public void outputclassList(){
 	System.out.println(classList.size());
 	for (ClassNode cur : classList.values())
 	    cur.outputClassNode();
+    }
+    public void exportClassList(String path){
+	outFile = new File(path);
+	/*if(!outFile.exists()){
+	    try {
+			outFile.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}*/
+	try {
+	    writer = new BufferedWriter(new FileWriter(outFile.getAbsoluteFile()));
+	    Iterator<Map.Entry<String, ClassNode>> iter = classList.entrySet().iterator();
+	    while(iter.hasNext()){
+		Map.Entry<String, ClassNode> entry = iter.next();
+		writer.write(entry.getValue().exportClassNode());
+		writer.flush();
+	    }
+	}
+	catch (FileNotFoundException e){
+	    e.printStackTrace();
+	}
+	catch (IOException e) {
+	    e.printStackTrace();
+	}
+	finally{
+	    try {
+		if (writer != null)
+		    writer.close();
+	    }
+	    catch (IOException e){
+		e.printStackTrace();
+	    }
+	}
     }
     public void updateSectionList(String courseNumber, String id){
 	if (sectionList.containsKey(courseNumber)){

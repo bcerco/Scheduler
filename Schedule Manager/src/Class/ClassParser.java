@@ -54,6 +54,8 @@ public class ClassParser{
 		    updateInstructorList(cur.getInstructor(), cur.getId());
 		    updateDepartmentList(cur.getCourse(), cur.getId());
 		    updateSectionList(cur.getCourse() + cur.getNumber(), cur.getId());
+		    cur.generateLinks();
+		    System.out.println(cur.exportClassNode());
 		    break;
 		case 4:
 		    for (int i = 0; i < 3; i++) {
@@ -71,6 +73,8 @@ public class ClassParser{
 		    updateInstructorList(cur.getInstructor(), cur.getId());
 		    updateDepartmentList(cur.getCourse(), cur.getId());
 		    updateSectionList(cur.getCourse() + cur.getNumber(), cur.getId());
+		    cur.generateLinks();
+		    System.out.println(cur.exportClassNode());
 		    break;
 		default:
 		    break;

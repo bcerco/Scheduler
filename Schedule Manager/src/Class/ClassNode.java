@@ -108,9 +108,18 @@ public class ClassNode{
     }
     public String exportClassNode(){
 	String ret = "";
-	ret += course + "," + number + "," + section + "," + title + "," + 
+	ret += course + "," + number + "," + section + "," + exportTitle() + "," +
 	    soft + "," + hard + "," + exportDayTime() + "," + room + "," + instructor;
 	return ret;
+    }
+    public String exportTitle(){
+	if (title.contains(",")){
+	    String [] sp = title.split(",");
+	    return  sp[0] + "\n" + sp[1];
+	}
+	else{
+	    return title;
+	}
     }
     public String exportDayTime(){
 	String ret = "";
@@ -121,9 +130,13 @@ public class ClassNode{
 	    ret += link + "," + timeToString(startTime[index], endTime[index]);
 	}
 	else{
-	    /*while(iter.hasNext()){
-		
-	      }*/
+	    String link = iter.next();
+	    int index1 = dayToInt(link.charAt(0));
+	    ret += "\"" + link + "\n";
+	    link = iter.next();
+	    int index2 = dayToInt(link.charAt(0));
+	    ret += link + "\",\"" + timeToString(startTime[index1], endTime[index1]) + "\n";
+	    ret += timeToString(startTime[index2], endTime[index2]) + "\"";
 	}
 	return ret;
     }
@@ -151,7 +164,7 @@ public class ClassNode{
 	int shour = sTime / 60;
 	int sminutes = sTime - (shour * 60);
 	int ehour = eTime / 60;
-	int eminutes = eTime - (ehour * 60);	
+	int eminutes = eTime - (ehour * 60);
 	String end = "";
 	if (shour > 12)
 	    shour-= 12;

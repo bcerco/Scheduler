@@ -13,13 +13,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 /*
- * DRAG AND DROP IS GLITCHY RIGHT NOW
- * Only happens when crossing columns
- * When a classview moves into another column, physically move it into that column's track.
- * Otherwise the track blocks drag and drop of elements under it (any class obstructed by the pane)
- */
-
-/*
  * Dragging gets lost when the mouse leaves the class view area. Make this work no matter what!
  */
 
@@ -176,8 +169,8 @@ public class CompactCourseView extends VBox {
 				CompactCourseView.this.isDragging = false;
 
 				if (event.getButton() == MouseButton.PRIMARY) {
-					ClassParser.classList.get(cid).startTime[day] = startTime;
-					ClassParser.classList.get(cid).endTime[day] = endTime;
+					//ClassParser.classList.get(cid).startTime[CompactCourseView.this.day] = startTime;
+					//ClassParser.classList.get(cid).endTime[CompactCourseView.this.day] = endTime;
 
 					if ((CompactCourseView.this.day + 3) != ((CompactCourseView.this.day + CompactCourseView.this.track + 3))) {
 		    			Pane fromTrackPane = (Pane)ToolBarView.tracks.getChildren().get(CompactCourseView.this.day + 3);
@@ -199,7 +192,11 @@ public class CompactCourseView extends VBox {
 							fromTrackPane.getChildren().remove(CompactCourseView.this);
 							toTrackPane.getChildren().add(CompactCourseView.this);
 
+							ClassParser.classList.get(cid).startTime[CompactCourseView.this.day] = 0;
+							ClassParser.classList.get(cid).endTime[CompactCourseView.this.day] = 0;
 							CompactCourseView.this.day = CompactCourseView.this.day + CompactCourseView.this.track;
+							ClassParser.classList.get(cid).startTime[CompactCourseView.this.day] = startTime;
+							ClassParser.classList.get(cid).endTime[CompactCourseView.this.day] = endTime;
 							//System.out.println(CompactCourseView.this.day + 3);
 							//System.out.println(fromTrackPane.getChildren().toString());
 							//System.out.println(toTrackPane.getChildren().toString());
@@ -218,9 +215,11 @@ public class CompactCourseView extends VBox {
 			    			fromTrackPaneCV.getChildren().remove(cv);
 							toTrackPaneCV.getChildren().add(cv);
 
+							ClassParser.classList.get(cv.cid).startTime[cv.day] = 0;
+							ClassParser.classList.get(cv.cid).endTime[cv.day] = 0;
+							cv.day = cv.day + CompactCourseView.this.track;
 							ClassParser.classList.get(cv.cid).startTime[cv.day] = cv.startTime;
 							ClassParser.classList.get(cv.cid).endTime[cv.day] = cv.endTime;
-							cv.day = cv.day + CompactCourseView.this.track;
 							cv.setLayoutX(0);
 						}
 					}

@@ -95,8 +95,9 @@ public class ToolBarView extends ToolBar {
 		btExport.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override public void handle(ActionEvent e) {
 		    	File checkFile = chooserImport.showSaveDialog(stage);
-		    	parser.exportClassList(checkFile.getAbsolutePath());
-
+		    	if (checkFile != null) {
+		    		parser.exportClassList(checkFile.getAbsolutePath());
+		    	}
 		    }
 		});
 

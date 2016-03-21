@@ -92,7 +92,6 @@ public class ClassParser{
 		e.printStackTrace();
 	    }
 	}
-	exportClassList("C:\\Users\\Brandon\\Desktop\\expr.csv");
     }
     public void outputclassList(){
 	System.out.println(classList.size());

@@ -92,6 +92,13 @@ public class ToolBarView extends ToolBar {
 		});
 
 		btExport = new Button("Export");
+		btExport.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override public void handle(ActionEvent e) {
+		    	File checkFile = chooserImport.showSaveDialog(stage);
+		    	parser.exportClassList(checkFile.getAbsolutePath());
+
+		    }
+		});
 
 		this.getItems().add(btImport);
 		this.getItems().add(btExport);

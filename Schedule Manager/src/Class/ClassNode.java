@@ -109,7 +109,7 @@ public class ClassNode{
     public String exportClassNode(){
 	generateLinks();
 	String ret = "";
-	ret += course + "," + number + "," + section + "," + exportTitle() + "," +
+	ret += course + "," + number + "," + section + "," + credits + "," + exportTitle() + "," +
 	    soft + "," + hard + "," + exportDayTime() + "," + room + "," + instructor + "\n";
 	return ret;
     }

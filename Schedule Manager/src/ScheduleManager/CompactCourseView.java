@@ -175,46 +175,59 @@ public class CompactCourseView extends VBox {
 				CompactCourseView.this.isRightClicked = false;
 				CompactCourseView.this.isDragging = false;
 
-				ClassParser.classList.get(cid).startTime[day] = startTime;
-				ClassParser.classList.get(cid).endTime[day] = endTime;
+				if (event.getButton() == MouseButton.PRIMARY) {
+					ClassParser.classList.get(cid).startTime[day] = startTime;
+					ClassParser.classList.get(cid).endTime[day] = endTime;
 
-				if ((CompactCourseView.this.day + 3) != ((CompactCourseView.this.day + CompactCourseView.this.track + 3))) {
-	    			Pane fromTrackPane = (Pane)ToolBarView.tracks.getChildren().get(CompactCourseView.this.day + 3);
-	    			Pane toTrackPane = (Pane)ToolBarView.tracks.getChildren().get(CompactCourseView.this.day + CompactCourseView.this.track + 3);
+					if ((CompactCourseView.this.day + 3) != ((CompactCourseView.this.day + CompactCourseView.this.track + 3))) {
+		    			Pane fromTrackPane = (Pane)ToolBarView.tracks.getChildren().get(CompactCourseView.this.day + 3);
+		    			Pane toTrackPane = (Pane)ToolBarView.tracks.getChildren().get(CompactCourseView.this.day + CompactCourseView.this.track + 3);
 
-	    			boolean coursePresent = false;
+		    			boolean coursePresent = false;
 
-	    			Object[] courseArray = toTrackPane.getChildren().toArray();
-					for (int i = 0; i < courseArray.length; i++) {
-						CompactCourseView curCourse = (CompactCourseView)courseArray[i];
-						if (CompactCourseView.this.cid.equals(curCourse.cid)) {
-							coursePresent = true;
+		    			if (!CompactCourseView.this.isLocked) {
+			    			Object[] courseArray = toTrackPane.getChildren().toArray();
+							for (int i = 0; i < courseArray.length; i++) {
+								CompactCourseView curCourse = (CompactCourseView)courseArray[i];
+								if (CompactCourseView.this.cid.equals(curCourse.cid)) {
+									coursePresent = true;
+								}
+							}
+		    			}
+
+						if (coursePresent == false) {
+							fromTrackPane.getChildren().remove(CompactCourseView.this);
+							toTrackPane.getChildren().add(CompactCourseView.this);
+
+							CompactCourseView.this.day = CompactCourseView.this.day + CompactCourseView.this.track;
+							//System.out.println(CompactCourseView.this.day + 3);
+							//System.out.println(fromTrackPane.getChildren().toString());
+							//System.out.println(toTrackPane.getChildren().toString());
+						}
+
+		    			//Pane currentTrack = (Pane)ToolBarView.tracks.getChildren().get(day + track + 3);
+			    		//System.out.println(currentTrack.getChildren().toString());
+		    		}
+					CompactCourseView.this.setLayoutX(0);
+
+					if (CompactCourseView.this.isLocked) {
+						for (CompactCourseView cv: sameCourses) {
+							Pane fromTrackPaneCV = (Pane)ToolBarView.tracks.getChildren().get(cv.day + 3);
+			    			Pane toTrackPaneCV = (Pane)ToolBarView.tracks.getChildren().get(cv.day + CompactCourseView.this.track + 3);
+
+			    			fromTrackPaneCV.getChildren().remove(cv);
+							toTrackPaneCV.getChildren().add(cv);
+
+							//ClassParser.classList.get(cv.cid).startTime[cv.day] = cv.startTime;
+							//ClassParser.classList.get(cv.cid).endTime[cv.day] = cv.endTime;
+							cv.day = cv.day + CompactCourseView.this.track;
+							cv.setLayoutX(0);
 						}
 					}
 
-					if (coursePresent == false) {
-						fromTrackPane.getChildren().remove(CompactCourseView.this);
-						toTrackPane.getChildren().add(CompactCourseView.this);
-
-						CompactCourseView.this.day = CompactCourseView.this.day + CompactCourseView.this.track;
-						//System.out.println(CompactCourseView.this.day + 3);
-						//System.out.println(fromTrackPane.getChildren().toString());
-						//System.out.println(toTrackPane.getChildren().toString());
-					}
-
-	    			//Pane currentTrack = (Pane)ToolBarView.tracks.getChildren().get(day + track + 3);
-		    		//System.out.println(currentTrack.getChildren().toString());
-	    		}
-				CompactCourseView.this.setLayoutX(0);
-
-				for (CompactCourseView cv: sameCourses) {
-					ClassParser.classList.get(cv.cid).startTime[cv.day] = cv.startTime;
-					ClassParser.classList.get(cv.cid).endTime[cv.day] = cv.endTime;
-					cv.setLayoutX(0);
+					System.out.println(ToolBarView.conflict.professorCheck(ClassParser.classList.get(cid).getInstructor()));
+					//ToolBarView.conflict.timeCheck(cid);
 				}
-
-				System.out.println(ToolBarView.conflict.professorCheck(ClassParser.classList.get(cid).getInstructor()));
-				//ToolBarView.conflict.timeCheck(cid);
 
 				event.consume();
 			}

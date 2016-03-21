@@ -79,33 +79,6 @@ public class ClassNode{
 	}
 
     }
-    //TODO: need to fix this
-    public void outputClassNode(){
-	System.out.println(course + " " + number);
-	System.out.println("\tSection: " + section);
-	System.out.println("\tCredits: " + credits);
-	System.out.println("\tTitle: " + title);
-	System.out.println("\tSoft: " + soft);
-	System.out.println("\tHard: " + hard);
-
-	System.out.println("\tDays: ");
-	for (int i = 0; i < startTime.length; i++) {
-	    if (startTime[i] != 0) {
-		switch(i){
-		case 0: System.out.printf("\t\tM: "); break;
-		case 1: System.out.printf("\t\tT: "); break;
-		case 2: System.out.printf("\t\tW: "); break;
-		case 3: System.out.printf("\t\tR: "); break;
-		case 4: System.out.printf("\t\tF: "); break;
-		case 5: System.out.printf("\t\tS: "); break;
-		}
-		System.out.println(startTime[i] + "-" + endTime[i]);
-	    }
-	}
-	System.out.println("\tRoom: " + room);
-	System.out.println("\tInstructor: " + instructor);
-	System.out.println();
-    }
     public String exportClassNode(){
 	generateLinks();
 	String ret = "";

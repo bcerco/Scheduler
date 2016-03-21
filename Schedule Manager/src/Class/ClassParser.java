@@ -93,11 +93,7 @@ public class ClassParser{
 	    }
 	}
     }
-    public void outputclassList(){
-	System.out.println(classList.size());
-	for (ClassNode cur : classList.values())
-	    cur.outputClassNode();
-    }
+
     public void exportClassList(String path){
 	outFile = new File(path);
 	/*if(!outFile.exists()){

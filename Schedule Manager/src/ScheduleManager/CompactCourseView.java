@@ -218,8 +218,8 @@ public class CompactCourseView extends VBox {
 			    			fromTrackPaneCV.getChildren().remove(cv);
 							toTrackPaneCV.getChildren().add(cv);
 
-							//ClassParser.classList.get(cv.cid).startTime[cv.day] = cv.startTime;
-							//ClassParser.classList.get(cv.cid).endTime[cv.day] = cv.endTime;
+							ClassParser.classList.get(cv.cid).startTime[cv.day] = cv.startTime;
+							ClassParser.classList.get(cv.cid).endTime[cv.day] = cv.endTime;
 							cv.day = cv.day + CompactCourseView.this.track;
 							cv.setLayoutX(0);
 						}

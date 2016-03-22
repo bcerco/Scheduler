@@ -83,7 +83,8 @@ public class Main extends Application {
 			        appHeight = (double)newSceneHeight;
 			        minAppHeight = 0 + toolBarView.getHeight() + topLabel.getHeight();
 			        //System.out.println(WeeklyScheduleCourseTracks.height);
-			        toolBarView.PopulateTracks();
+			        toolBarView.PopulateTracks(); // Only populating in height may be what causes graphical bugs on Mac
+			        							  // But updating in both width AND height causes performance issues.
 			    }
 			});
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());

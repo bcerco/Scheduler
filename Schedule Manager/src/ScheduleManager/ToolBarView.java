@@ -29,9 +29,9 @@ public class ToolBarView extends ToolBar {
 
 	private Button      btImport;
 	private Button      btExport;
-	private TextField	tfFilterEdit;
+	public static TextField	tfFilterEdit;
 
-	private static Filter      filter;
+	public static Filter      filter;
 	public static Conflict    conflict;
 
 	public static WeeklyScheduleCourseTracks tracks;
@@ -162,6 +162,25 @@ public class ToolBarView extends ToolBar {
 			    		tempPane.getChildren().add(curCourseView);
 			    	}
 			    }
+		    }
+		}
+
+		if (tfFilterEdit != null && !tfFilterEdit.getText().equals("")) {
+	        HashSet<String> tempHashSet = ToolBarView.filter.search(ToolBarView.tfFilterEdit.getText());
+			for (int i = 0; i < 6; i++) {
+		    	Pane tempPane = (Pane)ToolBarView.tracks.getChildren().get(i+1 + 2);
+		    	for (Node cur: tempPane.getChildren()) {
+		    		CompactCourseView tempCourse = (CompactCourseView)cur;
+		    		if (ToolBarView.tfFilterEdit.getText().equals("")) {
+		    			tempCourse.setVisible(true);
+		    		}
+		    		else if (tempHashSet.contains(tempCourse.getCid())) {
+		    			tempCourse.setVisible(true);
+		    		}
+		    		else {
+		    			tempCourse.setVisible(false);
+		    		}
+		    	}
 		    }
 		}
 	}

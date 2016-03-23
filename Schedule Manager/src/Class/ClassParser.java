@@ -6,6 +6,7 @@ import java.io.*;
 public class ClassParser{
     private File inFile;
     private File outFile;
+    private ArrayList<String> classOrder;
     public static HashMap<String, ClassNode> classList;
     public static HashMap<String, HashSet<String> > instructorList;
     public static HashMap<String, HashSet<String> > departmentList;
@@ -13,6 +14,7 @@ public class ClassParser{
     private BufferedReader reader = null;
     private BufferedWriter writer = null;
     public ClassParser(String fileToRead){
+	classOrder = new ArrayList<String>();
 	inFile = new File(fileToRead);
 	classList = new HashMap<String, ClassNode>();
 	instructorList = new HashMap<String,HashSet<String> >();
@@ -43,6 +45,7 @@ public class ClassParser{
 		    updateInstructorList(cur.getInstructor(), cur.getId());
 		    updateDepartmentList(cur.getCourse(), cur.getId());
 		    updateSectionList(cur.getCourse() + cur.getNumber(), cur.getId());
+		    classOrder.add(cur.getId());
 		    break;
 		case 7:
 		    for (int i = 0; i < 2; i++) {
@@ -54,6 +57,7 @@ public class ClassParser{
 		    updateInstructorList(cur.getInstructor(), cur.getId());
 		    updateDepartmentList(cur.getCourse(), cur.getId());
 		    updateSectionList(cur.getCourse() + cur.getNumber(), cur.getId());
+		    classOrder.add(cur.getId());
 		    break;
 		case 4:
 		    for (int i = 0; i < 3; i++) {
@@ -71,6 +75,7 @@ public class ClassParser{
 		    updateInstructorList(cur.getInstructor(), cur.getId());
 		    updateDepartmentList(cur.getCourse(), cur.getId());
 		    updateSectionList(cur.getCourse() + cur.getNumber(), cur.getId());
+		    classOrder.add(cur.getId());
 		    break;
 		default:
 		    break;
@@ -96,19 +101,15 @@ public class ClassParser{
 
     public void exportClassList(String path){
 	outFile = new File(path);
-	/*if(!outFile.exists()){
-	    try {
-			outFile.createNewFile();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}*/
 	try {
 	    writer = new BufferedWriter(new FileWriter(outFile.getAbsoluteFile()));
-	    Iterator<Map.Entry<String, ClassNode>> iter = classList.entrySet().iterator();
+	    //Iterator<Map.Entry<String, ClassNode>> iter = classList.entrySet().iterator();
+	    Iterator<String> iter = classOrder.iterator();
 	    while(iter.hasNext()){
-		Map.Entry<String, ClassNode> entry = iter.next();
-		writer.write(entry.getValue().exportClassNode());
+		//Map.Entry<String, ClassNode> entry = iter.next();
+		ClassNode cur = classList.get(iter.next());
+		//writer.write(entry.getValue().exportClassNode());
+		writer.write(cur.exportClassNode());
 		writer.flush();
 	    }
 	}

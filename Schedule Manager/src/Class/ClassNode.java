@@ -14,13 +14,13 @@ public class ClassNode{
     private short hard;
     private String room;
     private String id;
-    private HashSet<String> links;
+    private ArrayList<String> links;
     //arrays for days and times, may change later
     public int [] startTime;
     public int [] endTime;
 
     public ClassNode(String line, int comma){
-	links = new HashSet<String>();
+	links = new ArrayList<String>();
 	String [] args = line.split(",");
 	startTime = new int[6];
 	endTime = new int[6];
@@ -82,9 +82,15 @@ public class ClassNode{
     public String exportClassNode(){
 	generateLinks();
 	String ret = "";
-	ret += course + "," + number + "," + section + "," + credits + "," + exportTitle() + "," +
+	ret += course + "," + number + "," + exportSection() + "," + credits + "," + exportTitle() + "," +
 	    soft + "," + hard + "," + exportDayTime() + "," + room + "," + instructor + "\n";
 	return ret;
+    }
+    public String exportSection(){
+    	if (section < 10)
+    		return "00" + Short.toString(section);
+    	else
+    		return "0" + Short.toString(section);
     }
     public String exportTitle(){
 	if (title.contains(",")){

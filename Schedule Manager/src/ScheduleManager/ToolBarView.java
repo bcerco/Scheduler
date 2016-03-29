@@ -8,20 +8,27 @@ import Class.ClassNode;
 import Class.ClassParser;
 import Class.Conflict;
 import Class.Filter;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class ToolBarView extends ToolBar {
 	private ClassParser parser;
@@ -29,7 +36,12 @@ public class ToolBarView extends ToolBar {
 
 	private Button      btImport;
 	private Button      btExport;
+	private Button      btConflict;
 	public static TextField	tfFilterEdit;
+
+	private BorderPane  conflictRoot;
+	ListView<String>    conflictList;
+	private boolean		conflictsVisible;
 
 	public static Filter      filter;
 	public static Conflict    conflict;
@@ -37,6 +49,8 @@ public class ToolBarView extends ToolBar {
 	public static WeeklyScheduleCourseTracks tracks;
 
 	public ToolBarView (Stage stage, WeeklyScheduleCourseTracks scheduleTracks) {
+		conflictsVisible = false;
+
 		ToolBarView.tracks = scheduleTracks;
 
 		ToolBarView.filter = new Filter();
@@ -101,8 +115,69 @@ public class ToolBarView extends ToolBar {
 		    }
 		});
 
+		btConflict = new Button("Conflicts");
+		btConflict.setOnAction(new EventHandler<ActionEvent>() {
+			Button btnIgnoreConflict;
+
+		    @Override public void handle(ActionEvent e) {
+		    	if (!conflictsVisible) {
+			    	Stage conflictStage = new Stage();
+				    ToolBarView.this.conflictRoot = new BorderPane();
+				    Scene conflictScene = new Scene(ToolBarView.this.conflictRoot,800,400);
+				    conflictStage.setScene(conflictScene);
+				    conflictStage.setTitle("Conflicts");
+				    conflictStage.initModality(Modality.NONE);
+				    conflictStage.initOwner(
+				        ((Node)e.getSource()).getScene().getWindow() );
+
+				    conflictStage.setOnCloseRequest((new EventHandler<WindowEvent>() {
+						@Override
+						public void handle(WindowEvent event) {
+							conflictsVisible = false;
+							conflictStage.close();
+							event.consume();
+						}
+
+				    }));
+
+				    btnIgnoreConflict = new Button("Ignore");
+				    HBox conflictCommandPanel = new HBox();
+
+				    if (!(ClassParser.classList == null)) {
+					    String conflictStringList = "";
+					    for (String inst : ClassParser.instructorList.keySet()) {
+					    	//String conflictResult = ToolBarView.conflict.professorCheck(ClassParser.classList.get(id).getInstructor());
+					    	String conflictResult = ToolBarView.conflict.professorCheck(inst);
+					    	if (conflictResult != null && !conflictResult.equals("null")) {
+					    		String[] conflictResultArray = conflictResult.split("\n");
+					    		for (int i = 0; i < conflictResultArray.length; i++) {
+					    			if (!conflictResultArray[i].equals("null")) {
+						    			conflictStringList += conflictResultArray[i];
+							    		conflictStringList += ";";
+					    			}
+						    	}
+					    	}
+					    }
+
+					    ObservableList<String> items = FXCollections.observableArrayList(conflictStringList.split(";"));
+
+					    conflictList = new ListView<String>();
+					    conflictList.setItems(items);
+				    }
+
+				    conflictCommandPanel.getChildren().add(btnIgnoreConflict);
+				    ToolBarView.this.conflictRoot.setCenter(conflictList);
+				    ToolBarView.this.conflictRoot.setBottom(conflictCommandPanel);
+
+				    conflictStage.show();
+				    conflictsVisible = true;
+		    	}
+		    }
+		});
+
 		this.getItems().add(btImport);
 		this.getItems().add(btExport);
+		this.getItems().add(btConflict);
 		filterBox.getChildren().add(tfFilterEdit);
 		this.getItems().add(filterBox);
 		HBox.setHgrow(filterBox, Priority.ALWAYS);

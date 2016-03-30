@@ -1,6 +1,0 @@
-time,CMPSC470,CMPSC472,CMPSC487
-
-exception
-
-	professor 
-		  Chang 

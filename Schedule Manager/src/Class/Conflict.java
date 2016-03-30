@@ -7,11 +7,15 @@ public class Conflict{
 	private File inFile;
 	private BufferedReader reader = null;
 	private HashMap<String, HashSet<String> > timeConflict;
+    private HashMap<String, HashSet<String> > ignoreTimeConflict;
+    private HashMap<String, Float> instructorCredits;
 
 	public Conflict(String fileToRead){
 		inFile = new File(fileToRead);
 		timeConflict = new HashMap<String, HashSet<String> >();
-	}
+	    ignoreTimeConflict = new HashMap<String, HashSet<String> >();
+	    fillConflict();
+    }
 
 	public void fillConflict(){
 		try {
@@ -19,7 +23,20 @@ public class Conflict{
 			String line = null;
 			String [] params;
 			while((line = reader.readLine()) != null){
-
+                params = line.split(";");
+                //TODO should probably change this to switch
+                if (params[0].equals("ignore")){
+                    switch(params[1]){
+                        case "time":
+                            addTimeIgnore(params);
+                            break;
+                        case "credit":
+                            break;
+                        default:
+                            //TODO throw error
+                            break;
+                    }
+                }
 			}
 		}
 		catch (FileNotFoundException e){
@@ -38,6 +55,33 @@ public class Conflict{
 			}
 		}
 	}
+    public void addTimeIgnore(String [] params){
+        if (ignoreTimeConflict.containsKey(params[2])){
+            for (int i = 3; i < params.length; i++){
+                ignoreTimeConflict.get(params[2]).add(params[i]);
+                if (ignoreTimeConflict.containsKey(params[i])){
+                    ignoreTimeConflict.get(params[i]).add(params[2]);
+                }
+                else{
+                    ignoreTimeConflict.put(params[i], new HashSet<String>());
+                    ignoreTimeConflict.get(params[i]).add(params[2]);
+                }
+            }
+        }
+        else{
+            ignoreTimeConflict.put(params[2], new HashSet<String> ());
+            for (int i = 3; i < params.length; i++){
+                ignoreTimeConflict.get(params[2]).add(params[i]);
+                if (ignoreTimeConflict.containsKey(params[i])){
+                    ignoreTimeConflict.get(params[i]).add(params[2]);
+                }
+                else{
+                    ignoreTimeConflict.put(params[i], new HashSet<String>());
+                    ignoreTimeConflict.get(params[i]).add(params[2]);
+                }
+            }
+        }
+    }
 	public String timeCheck(String courseId){
 		String ret = null;
 		ClassNode cur = ClassParser.classList.get(courseId);
@@ -68,13 +112,25 @@ public class Conflict{
 			Iterator innerIt = ClassParser.instructorList.get(prof).iterator();
 			while (innerIt.hasNext()){
 				ClassNode inner = ClassParser.classList.get(innerIt.next());
-				if (!outer.getId().equals(inner.getId()) && !visited.contains(outer.getId())){
+				if (!outer.getId().equals(inner.getId()) &&
+                        !visited.contains(outer.getId())){
 					for (int i = 0; i < 6; i++){
 						if (inner.startTime[i] > 0){
-							if ((inner.startTime[i] <= outer.endTime[i] && inner.startTime[i] >= outer.startTime[i]) ||
-									(outer.startTime[i] <= inner.endTime[i] && outer.startTime[i] >= inner.startTime[i])){
-								ret += "\n" + prof + " is double booked with " + outer.getId() +
-								    " and " + inner.getId() + " on " + getDay(i);
+							if (ignoreTimeConflict.containsKey(inner.getId())){
+                                if (ignoreTimeConflict.get(inner.getId()).contains(outer.getId()))
+                                    break;
+                            }
+                            if (ignoreTimeConflict.containsKey(outer.getId())){
+                                if (ignoreTimeConflict.get(outer.getId()).contains(inner.getId()))
+                                    break;
+                            }
+                            if ((inner.startTime[i] <= outer.endTime[i] &&
+                                        inner.startTime[i] >= outer.startTime[i]) ||
+									(outer.startTime[i] <= inner.endTime[i] &&
+                                     outer.startTime[i] >= inner.startTime[i])){
+								ret += "\n" + prof + " is double booked with " +
+                                    outer.getId() + " and " + inner.getId() +
+                                    " on " + getDay(i);
 								con = true;
 							}
 						}

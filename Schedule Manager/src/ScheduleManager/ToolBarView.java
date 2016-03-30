@@ -55,7 +55,7 @@ public class ToolBarView extends ToolBar {
 
 		ToolBarView.filter = new Filter();
 
-		ToolBarView.conflict = new Conflict("conflicts.txt");
+		ToolBarView.conflict = new Conflict("/home/bac5494/Dev/Java/Scheduler/Schedule Manager/src/conflicts.txt");
 
 		chooserImport.setTitle("File Import");
 		chooserImport.getExtensionFilters().addAll(

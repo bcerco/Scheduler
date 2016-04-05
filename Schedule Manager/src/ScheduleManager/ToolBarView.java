@@ -55,7 +55,7 @@ public class ToolBarView extends ToolBar {
 
 		ToolBarView.filter = new Filter();
 
-		ToolBarView.conflict = new Conflict("/home/bac5494/Dev/Java/Scheduler/Schedule Manager/src/conflicts.txt");
+		ToolBarView.conflict = new Conflict("/home/nad5209/cmpsc/IndependentStudy/Scheduler/Schedule Manager/src/conflicts.txt");
 
 		chooserImport.setTitle("File Import");
 		chooserImport.getExtensionFilters().addAll(
@@ -140,9 +140,6 @@ public class ToolBarView extends ToolBar {
 
 				    }));
 
-				    btnIgnoreConflict = new Button("Ignore");
-				    HBox conflictCommandPanel = new HBox();
-
 				    if (!(ClassParser.classList == null)) {
 					    String conflictStringList = "";
 					    for (String inst : ClassParser.instructorList.keySet()) {
@@ -164,6 +161,33 @@ public class ToolBarView extends ToolBar {
 					    conflictList = new ListView<String>();
 					    conflictList.setItems(items);
 				    }
+
+				    btnIgnoreConflict = new Button("Ignore");
+				    btnIgnoreConflict.setOnAction(new EventHandler<ActionEvent>() {
+					    @Override public void handle(ActionEvent e) {
+					    	//int selectedIndex = conflictList.getSelectionModel().getSelectedIndex();
+					    	//conflictList.getItems().remove(selectedIndex);
+
+					    	String selectedItem = conflictList.getSelectionModel().getSelectedItem();
+					    	selectedItem = selectedItem.replace(" Sunday", "");
+					    	selectedItem = selectedItem.replace(" Monday", "");
+					    	selectedItem = selectedItem.replace(" Tuesday", "");
+					    	selectedItem = selectedItem.replace(" Wednesday", "");
+					    	selectedItem = selectedItem.replace(" Thursday", "");
+					    	selectedItem = selectedItem.replace(" Friday", "");
+					    	selectedItem = selectedItem.replace(" Saturday", "");
+
+					    	conflictList.getItems().removeAll(selectedItem + " Sunday");
+					    	conflictList.getItems().removeAll(selectedItem + " Monday");
+					    	conflictList.getItems().removeAll(selectedItem + " Tuesday");
+					    	conflictList.getItems().removeAll(selectedItem + " Wednesday");
+					    	conflictList.getItems().removeAll(selectedItem + " Thursday");
+					    	conflictList.getItems().removeAll(selectedItem + " Friday");
+					    	conflictList.getItems().removeAll(selectedItem + " Saturday");
+					    }
+					});
+
+				    HBox conflictCommandPanel = new HBox();
 
 				    conflictCommandPanel.getChildren().add(btnIgnoreConflict);
 				    ToolBarView.this.conflictRoot.setCenter(conflictList);

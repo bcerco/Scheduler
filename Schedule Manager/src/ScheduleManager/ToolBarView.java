@@ -184,6 +184,10 @@ public class ToolBarView extends ToolBar {
 					    	conflictList.getItems().removeAll(selectedItem + " Thursday");
 					    	conflictList.getItems().removeAll(selectedItem + " Friday");
 					    	conflictList.getItems().removeAll(selectedItem + " Saturday");
+
+					    	String[] selectedItemArray = selectedItem.split(" ");
+					    	String classId1 = selectedItemArray[5]; // For ignoring purposes
+					    	String classId2 = selectedItemArray[7]; // For ignoring purposes
 					    }
 					});
 

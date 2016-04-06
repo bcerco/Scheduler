@@ -261,7 +261,7 @@ public class ToolBarView extends ToolBar {
 
 				    conflictCommandPanel.getChildren().add(btnIgnoreConflict);
 				    ToolBarView.this.conflictRoot.setCenter(conflictList);
-				    ToolBarView.this.conflictRoot.setBottom(conflictCommandPanel);
+				    ToolBarView.this.conflictRoot.setTop(conflictCommandPanel);
 
 				    conflictStage.show();
 				    conflictsVisible = true;

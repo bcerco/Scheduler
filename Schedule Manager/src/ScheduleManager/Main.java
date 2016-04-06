@@ -29,8 +29,12 @@ public class Main extends Application {
 	public static double minAppHeight;
 	ToolBarView toolBarView;
 
+	public static Stage mainStage;
+
 	@Override
 	public void start(Stage primaryStage) {
+		mainStage = primaryStage;
+
 		if (!(new File("SMConfig").exists())) {
 			File pathsFile = new File("SMConfig");
 			pathsFile.mkdirs();

@@ -6,6 +6,7 @@
 }
 .ScheduleHeaderCell {
 	-fx-background-color : #7AA5B3;
+	-fx-text-fill        : #FFFFFF;
 }
 
 .ScheduleCell {
@@ -34,4 +35,16 @@
 
 .Temp {
 	-fx-background-color : #FFB347;
+}
+
+.PopupButton {
+	-fx-background-color : #FFFFFF;
+	-fx-border-color     : #7AA5B3;
+	-fx-border-width     : 0 1 1 0;
+}
+
+.PopupButtonHighlight {
+	-fx-background-color : #7AA5B3;
+	-fx-text-fill        : #FFFFFF;
+	-fx-border-width     : 0 1 1 0;
 }

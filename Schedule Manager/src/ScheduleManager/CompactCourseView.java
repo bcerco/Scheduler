@@ -3,14 +3,24 @@ package ScheduleManager;
 import java.util.ArrayList;
 
 import Class.ClassParser;
+import Class.Conflict;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 
 /*
  * Dragging gets lost when the mouse leaves the class view area. Make this work no matter what!
@@ -151,12 +161,8 @@ public class CompactCourseView extends VBox {
 
 				if (event.getButton() == MouseButton.SECONDARY && isRightClicked == false) {
 					isRightClicked = true;
-					isLocked = !isLocked;
-					System.out.println(isLocked);
 
-					for (CompactCourseView cv: sameCourses) {
-			    		cv.isLocked = isLocked;
-					}
+					showPopupDialog(event.getScreenX(), event.getScreenY());
 
 					return;
 				}
@@ -340,5 +346,208 @@ public class CompactCourseView extends VBox {
 	@Override
 	public String toString() {
 		return this.cid;
+	}
+
+	public void showPopupDialog(double x, double y) {
+		// Popup dialog when right-clicking on a classview
+    	Stage popupStage = new Stage(StageStyle.UNDECORATED);
+    	BorderPane popupRoot = new BorderPane();
+	    Scene popupScene = new Scene(popupRoot,100,100);
+	    popupScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+	    popupStage.setScene(popupScene);
+	    popupStage.setTitle("Popup Dialog");
+	    popupStage.initModality(Modality.WINDOW_MODAL);
+	    popupStage.initOwner(Main.mainStage);
+
+	    popupStage.setX(x - 50);
+	    popupStage.setY(y - 48);
+
+	    /*popupStage.setOnCloseRequest((new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent event) {
+				popupStage.close();
+				event.consume();
+			}
+
+	    }));*/
+
+	    VBox  mainBox      = new VBox();
+	    HBox  editRow      = new HBox();
+	    HBox  deleteRow    = new HBox();
+	    HBox  lockRow      = new HBox();
+	    HBox  closeRow      = new HBox();
+	    Label editButton   = new Label("Edit");
+	    Label deleteButton = new Label("Delete");
+	    Label lockButton   = new Label("Lock");
+	    Label closeButton   = new Label("Close");
+
+	    editRow.getChildren().add(editButton);
+	    editRow.alignmentProperty().set(Pos.CENTER);
+	    deleteRow.getChildren().add(deleteButton);
+	    deleteRow.alignmentProperty().set(Pos.CENTER);
+	    lockRow.getChildren().add(lockButton);
+	    lockRow.alignmentProperty().set(Pos.CENTER);
+	    closeRow.getChildren().add(closeButton);
+	    closeRow.alignmentProperty().set(Pos.CENTER);
+
+	    editRow.getStyleClass().add("ScheduleCell");
+	    deleteRow.getStyleClass().add("ScheduleCell");
+	    lockRow.getStyleClass().add("ScheduleCell");
+	    closeRow.getStyleClass().add("ScheduleCell");
+
+	    editRow.setOnMouseEntered(new EventHandler<MouseEvent> () {
+			@Override
+			public void handle(MouseEvent event) {
+				editRow.getStyleClass().remove("PopupButton");
+				editRow.getStyleClass().add("PopupButtonHighlight");
+				event.consume();
+			}
+	    });
+	    editRow.setOnMouseExited(new EventHandler<MouseEvent> () {
+			@Override
+			public void handle(MouseEvent event) {
+				editRow.getStyleClass().remove("PopupButtonHighlight");
+				editRow.getStyleClass().add("PopupButton");
+				event.consume();
+			}
+	    });
+	    editRow.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+
+			}
+	    });
+
+	    deleteRow.setOnMouseEntered(new EventHandler<MouseEvent> () {
+			@Override
+			public void handle(MouseEvent event) {
+				deleteRow.getStyleClass().remove("PopupButton");
+				deleteRow.getStyleClass().add("PopupButtonHighlight");
+				event.consume();
+			}
+	    });
+	    deleteRow.setOnMouseExited(new EventHandler<MouseEvent> () {
+			@Override
+			public void handle(MouseEvent event) {
+				deleteRow.getStyleClass().remove("PopupButtonHighlight");
+				deleteRow.getStyleClass().add("PopupButton");
+				event.consume();
+			}
+	    });
+	    deleteRow.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				if (CompactCourseView.this.isLocked) {
+					Pane parent = (Pane) CompactCourseView.this.getParent();
+					parent.getChildren().remove(CompactCourseView.this);
+					for (CompactCourseView cv: sameCourses) {
+						cv.sameCourses.remove(CompactCourseView.this);
+					}
+
+					for (CompactCourseView cv: sameCourses) {
+						parent = (Pane) cv.getParent();
+						parent.getChildren().remove(cv);
+
+						for (CompactCourseView cv2: cv.sameCourses) {
+							cv2.sameCourses.remove(cv);
+						}
+					}
+
+					popupStage.close();
+				}
+				else {
+					Pane parent = (Pane) CompactCourseView.this.getParent();
+					parent.getChildren().remove(CompactCourseView.this);
+					for (CompactCourseView cv: sameCourses) {
+						cv.sameCourses.remove(CompactCourseView.this);
+					}
+					popupStage.close();
+				}
+				event.consume();
+			}
+	    });
+
+	    lockRow.setOnMouseEntered(new EventHandler<MouseEvent> () {
+			@Override
+			public void handle(MouseEvent event) {
+				lockRow.getStyleClass().remove("PopupButton");
+				lockRow.getStyleClass().add("PopupButtonHighlight");
+				event.consume();
+			}
+	    });
+	    lockRow.setOnMouseExited(new EventHandler<MouseEvent> () {
+			@Override
+			public void handle(MouseEvent event) {
+				lockRow.getStyleClass().remove("PopupButtonHighlight");
+				lockRow.getStyleClass().add("PopupButton");
+				event.consume();
+			}
+	    });
+	    lockRow.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				isLocked = !isLocked;
+				System.out.println(isLocked);
+
+				for (CompactCourseView cv: sameCourses) {
+		    		cv.isLocked = isLocked;
+				}
+
+				popupStage.close();
+				event.consume();
+			}
+	    });
+
+	    closeRow.setOnMouseEntered(new EventHandler<MouseEvent> () {
+			@Override
+			public void handle(MouseEvent event) {
+				closeRow.getStyleClass().remove("PopupButton");
+				closeRow.getStyleClass().add("PopupButtonHighlight");
+				event.consume();
+			}
+	    });
+	    closeRow.setOnMouseExited(new EventHandler<MouseEvent> () {
+			@Override
+			public void handle(MouseEvent event) {
+				closeRow.getStyleClass().remove("PopupButtonHighlight");
+				closeRow.getStyleClass().add("PopupButton");
+				event.consume();
+			}
+	    });
+	    closeRow.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				popupStage.close();
+				event.consume();
+			}
+	    });
+
+	    mainBox.getChildren().add(editRow);
+	    mainBox.getChildren().add(deleteRow);
+	    mainBox.getChildren().add(lockRow);
+	    mainBox.getChildren().add(closeRow);
+
+	    HBox.setHgrow(editButton, Priority.ALWAYS);
+	    HBox.setHgrow(deleteButton, Priority.ALWAYS);
+	    HBox.setHgrow(lockButton, Priority.ALWAYS);
+	    HBox.setHgrow(closeButton, Priority.ALWAYS);
+
+	    VBox.setVgrow(editRow, Priority.ALWAYS);
+	    VBox.setVgrow(deleteRow, Priority.ALWAYS);
+	    VBox.setVgrow(lockRow, Priority.ALWAYS);
+	    VBox.setVgrow(closeRow, Priority.ALWAYS);
+
+	    popupRoot.setCenter(mainBox);
+
+	    /*popupScene.setOnMouseExited(new EventHandler<MouseEvent> () {
+			@Override
+			public void handle(MouseEvent event) {
+				popupStage.close();
+				event.consume();
+			}
+	    });*/
+
+	    popupStage.show();
+	    popupStage.setResizable(false);
 	}
 }

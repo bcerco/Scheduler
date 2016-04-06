@@ -170,6 +170,8 @@ public class ToolBarView extends ToolBar {
 					    	//conflictList.getItems().remove(selectedIndex);
 
 					    	String selectedItem = conflictList.getSelectionModel().getSelectedItem();
+					    	if (selectedItem == null)
+					    		return;
 					    	selectedItem = selectedItem.replace(" Sunday", "");
 					    	selectedItem = selectedItem.replace(" Monday", "");
 					    	selectedItem = selectedItem.replace(" Tuesday", "");

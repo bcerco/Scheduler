@@ -138,8 +138,8 @@ public class CompactCourseView extends VBox {
 
 					if (isLocked) {
 						for (CompactCourseView cv: sameCourses) {
-							cv.setMinHeight(Math.round(event.getY()));
-							cv.setMaxHeight(Math.round(event.getY()));
+							cv.setMinHeight(Math.round(CompactCourseView.this.getMinHeight()));
+							cv.setMaxHeight(Math.round(CompactCourseView.this.getMaxHeight()));
 
 							cv.startTime = (int)((cv.getLayoutY() + cv.getTranslateY())/pixelMinutes)+(WeeklyScheduleView.startHour * 60);
 				    		cv.endTime = (int)(cv.startTime + (cv.getHeight()/pixelMinutes));

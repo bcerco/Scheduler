@@ -146,6 +146,9 @@ public class ToolBarView extends ToolBar {
 					    for (String inst : ClassParser.instructorList.keySet()) {
 					    	//String conflictResult = ToolBarView.conflict.professorCheck(ClassParser.classList.get(id).getInstructor());
 					    	String conflictResult = ToolBarView.conflict.professorCheck(inst);
+					    	String conflictCreditResult = ToolBarView.conflict.creditCheck(inst);
+					    	if (conflictCreditResult != null)
+					    		conflictStringList += conflictCreditResult.replace("\n","") + ";";
 					    	if (conflictResult != null && !conflictResult.equals("null")) {
 					    		String[] conflictResultArray = conflictResult.split("\n");
 					    		for (int i = 0; i < conflictResultArray.length; i++) {

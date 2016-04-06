@@ -143,6 +143,26 @@ public class ToolBarView extends ToolBar {
 
 				    if (!(ClassParser.classList == null)) {
 					    String conflictStringList = "";
+					    HashSet<String> visited = new HashSet<String>();
+					    for (String cur: ClassParser.classList.keySet()){
+					    	String conflictResult = ToolBarView.conflict.timeCheck(cur);
+					    	if (conflictResult != null){
+					    		String[] conflictResultArray = conflictResult.split("\n");
+					    		for (int i = 0; i < conflictResultArray.length; i++) {
+					    			if (!conflictResultArray[i].equals("null")) {
+						    			String [] tmp = conflictResultArray[i].split(" ");
+						    			String c = tmp[1]; c = c.replace(".", "");
+						    			String c2 = tmp[4]; c2 = c2.replace(".", "");
+					    				if (!visited.contains(c2)){
+					    					conflictStringList += conflictResultArray[i];
+					    					conflictStringList += ";";
+					    				}
+					    			}
+						    	}
+					    	}
+					    	visited.add(cur);
+					    }
+
 					    for (String inst : ClassParser.instructorList.keySet()) {
 					    	//String conflictResult = ToolBarView.conflict.professorCheck(ClassParser.classList.get(id).getInstructor());
 					    	String conflictResult = ToolBarView.conflict.professorCheck(inst);
@@ -175,28 +195,13 @@ public class ToolBarView extends ToolBar {
 					    	String selectedItem = conflictList.getSelectionModel().getSelectedItem();
 					    	if (selectedItem == null)
 					    		return;
-					    	selectedItem = selectedItem.replace(" Sunday", "");
-					    	selectedItem = selectedItem.replace(" Monday", "");
-					    	selectedItem = selectedItem.replace(" Tuesday", "");
-					    	selectedItem = selectedItem.replace(" Wednesday", "");
-					    	selectedItem = selectedItem.replace(" Thursday", "");
-					    	selectedItem = selectedItem.replace(" Friday", "");
-					    	selectedItem = selectedItem.replace(" Saturday", "");
-
-					    	conflictList.getItems().removeAll(selectedItem + " Sunday");
-					    	conflictList.getItems().removeAll(selectedItem + " Monday");
-					    	conflictList.getItems().removeAll(selectedItem + " Tuesday");
-					    	conflictList.getItems().removeAll(selectedItem + " Wednesday");
-					    	conflictList.getItems().removeAll(selectedItem + " Thursday");
-					    	conflictList.getItems().removeAll(selectedItem + " Friday");
-					    	conflictList.getItems().removeAll(selectedItem + " Saturday");
 
 					    	String[] selectedItemArray = selectedItem.split(" ");
 					    	String conflictType = selectedItemArray[0]; // For ignoring purposes
 					    	String classId1     = selectedItemArray[6]; // For ignoring purposes
-					    	classId1.replace(".", "");
+					    	classId1 = classId1.replace(".", "");
 					    	String classId2     = selectedItemArray[8]; // For ignoring purposes
-					    	classId2.replace(".", "");
+					    	classId2 = classId2.replace(".", "");
 
 					    	switch (conflictType) {
 					    	case "PROFESSOR:":
@@ -207,9 +212,31 @@ public class ToolBarView extends ToolBar {
 					    	conflict = new Conflict("SMConfig/conflicts.txt");
 					    	if (!(ClassParser.classList == null)) {
 							    String conflictStringList = "";
+							    HashSet<String> visited = new HashSet<String>();
+							    for (String cur: ClassParser.classList.keySet()){
+							    	String conflictResult = ToolBarView.conflict.timeCheck(cur);
+							    	if (conflictResult != null){
+							    		String[] conflictResultArray = conflictResult.split("\n");
+							    		for (int i = 0; i < conflictResultArray.length; i++) {
+							    			if (!conflictResultArray[i].equals("null")) {
+								    			String [] tmp = conflictResultArray[i].split(" ");
+								    			String c = tmp[1]; c = c.replace(".", "");
+								    			String c2 = tmp[4]; c2 = c2.replace(".", "");
+							    				if (!visited.contains(c2)){
+							    					conflictStringList += conflictResultArray[i];
+							    					conflictStringList += ";";
+							    				}
+							    			}
+								    	}
+							    	}
+							    	visited.add(cur);
+							    }
 							    for (String inst : ClassParser.instructorList.keySet()) {
 							    	//String conflictResult = ToolBarView.conflict.professorCheck(ClassParser.classList.get(id).getInstructor());
 							    	String conflictResult = ToolBarView.conflict.professorCheck(inst);
+							    	String conflictCreditResult = ToolBarView.conflict.creditCheck(inst);
+							    	if (conflictCreditResult != null)
+							    		conflictStringList += conflictCreditResult.replace("\n","") + ";";
 							    	if (conflictResult != null && !conflictResult.equals("null")) {
 							    		String[] conflictResultArray = conflictResult.split("\n");
 							    		for (int i = 0; i < conflictResultArray.length; i++) {

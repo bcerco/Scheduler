@@ -8,15 +8,13 @@ public class Conflict{
 	private BufferedReader reader = null;
 	private HashMap<String, HashSet<String> > timeConflict;
 	private HashMap<String, HashSet<String> > ignoreTimeConflict;
-	private HashMap<String, Float> creditMin;
-	private HashMap<String, Float> creditMax;
+	private HashMap<String, Float> creditNum;
 
 	public Conflict(String fileToRead){
 		inFile = new File(fileToRead);
 		timeConflict = new HashMap<String, HashSet<String> >();
 		ignoreTimeConflict = new HashMap<String, HashSet<String> >();
-		creditMin = new HashMap<String, Float>();
-		creditMax = new HashMap<String, Float>();
+		creditNum = new HashMap<String, Float>();
 		fillConflict();
 	}
 
@@ -40,6 +38,12 @@ public class Conflict{
 						break;
 					}
 				}
+				if (params[0].equals("time")){
+					addTimeConflict(params);
+				}
+				if (params[0].equals("credit)")){
+					addCreditNum(params);
+				}
 			}
 		}
 		catch (FileNotFoundException e){
@@ -58,6 +62,9 @@ public class Conflict{
 			}
 		}
 	}
+	public void addCreditNum(String [] params){
+		creditNum.put(params[1], Float.parseFloat(params[2]));
+	}
 	public void appendConflict(String conf){
 		PrintWriter out = null;
 		try{
@@ -74,6 +81,33 @@ public class Conflict{
 		finally{
 			if (out != null)
 				out.close();
+		}
+	}
+	public void addTimeConflict(String [] params){
+		if (timeConflict.containsKey(params[1])){
+			for (int i = 2; i < params.length; i++){
+				timeConflict.get(params[1]).add(params[i]);
+				if (timeConflict.containsKey(params[i])){
+					timeConflict.get(params[i]).add(params[1]);
+				}
+				else{
+					timeConflict.put(params[i], new HashSet<String>());
+					timeConflict.get(params[i]).add(params[1]);
+				}
+			}
+		}
+		else{
+			timeConflict.put(params[1], new HashSet<String> ());
+			for (int i = 2; i < params.length; i++){
+				timeConflict.get(params[1]).add(params[i]);
+				if (timeConflict.containsKey(params[i])){
+					timeConflict.get(params[i]).add(params[1]);
+				}
+				else{
+					timeConflict.put(params[i], new HashSet<String>());
+					timeConflict.get(params[i]).add(params[1]);
+				}
+			}
 		}
 	}
 	public void addTimeIgnore(String [] params){
@@ -106,13 +140,11 @@ public class Conflict{
 	public String creditCheck(String instructor){
 		if (instructor.contains("?"))
 			return null;
-		if (ClassParser.instructorCredit.get(instructor) < 6.0 &&
-				!creditMin.containsKey(instructor)){
-			return "WARNING:    " + instructor + " is under 6.0 credits.\n";
-		}
-		if (ClassParser.instructorCredit.get(instructor) > 6.0 &&
-				!creditMax.containsKey(instructor)){
-			return "WARNING:    " + instructor + " is over 9.0 credits.\n";
+		if (creditNum.containsKey(instructor)){
+			if (ClassParser.instructorCredit.get(instructor) != creditNum.get(instructor)){
+				return "WARNING: " + instructor + " has " + ClassParser.instructorCredit.get(instructor) +
+					" instead of " + creditNum.get(instructor);
+			}
 		}
 		return null;
 	}
@@ -123,13 +155,24 @@ public class Conflict{
 			Iterator iterator = timeConflict.get(courseId).iterator();
 			while(iterator.hasNext()){
 				ClassNode other = ClassParser.classList.get(iterator.next());
+				boolean tmp = false;
 				for (int i = 0; i < 6; i++) {
-					if ((cur.startTime[i] <= other.endTime[i] &&
-							cur.endTime[i] >= other.endTime[i]) ||
-							(other.startTime[i] <= cur.endTime[i] &&
-							other.endTime[i] >= cur.endTime[i])){
-						ret += "TIME:        " + cur.getId() + " overlaps with " + other.getId() +
-								" on day " + i + ".\n";
+					if (cur.startTime[i] > 0){
+						if ((cur.startTime[i] <= other.endTime[i] &&
+								cur.endTime[i] >= other.endTime[i]) ||
+								(other.startTime[i] <= cur.endTime[i] &&
+								other.endTime[i] >= cur.endTime[i])){
+							if (!tmp){
+								ret += "\nTIME: " + cur.getCourse() + "." + cur.getNumber() +
+										"." + cur.getSection() + " overlaps with " + other.getCourse() +
+										"." + other.getNumber() + "." + other.getSection() +
+										" on day " + getDay(i);
+								tmp = !tmp;
+							}
+							else{
+								ret += getDay(i);
+							}
+						}
 					}
 				}
 			}
@@ -153,6 +196,7 @@ public class Conflict{
                 }
 				if (!outer.getId().equals(inner.getId()) &&
 						!visited.contains(inner.getId()) && !visitedOuter.contains(inner.getId())){
+					boolean tmp = false;
 					for (int i = 0; i < 6; i++){
 						if (inner.startTime[i] > 0){
 							/*if (ignoreTimeConflict.containsKey(inner.getId())){
@@ -167,9 +211,19 @@ public class Conflict{
 									inner.startTime[i] >= outer.startTime[i]) ||
 									(outer.startTime[i] <= inner.endTime[i] &&
 									outer.startTime[i] >= inner.startTime[i])){
-								ret += "\nPROFESSOR:  "+ prof + " is double booked with " +
+								/*ret += "\nPROFESSOR: "+ prof + " is double booked with " +
 										outer.getId() + " and " + inner.getId() +
-										" on " + getDay(i);
+										" on " + getDay(i);*/
+								if (!tmp){
+									ret += "\nPROFESSOR: "+ prof + " is double booked with " +
+											outer.getCourse() + "." + outer.getNumber() + "." +
+											outer.getSection() + " and " + inner.getCourse() +
+											"." + inner.getNumber() + "." + inner.getSection() +
+											" on " + getDay(i);
+									tmp = !tmp;
+								}
+								else
+									ret += getDay(i);
 								con = true;
 								visitedOuter.add(outer.getId());
 							}
@@ -188,19 +242,19 @@ public class Conflict{
 	public String getDay(int i){
 		switch(i){
 		case 0:
-			return "Monday";
+			return "M";
 		case 1:
-			return "Tuesday";
+			return "T";
 		case 2:
-			return "Wednesday";
+			return "W";
 		case 3:
-			return "Thursday";
+			return "R";
 		case 4:
-			return "Friday";
+			return "F";
 		case 5:
-			return "Saturday";
+			return "S";
 		case 6:
-			return "Sunday";
+			return "U";
 		default:
 			return "Error";
 		}

@@ -331,4 +331,10 @@ public class ClassNode{
     public void setSoft(short s){
         soft = s;
     }
+    public float getCredit(){
+        return credit;
+    }
+    public void setCredit(float f){
+        credit = f;
+    }
 }

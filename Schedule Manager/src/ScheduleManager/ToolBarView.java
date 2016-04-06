@@ -187,8 +187,41 @@ public class ToolBarView extends ToolBar {
 					    	conflictList.getItems().removeAll(selectedItem + " Saturday");
 
 					    	String[] selectedItemArray = selectedItem.split(" ");
-					    	String classId1 = selectedItemArray[5]; // For ignoring purposes
-					    	String classId2 = selectedItemArray[7]; // For ignoring purposes
+					    	String conflictType = selectedItemArray[0]; // For ignoring purposes
+					    	String classId1     = selectedItemArray[6]; // For ignoring purposes
+					    	classId1.replace(".", "");
+					    	String classId2     = selectedItemArray[8]; // For ignoring purposes
+					    	classId2.replace(".", "");
+
+					    	switch (conflictType) {
+					    	case "PROFESSOR:":
+					    		conflict.appendConflict("ignore;time;" + classId1 + ";" + classId2);
+					    		break;
+					    	}
+
+					    	conflict = new Conflict("SMConfig/conflicts.txt");
+					    	if (!(ClassParser.classList == null)) {
+							    String conflictStringList = "";
+							    for (String inst : ClassParser.instructorList.keySet()) {
+							    	//String conflictResult = ToolBarView.conflict.professorCheck(ClassParser.classList.get(id).getInstructor());
+							    	String conflictResult = ToolBarView.conflict.professorCheck(inst);
+							    	if (conflictResult != null && !conflictResult.equals("null")) {
+							    		String[] conflictResultArray = conflictResult.split("\n");
+							    		for (int i = 0; i < conflictResultArray.length; i++) {
+							    			if (!conflictResultArray[i].equals("null")) {
+								    			conflictStringList += conflictResultArray[i];
+									    		conflictStringList += ";";
+							    			}
+								    	}
+							    	}
+							    }
+
+							    ObservableList<String> items = FXCollections.observableArrayList(conflictStringList.split(";"));
+
+							    conflictList = new ListView<String>();
+							    conflictList.setItems(items);
+							    ToolBarView.this.conflictRoot.setCenter(conflictList);
+						    }
 					    }
 					});
 

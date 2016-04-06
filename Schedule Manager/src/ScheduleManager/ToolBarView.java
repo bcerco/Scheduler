@@ -55,7 +55,7 @@ public class ToolBarView extends ToolBar {
 
 		ToolBarView.filter = new Filter();
 
-		ToolBarView.conflict = new Conflict("/home/nad5209/cmpsc/IndependentStudy/Scheduler/Schedule Manager/src/conflicts.txt");
+		ToolBarView.conflict = new Conflict("SMConfig/conflicts.txt");
 
 		chooserImport.setTitle("File Import");
 		chooserImport.getExtensionFilters().addAll(
@@ -121,6 +121,7 @@ public class ToolBarView extends ToolBar {
 
 		    @Override public void handle(ActionEvent e) {
 		    	if (!conflictsVisible) {
+		    		conflict = new Conflict("SMConfig/conflicts.txt");
 			    	Stage conflictStage = new Stage();
 				    ToolBarView.this.conflictRoot = new BorderPane();
 				    Scene conflictScene = new Scene(ToolBarView.this.conflictRoot,800,400);

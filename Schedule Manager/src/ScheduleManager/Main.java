@@ -1,7 +1,9 @@
 package ScheduleManager;
 
 import java.io.File;
+import java.io.IOException;
 
+import Class.ClassParser;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -17,6 +19,7 @@ import javafx.scene.layout.RowConstraints;
 
 
 public class Main extends Application {
+	public static File conflictsFile = null;
 	public static File spreadsheet = null;
 
 	public static double height;
@@ -26,8 +29,34 @@ public class Main extends Application {
 	public static double minAppHeight;
 	ToolBarView toolBarView;
 
+	BorderPane settingsRoot;
+
+
 	@Override
 	public void start(Stage primaryStage) {
+		if (!(new File("SMConfig").exists())) {
+			File pathsFile = new File("SMConfig");
+			pathsFile.mkdirs();
+		}
+
+		if (!(new File("SMConfig/conflicts.txt").exists())) {
+			File pathsFile = new File("SMConfig/conflicts.txt");
+			try {
+				pathsFile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		if (!(new File("SMConfig/colors.txt").exists())) {
+			File pathsFile = new File("SMConfig/colors.txt");
+			try {
+				pathsFile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
 		try {
 			primaryStage.setMinWidth(1024);
 			primaryStage.setMinHeight(768);

@@ -46,9 +46,9 @@ public class ClassParser{
                         classList.put(cur.getId(),cur);
                         updateInstructorList(cur.getInstructor(), cur.getId());
                         updateDepartmentList(cur.getCourse(), cur.getId());
-                        updateSectionList(cur.getCourse() + cur.getNumber(), 
+                        updateSectionList(cur.getCourse() + cur.getNumber(),
                                 cur.getId());
-                        updateInstructorCredit(cur.getInstructor(), 
+                        updateInstructorCredit(cur.getInstructor(),
                                 cur.getCredit());
                         classOrder.add(cur.getId());
                         break;
@@ -61,9 +61,9 @@ public class ClassParser{
                         classList.put(cur.getId(),cur);
                         updateInstructorList(cur.getInstructor(), cur.getId());
                         updateDepartmentList(cur.getCourse(), cur.getId());
-                        updateSectionList(cur.getCourse() + cur.getNumber(), 
+                        updateSectionList(cur.getCourse() + cur.getNumber(),
                                 cur.getId());
-                        updateInstructorCredit(cur.getInstructor().
+                        updateInstructorCredit(cur.getInstructor(),
                                 cur.getCredit());
                         classOrder.add(cur.getId());
                         break;
@@ -82,9 +82,9 @@ public class ClassParser{
                         classList.put(cur.getId(),cur);
                         updateInstructorList(cur.getInstructor(), cur.getId());
                         updateDepartmentList(cur.getCourse(), cur.getId());
-                        updateSectionList(cur.getCourse() + cur.getNumber(), 
+                        updateSectionList(cur.getCourse() + cur.getNumber(),
                                 cur.getId());
-                        updateInstructorCredit(cur.getInstructor().
+                        updateInstructorCredit(cur.getInstructor(),
                                 cur.getCredit());
                         classOrder.add(cur.getId());
                         break;
@@ -166,11 +166,10 @@ public class ClassParser{
     }
     public void updateInstructorCredit(String instructor, float credit){
         if (instructorCredit.containsKey(instructor)){
-            instructorCredit.get(instructor) += credit;
+            instructorCredit.put(instructor, instructorCredit.get(instructor) + credit);
         }
         else{
             instructorCredit.put(instructor, credit);
-            instructorCredit.get(instructor) += credit;
         }
     }
 }

@@ -237,7 +237,7 @@ public class ClassNode{
                 Integer.parseInt(times[1].split(":")[1].substring(0,2));
         }
         else{
-            end = Integer.parseInt(times[1].substring(0, 
+            end = Integer.parseInt(times[1].substring(0,
                         times[1].length() - 1)) * 60;
         }/*
         if (times[1].split(":")[1].charAt(2) == 'P'){
@@ -332,9 +332,9 @@ public class ClassNode{
         soft = s;
     }
     public float getCredit(){
-        return credit;
+        return credits;
     }
     public void setCredit(float f){
-        credit = f;
+        credits = f;
     }
 }

@@ -8,13 +8,17 @@ public class Conflict{
     private BufferedReader reader = null;
     private HashMap<String, HashSet<String> > timeConflict;
     private HashMap<String, HashSet<String> > ignoreTimeConflict;
-    private HashMap<String, Float> instructorCredits;
-    private HashMap<String, Float> 
+    private HashMap<String, Float> instructorCredit;
+    private HashMap<String, Float> creditMin;
+    private HashMap<String, Float> creditMax;
 
     public Conflict(String fileToRead){
         inFile = new File(fileToRead);
         timeConflict = new HashMap<String, HashSet<String> >();
         ignoreTimeConflict = new HashMap<String, HashSet<String> >();
+        instructorCredit = new HashMap<String, Float>();
+        creditMin = new HashMap<String, Float>();
+        creditMax = new HashMap<String, Float>();
         fillConflict();
     }
 
@@ -102,13 +106,13 @@ public class Conflict{
         }
     }
     public String creditCheck(String instructor){
-        if (instructorCredit.get(instructor) < 6.0 && 
-                !creditMin.contains(instructor)){
-            return "WARNING: " + instructor + " is under 6.0 credits.\n";            
+        if (instructorCredit.get(instructor) < 6.0 &&
+                !creditMin.containsKey(instructor)){
+            return "WARNING: " + instructor + " is under 6.0 credits.\n";
         }
-        if (instructorCredit.get(instructor) > 6.0 && 
-                !creditMax.contains(instructor)){
-            return "WARNING: " + instructor + " is over 9.0 credits.\n";            
+        if (instructorCredit.get(instructor) > 6.0 &&
+                !creditMax.containsKey(instructor)){
+            return "WARNING: " + instructor + " is over 9.0 credits.\n";
         }
         return null;
     }

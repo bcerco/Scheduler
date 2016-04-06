@@ -29,9 +29,6 @@ public class Main extends Application {
 	public static double minAppHeight;
 	ToolBarView toolBarView;
 
-	BorderPane settingsRoot;
-
-
 	@Override
 	public void start(Stage primaryStage) {
 		if (!(new File("SMConfig").exists())) {

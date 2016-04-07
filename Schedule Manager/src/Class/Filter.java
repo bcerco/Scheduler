@@ -60,6 +60,9 @@ public class Filter{
         else if(ClassParser.sectionList.containsKey(query)){
             result.addAll(ClassParser.sectionList.get(query));
         }
+        else if(ClassParser.tierList.containsKey(Character.getNumericValue(query.charAt(0)))){
+        	result.addAll(ClassParser.tierList.get(Character.getNumericValue(query.charAt(0))));
+        }
         else {
             //TODO: throw error
         }

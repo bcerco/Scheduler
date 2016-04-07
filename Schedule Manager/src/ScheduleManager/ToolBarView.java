@@ -84,22 +84,24 @@ public class ToolBarView extends ToolBar {
 			@Override
 			public void handle(KeyEvent event) {
 				if (event.getCode().equals(KeyCode.ENTER)) {
-					HashSet<String> tempHashSet = filter.search(tfFilterEdit.getText());
-					for (int i = 0; i < 6; i++) {
-				    	Pane tempPane = (Pane)tracks.getChildren().get(i+1 + 2);
-				    	for (Node cur: tempPane.getChildren()) {
-				    		CompactCourseView tempCourse = (CompactCourseView)cur;
-				    		if (tfFilterEdit.getText().equals("")) {
-				    			tempCourse.setVisible(true);
-				    		}
-				    		else if (tempHashSet.contains(tempCourse.getCid())) {
-				    			tempCourse.setVisible(true);
-				    		}
-				    		else {
-				    			tempCourse.setVisible(false);
-				    		}
-				    	}
-				    }
+					if (!tfFilterEdit.getText().equals("")){
+						HashSet<String> tempHashSet = filter.search(tfFilterEdit.getText());
+						for (int i = 0; i < 6; i++) {
+							Pane tempPane = (Pane)tracks.getChildren().get(i+1 + 2);
+							for (Node cur: tempPane.getChildren()) {
+								CompactCourseView tempCourse = (CompactCourseView)cur;
+								if (tfFilterEdit.getText().equals("")) {
+									tempCourse.setVisible(true);
+								}
+								else if (tempHashSet.contains(tempCourse.getCid())) {
+									tempCourse.setVisible(true);
+								}
+								else {
+									tempCourse.setVisible(false);
+								}
+							}
+						}
+					}
 				}
 			}
 

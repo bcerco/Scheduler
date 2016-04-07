@@ -12,6 +12,7 @@ public class ClassParser{
     public static HashMap<String, HashSet<String> > departmentList;
     public static HashMap<String, HashSet<String> > sectionList;
     public static HashMap<String, Float> instructorCredit;
+    public static HashMap<Integer, HashSet<String> > tierList;
     private BufferedReader reader = null;
     private BufferedWriter writer = null;
     public ClassParser(String fileToRead){
@@ -22,6 +23,13 @@ public class ClassParser{
         departmentList = new HashMap<String,HashSet<String> >();
         sectionList = new HashMap<String,HashSet<String> >();
         instructorCredit = new HashMap<String,Float>();
+        tierList = new HashMap<Integer, HashSet<String> >();
+        tierList.put(0, new HashSet<String>());
+        tierList.put(1, new HashSet<String>());
+        tierList.put(2, new HashSet<String>());
+        tierList.put(3, new HashSet<String>());
+        tierList.put(4, new HashSet<String>());
+        tierList.put(5, new HashSet<String>());
     }
     public int countCommas(String line){
         int comma = 0;
@@ -50,6 +58,7 @@ public class ClassParser{
                                 cur.getId());
                         updateInstructorCredit(cur.getInstructor(),
                                 cur.getCredit());
+                        updateTierList(cur.getNumber(), cur.getId());
                         classOrder.add(cur.getId());
                         break;
                     case 7:
@@ -65,6 +74,7 @@ public class ClassParser{
                                 cur.getId());
                         updateInstructorCredit(cur.getInstructor(),
                                 cur.getCredit());
+                        updateTierList(cur.getNumber(), cur.getId());
                         classOrder.add(cur.getId());
                         break;
                     case 4:
@@ -86,6 +96,7 @@ public class ClassParser{
                                 cur.getId());
                         updateInstructorCredit(cur.getInstructor(),
                                 cur.getCredit());
+                        updateTierList(cur.getNumber(), cur.getId());
                         classOrder.add(cur.getId());
                         break;
                     default:
@@ -171,5 +182,8 @@ public class ClassParser{
         else{
             instructorCredit.put(instructor, credit);
         }
+    }
+    public void updateTierList(String number, String id){
+    	tierList.get(Character.getNumericValue(number.charAt(0))).add(id);
     }
 }

@@ -51,15 +51,7 @@ public class ClassParser{
                         break;
                     case 10:
                         cur = new ClassNode(line,num);
-                        classList.put(cur.getId(),cur);
-                        updateInstructorList(cur.getInstructor(), cur.getId());
-                        updateDepartmentList(cur.getCourse(), cur.getId());
-                        updateSectionList(cur.getCourse() + cur.getNumber(),
-                                cur.getId());
-                        updateInstructorCredit(cur.getInstructor(),
-                                cur.getCredit());
-                        updateTierList(cur.getNumber(), cur.getId());
-                        classOrder.add(cur.getId());
+                        updateMapping(cur);
                         break;
                     case 7:
                         for (int i = 0; i < 2; i++) {
@@ -67,15 +59,7 @@ public class ClassParser{
                         }
                         num = countCommas(line);
                         cur = new ClassNode(line, num);
-                        classList.put(cur.getId(),cur);
-                        updateInstructorList(cur.getInstructor(), cur.getId());
-                        updateDepartmentList(cur.getCourse(), cur.getId());
-                        updateSectionList(cur.getCourse() + cur.getNumber(),
-                                cur.getId());
-                        updateInstructorCredit(cur.getInstructor(),
-                                cur.getCredit());
-                        updateTierList(cur.getNumber(), cur.getId());
-                        classOrder.add(cur.getId());
+                        updateMapping(cur);
                         break;
                     case 4:
                         for (int i = 0; i < 3; i++) {
@@ -89,15 +73,7 @@ public class ClassParser{
                         }
                         num = countCommas(line);
                         cur = new ClassNode(line, num);
-                        classList.put(cur.getId(),cur);
-                        updateInstructorList(cur.getInstructor(), cur.getId());
-                        updateDepartmentList(cur.getCourse(), cur.getId());
-                        updateSectionList(cur.getCourse() + cur.getNumber(),
-                                cur.getId());
-                        updateInstructorCredit(cur.getInstructor(),
-                                cur.getCredit());
-                        updateTierList(cur.getNumber(), cur.getId());
-                        classOrder.add(cur.getId());
+                        updateMapping(cur);
                         break;
                     default:
                         break;
@@ -147,6 +123,17 @@ public class ClassParser{
                 e.printStackTrace();
             }
         }
+    }
+    public void updateMapping(ClassNode cur){
+        classList.put(cur.getId(),cur);
+        updateInstructorList(cur.getInstructor(), cur.getId());
+        updateDepartmentList(cur.getCourse(), cur.getId());
+        updateSectionList(cur.getCourse() + cur.getNumber(),
+                cur.getId());
+        updateInstructorCredit(cur.getInstructor(),
+                cur.getCredit());
+        updateTierList(cur.getNumber(), cur.getId());
+        classOrder.add(cur.getId());
     }
     public void updateSectionList(String courseNumber, String id){
         if (sectionList.containsKey(courseNumber)){

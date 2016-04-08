@@ -152,7 +152,7 @@ public class Conflict{
 		String ret = null;
 		ClassNode cur = ClassParser.classList.get(courseId);
 		if (timeConflict.containsKey(courseId)){
-			Iterator iterator = timeConflict.get(courseId).iterator();
+			Iterator<String> iterator = timeConflict.get(courseId).iterator();
 			while(iterator.hasNext()){
 				ClassNode other = ClassParser.classList.get(iterator.next());
 				boolean tmp = false;
@@ -184,10 +184,10 @@ public class Conflict{
 		boolean con = false;
 		HashSet<String> visited = new HashSet<String>();
 		HashSet<String> visitedOuter = new HashSet<String>();
-		Iterator outerIt = ClassParser.instructorList.get(prof).iterator();
+		Iterator<String> outerIt = ClassParser.instructorList.get(prof).iterator();
 		while (outerIt.hasNext()){
 			ClassNode outer = ClassParser.classList.get(outerIt.next());
-			Iterator innerIt = ClassParser.instructorList.get(prof).iterator();
+			Iterator<String> innerIt = ClassParser.instructorList.get(prof).iterator();
 			while (innerIt.hasNext()){
 				ClassNode inner = ClassParser.classList.get(innerIt.next());
                 if (ignoreTimeConflict.containsKey(inner.getId())){

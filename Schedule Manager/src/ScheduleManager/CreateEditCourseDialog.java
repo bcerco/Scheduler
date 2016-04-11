@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -58,6 +59,7 @@ public class CreateEditCourseDialog {
 	    HBox idFieldRow        = new HBox();
 	    HBox timeFieldRow      = new HBox();
 	    HBox professorFieldRow = new HBox();
+	    HBox daysFieldRow      = new HBox();
 	    Label idLabel          = new Label("Course ID");
 	    idLabel.setMinWidth(150);
 	    idLabel.setMaxWidth(150);
@@ -96,6 +98,31 @@ public class CreateEditCourseDialog {
 	    professorLabel.alignmentProperty().set(Pos.CENTER);
 	    TextField professorField = new TextField();
 	    professorField.setPromptText("Professor");
+	    Label daysLabel = new Label("Days");
+	    daysLabel.setMinWidth(150);
+	    daysLabel.setMaxWidth(150);
+	    daysLabel.alignmentProperty().set(Pos.CENTER);
+	    CheckBox sundayCheckBox = new CheckBox("U");
+	    sundayCheckBox.setMinWidth(50);
+	    sundayCheckBox.setMaxWidth(50);
+	    CheckBox mondayCheckBox = new CheckBox("M");
+	    mondayCheckBox.setMinWidth(50);
+	    mondayCheckBox.setMaxWidth(50);
+	    CheckBox tuesdayCheckBox = new CheckBox("T");
+	    tuesdayCheckBox.setMinWidth(50);
+	    tuesdayCheckBox.setMaxWidth(50);
+	    CheckBox wednesdayCheckBox = new CheckBox("W");
+	    wednesdayCheckBox.setMinWidth(50);
+	    wednesdayCheckBox.setMaxWidth(50);
+	    CheckBox thursdayCheckBox = new CheckBox("R");
+	    thursdayCheckBox.setMinWidth(50);
+	    thursdayCheckBox.setMaxWidth(50);
+	    CheckBox fridayCheckBox = new CheckBox("F");
+	    fridayCheckBox.setMinWidth(50);
+	    fridayCheckBox.setMaxWidth(50);
+	    CheckBox saturdayCheckBox = new CheckBox("S");
+	    saturdayCheckBox.setMinWidth(50);
+	    saturdayCheckBox.setMaxWidth(50);
 
 	    idFieldRow.getChildren().add(idLabel);
 	    idFieldRow.getChildren().add(courseField);
@@ -111,9 +138,18 @@ public class CreateEditCourseDialog {
 	    timeFieldRow.getChildren().add(endAMPMField);
 	    professorFieldRow.getChildren().add(professorLabel);
 	    professorFieldRow.getChildren().add(professorField);
+	    daysFieldRow.getChildren().add(daysLabel);
+	    daysFieldRow.getChildren().add(sundayCheckBox);
+	    daysFieldRow.getChildren().add(mondayCheckBox);
+	    daysFieldRow.getChildren().add(tuesdayCheckBox);
+	    daysFieldRow.getChildren().add(wednesdayCheckBox);
+	    daysFieldRow.getChildren().add(thursdayCheckBox);
+	    daysFieldRow.getChildren().add(fridayCheckBox);
+	    daysFieldRow.getChildren().add(saturdayCheckBox);
 	    createEditMainBox.getChildren().add(idFieldRow);
 	    createEditMainBox.getChildren().add(timeFieldRow);
 	    createEditMainBox.getChildren().add(professorFieldRow);
+	    createEditMainBox.getChildren().add(daysFieldRow);
 	    createEditRoot.setCenter(createEditMainBox);
 
 	    if (this.courseView != null) {
@@ -149,6 +185,56 @@ public class CreateEditCourseDialog {
 	    	endHourField.setText(Integer.toString(endHour));
 	    	endMinuteField.setText(Integer.toString(endMinute));
 	    	professorField.setText(ClassParser.classList.get(this.courseView.getCid()).getInstructor());
+
+	    	switch(this.courseView.getDay()+1) {
+	    	case 0:
+	    		sundayCheckBox.setSelected(true);
+	    		break;
+	    	case 1:
+	    		mondayCheckBox.setSelected(true);
+	    		break;
+	    	case 2:
+	    		tuesdayCheckBox.setSelected(true);
+	    		break;
+	    	case 3:
+	    		wednesdayCheckBox.setSelected(true);
+	    		break;
+	    	case 4:
+	    		thursdayCheckBox.setSelected(true);
+	    		break;
+	    	case 5:
+	    		fridayCheckBox.setSelected(true);
+	    		break;
+	    	case 6:
+	    		saturdayCheckBox.setSelected(true);
+	    		break;
+	    	}
+
+	    	for (CompactCourseView ccv : this.courseView.sameCourses) {
+	    		switch(ccv.getDay()+1) {
+		    	case 0:
+		    		sundayCheckBox.setSelected(true);
+		    		break;
+		    	case 1:
+		    		mondayCheckBox.setSelected(true);
+		    		break;
+		    	case 2:
+		    		tuesdayCheckBox.setSelected(true);
+		    		break;
+		    	case 3:
+		    		wednesdayCheckBox.setSelected(true);
+		    		break;
+		    	case 4:
+		    		thursdayCheckBox.setSelected(true);
+		    		break;
+		    	case 5:
+		    		fridayCheckBox.setSelected(true);
+		    		break;
+		    	case 6:
+		    		saturdayCheckBox.setSelected(true);
+		    		break;
+		    	}
+	    	}
 	    }
 
 	    HBox.setHgrow(idLabel, Priority.NEVER);

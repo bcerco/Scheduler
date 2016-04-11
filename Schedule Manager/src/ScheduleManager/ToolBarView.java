@@ -102,6 +102,15 @@ public class ToolBarView extends ToolBar {
 							}
 						}
 					}
+					else {
+						for (int i = 0; i < 6; i++) {
+							Pane tempPane = (Pane)tracks.getChildren().get(i+1 + 2);
+							for (Node cur: tempPane.getChildren()) {
+								CompactCourseView tempCourse = (CompactCourseView)cur;
+								tempCourse.setVisible(true);
+							}
+						}
+					}
 				}
 			}
 

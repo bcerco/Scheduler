@@ -414,7 +414,9 @@ public class CompactCourseView extends VBox {
 	    editRow.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-
+				new CreateEditCourseDialog(CompactCourseView.this);
+				popupStage.close();
+				event.consume();
 			}
 	    });
 
@@ -549,5 +551,81 @@ public class CompactCourseView extends VBox {
 
 	    popupStage.show();
 	    popupStage.setResizable(false);
+	}
+
+	public String getCourse() {
+		return course;
+	}
+
+	public void setCourse(String course) {
+		this.course = course;
+	}
+
+	public int getDay() {
+		return day;
+	}
+
+	public void setDay(int day) {
+		this.day = day;
+	}
+
+	public int getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(int startTime) {
+		this.startTime = startTime;
+	}
+
+	public int getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(int endTime) {
+		this.endTime = endTime;
+	}
+
+	public int getTrack() {
+		return track;
+	}
+
+	public void setTrack(int track) {
+		this.track = track;
+	}
+
+	public void setCid(String cid) {
+		this.cid = cid;
+	}
+
+	public String getStart() {
+		return start;
+	}
+
+	public void setStart(String start) {
+		this.start = start;
+	}
+
+	public String getEnd() {
+		return end;
+	}
+
+	public void setEnd(String end) {
+		this.end = end;
+	}
+
+	public String getNumber() {
+		return number;
+	}
+
+	public void setNumber(String number) {
+		this.number = number;
+	}
+
+	public short getSection() {
+		return section;
+	}
+
+	public void setSection(short section) {
+		this.section = section;
 	}
 }

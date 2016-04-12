@@ -287,12 +287,22 @@ public class ClassNode{
     public int[] getEndTime(){
         return endTime;
     }
-    public void setInstructor(String ins, HashMap<String, HashSet<String> > instructorList){
-        //TODO: handle instructor change
-        /*
-           instructorList.get(instructor).remove(id);
-           instructorList.get(ins).add(id);
-           */
+    public void setInstructor(String ins){
+    	ClassParser.instructorList.get(instructor).remove(id);
+    	ClassParser.instructorCredit.put(instructor,
+    			ClassParser.instructorCredit.get(instructor) - credits);
+    	if (ClassParser.instructorList.containsKey(ins))
+    		ClassParser.instructorList.get(ins).add(id);
+    	else{
+    		ClassParser.instructorList.put(ins, new HashSet<String>());
+    		ClassParser.instructorList.get(ins).add(id);
+    	}
+    	if (ClassParser.instructorCredit.containsKey(ins)){
+        	ClassParser.instructorCredit.put(ins,
+        			ClassParser.instructorCredit.get(ins) + credits);
+    	}
+    	else
+    		ClassParser.instructorCredit.put(ins, credits);
         instructor = ins;
     }
     public String getInstructor(){

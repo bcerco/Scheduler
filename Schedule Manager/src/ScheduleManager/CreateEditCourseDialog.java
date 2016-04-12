@@ -57,9 +57,7 @@ public class CreateEditCourseDialog {
 
 	    VBox createEditMainBox = new VBox();
 	    HBox idFieldRow        = new HBox();
-	    HBox timeFieldRow      = new HBox();
 	    HBox professorFieldRow = new HBox();
-	    HBox daysFieldRow      = new HBox();
 	    Label idLabel          = new Label("Course ID");
 	    idLabel.setMinWidth(150);
 	    idLabel.setMaxWidth(150);
@@ -70,170 +68,161 @@ public class CreateEditCourseDialog {
 	    courseField.setPromptText("Course Department");
 	    numberField.setPromptText("Course Number");
 	    sectionField.setPromptText("Course Section");
-	    Label timeLabel        = new Label("Course Time");
-	    timeLabel.setMinWidth(150);
-	    timeLabel.setMaxWidth(150);
-	    timeLabel.alignmentProperty().set(Pos.CENTER);
-	    TextField startHourField    = new TextField();
-	    TextField startMinuteField  = new TextField();
-	    ComboBox<String>  startAMPMField    = new ComboBox<String>(optionsAMPM);
-	    startAMPMField.setMinWidth(75);
-	    startAMPMField.setMaxWidth(75);
-	    startHourField.setPromptText("Start Hour");
-	    startMinuteField.setPromptText("Start Minute");
-	    Label toLabel          = new Label("to");
-	    toLabel.setMinWidth(20);
-	    toLabel.setMaxWidth(20);
-	    toLabel.alignmentProperty().set(Pos.CENTER);
-	    TextField endHourField      = new TextField();
-	    TextField endMinuteField    = new TextField();
-	    ComboBox<String>  endAMPMField    = new ComboBox<String>(optionsAMPM);
-	    endAMPMField.setMinWidth(75);
-	    endAMPMField.setMaxWidth(75);
-	    endHourField.setPromptText("End Hour");
-	    endMinuteField.setPromptText("End Minute");
 	    Label professorLabel = new Label("Professor");
 	    professorLabel.setMinWidth(150);
 	    professorLabel.setMaxWidth(150);
 	    professorLabel.alignmentProperty().set(Pos.CENTER);
 	    TextField professorField = new TextField();
 	    professorField.setPromptText("Professor");
-	    Label daysLabel = new Label("Days");
-	    daysLabel.setMinWidth(150);
-	    daysLabel.setMaxWidth(150);
-	    daysLabel.alignmentProperty().set(Pos.CENTER);
-	    CheckBox sundayCheckBox = new CheckBox("U");
-	    sundayCheckBox.setMinWidth(50);
-	    sundayCheckBox.setMaxWidth(50);
-	    CheckBox mondayCheckBox = new CheckBox("M");
-	    mondayCheckBox.setMinWidth(50);
-	    mondayCheckBox.setMaxWidth(50);
-	    CheckBox tuesdayCheckBox = new CheckBox("T");
-	    tuesdayCheckBox.setMinWidth(50);
-	    tuesdayCheckBox.setMaxWidth(50);
-	    CheckBox wednesdayCheckBox = new CheckBox("W");
-	    wednesdayCheckBox.setMinWidth(50);
-	    wednesdayCheckBox.setMaxWidth(50);
-	    CheckBox thursdayCheckBox = new CheckBox("R");
-	    thursdayCheckBox.setMinWidth(50);
-	    thursdayCheckBox.setMaxWidth(50);
-	    CheckBox fridayCheckBox = new CheckBox("F");
-	    fridayCheckBox.setMinWidth(50);
-	    fridayCheckBox.setMaxWidth(50);
-	    CheckBox saturdayCheckBox = new CheckBox("S");
-	    saturdayCheckBox.setMinWidth(50);
-	    saturdayCheckBox.setMaxWidth(50);
+
+	    HBox[]      dayTimeRowArray      = new HBox[8];
+	    Label[]     dayLabelsArray       = new Label[8];
+	    TextField[] dayStartHoursArray   = new TextField[8];
+	    TextField[] dayStartMinutesArray = new TextField[8];
+	    TextField[] dayEndHoursArray     = new TextField[8];
+	    TextField[] dayEndMinutesArray   = new TextField[8];
+	    Label[]     timeSeparatorArray   = new Label[8];
+
+	    for (int i = 1; i < 8; i++) {
+	    	dayTimeRowArray[i]      = new HBox();
+	    	dayLabelsArray[i]       = new Label();
+	    	dayStartHoursArray[i]   = new TextField();
+    		dayStartMinutesArray[i] = new TextField();
+    		dayEndHoursArray[i]     = new TextField();
+    		dayEndMinutesArray[i]   = new TextField();
+    		timeSeparatorArray[i]   = new Label("to");
+
+
+	    	switch(i) {
+	    	case 1:
+	    		dayLabelsArray[i].setText("Sunday");
+	    		break;
+	    	case 2:
+	    		dayLabelsArray[i].setText("Monday");
+	    		break;
+	    	case 3:
+	    		dayLabelsArray[i].setText("Tuesday");
+	    		break;
+	    	case 4:
+	    		dayLabelsArray[i].setText("Wednesday");
+	    		break;
+	    	case 5:
+	    		dayLabelsArray[i].setText("Thursday");
+	    		break;
+	    	case 6:
+	    		dayLabelsArray[i].setText("Friday");
+	    		break;
+	    	case 7:
+	    		dayLabelsArray[i].setText("Saturday");
+	    		break;
+	    	}
+
+	    	dayStartHoursArray[i].setPromptText("Start Hour");
+    		dayStartMinutesArray[i].setPromptText("Start Minute");
+    		dayEndHoursArray[i].setPromptText("End Hour");
+    		dayEndMinutesArray[i].setPromptText("End Minute");
+
+	    	dayTimeRowArray[i].getChildren().add(dayLabelsArray[i]);
+    		dayTimeRowArray[i].getChildren().add(dayStartHoursArray[i]);
+    		dayTimeRowArray[i].getChildren().add(dayStartMinutesArray[i]);
+    		dayTimeRowArray[i].getChildren().add(timeSeparatorArray[i]);
+    		timeSeparatorArray[i].setMinWidth(50);
+    	    timeSeparatorArray[i].setMaxWidth(50);
+    	    timeSeparatorArray[i].alignmentProperty().set(Pos.CENTER);
+    		dayTimeRowArray[i].getChildren().add(dayEndHoursArray[i]);
+    		dayTimeRowArray[i].getChildren().add(dayEndMinutesArray[i]);
+
+    		dayLabelsArray[i].setMinWidth(150);
+    		dayLabelsArray[i].setMaxWidth(150);
+    		dayLabelsArray[i].alignmentProperty().set(Pos.CENTER);
+
+    		HBox.setHgrow(dayLabelsArray[i], Priority.NEVER);
+    	    HBox.setHgrow(dayStartHoursArray[i], Priority.ALWAYS);
+    	    HBox.setHgrow(dayStartMinutesArray[i], Priority.ALWAYS);
+    	    HBox.setHgrow(dayEndHoursArray[i], Priority.ALWAYS);
+    	    VBox.setVgrow(dayEndMinutesArray[i], Priority.NEVER);
+	    }
 
 	    idFieldRow.getChildren().add(idLabel);
 	    idFieldRow.getChildren().add(courseField);
 	    idFieldRow.getChildren().add(numberField);
 	    idFieldRow.getChildren().add(sectionField);
-	    timeFieldRow.getChildren().add(timeLabel);
-	    timeFieldRow.getChildren().add(startHourField);
-	    timeFieldRow.getChildren().add(startMinuteField);
-	    timeFieldRow.getChildren().add(startAMPMField);
-	    timeFieldRow.getChildren().add(toLabel);
-	    timeFieldRow.getChildren().add(endHourField);
-	    timeFieldRow.getChildren().add(endMinuteField);
-	    timeFieldRow.getChildren().add(endAMPMField);
 	    professorFieldRow.getChildren().add(professorLabel);
 	    professorFieldRow.getChildren().add(professorField);
-	    daysFieldRow.getChildren().add(daysLabel);
-	    daysFieldRow.getChildren().add(sundayCheckBox);
-	    daysFieldRow.getChildren().add(mondayCheckBox);
-	    daysFieldRow.getChildren().add(tuesdayCheckBox);
-	    daysFieldRow.getChildren().add(wednesdayCheckBox);
-	    daysFieldRow.getChildren().add(thursdayCheckBox);
-	    daysFieldRow.getChildren().add(fridayCheckBox);
-	    daysFieldRow.getChildren().add(saturdayCheckBox);
 	    createEditMainBox.getChildren().add(idFieldRow);
-	    createEditMainBox.getChildren().add(timeFieldRow);
+	    for (int i = 1; i < 8; i++) {
+	    	createEditMainBox.getChildren().add(dayTimeRowArray[i]);
+	    }
 	    createEditMainBox.getChildren().add(professorFieldRow);
-	    createEditMainBox.getChildren().add(daysFieldRow);
 	    createEditRoot.setCenter(createEditMainBox);
 
 	    if (this.courseView != null) {
 	    	courseField.setText(this.courseView.getCourse());
 	    	numberField.setText(this.courseView.getNumber());
 	    	sectionField.setText(Short.toString(this.courseView.getSection()));
+
 	    	int startHour = this.courseView.getStartTime() / 60;
 	    	int startMinute = this.courseView.getStartTime() % 60;
 	    	if (startHour > 12) {
 	    		startHour = startHour - 12;
-	    		startAMPMField.setValue("PM");
+	    		//startAMPMField.setValue("PM");
 	    	}
 	    	else if (startHour == 12) {
-	    		startAMPMField.setValue("PM");
+	    		//startAMPMField.setValue("PM");
 	    	}
 	    	else {
-	    		startAMPMField.setValue("AM");
+	    		//startAMPMField.setValue("AM");
 	    	}
-	    	startHourField.setText(Integer.toString(startHour));
-	    	startMinuteField.setText(Integer.toString(startMinute));
+	    	dayStartHoursArray[this.courseView.getDay() + 2].setText(Integer.toString(startHour));
+	    	dayStartMinutesArray[this.courseView.getDay() + 2].setText(Integer.toString(startMinute));
+
 	    	int endHour = this.courseView.getEndTime() / 60;
 	    	int endMinute = this.courseView.getEndTime() % 60;
 	    	if (endHour > 12) {
 	    		endHour = endHour - 12;
-	    		endAMPMField.setValue("PM");
+	    		//endAMPMField.setValue("PM");
 	    	}
 	    	else if (endHour == 12) {
-	    		endAMPMField.setValue("PM");
+	    		//endAMPMField.setValue("PM");
 	    	}
 	    	else {
-	    		endAMPMField.setValue("AM");
+	    		//endAMPMField.setValue("AM");
 	    	}
-	    	endHourField.setText(Integer.toString(endHour));
-	    	endMinuteField.setText(Integer.toString(endMinute));
+	    	dayEndHoursArray[this.courseView.getDay() + 2].setText(Integer.toString(endHour));
+	    	dayEndMinutesArray[this.courseView.getDay() + 2].setText(Integer.toString(endMinute));
+
 	    	professorField.setText(ClassParser.classList.get(this.courseView.getCid()).getInstructor());
 
-	    	switch(this.courseView.getDay()+1) {
-	    	case 0:
-	    		sundayCheckBox.setSelected(true);
-	    		break;
-	    	case 1:
-	    		mondayCheckBox.setSelected(true);
-	    		break;
-	    	case 2:
-	    		tuesdayCheckBox.setSelected(true);
-	    		break;
-	    	case 3:
-	    		wednesdayCheckBox.setSelected(true);
-	    		break;
-	    	case 4:
-	    		thursdayCheckBox.setSelected(true);
-	    		break;
-	    	case 5:
-	    		fridayCheckBox.setSelected(true);
-	    		break;
-	    	case 6:
-	    		saturdayCheckBox.setSelected(true);
-	    		break;
-	    	}
-
 	    	for (CompactCourseView ccv : this.courseView.sameCourses) {
-	    		switch(ccv.getDay()+1) {
-		    	case 0:
-		    		sundayCheckBox.setSelected(true);
-		    		break;
-		    	case 1:
-		    		mondayCheckBox.setSelected(true);
-		    		break;
-		    	case 2:
-		    		tuesdayCheckBox.setSelected(true);
-		    		break;
-		    	case 3:
-		    		wednesdayCheckBox.setSelected(true);
-		    		break;
-		    	case 4:
-		    		thursdayCheckBox.setSelected(true);
-		    		break;
-		    	case 5:
-		    		fridayCheckBox.setSelected(true);
-		    		break;
-		    	case 6:
-		    		saturdayCheckBox.setSelected(true);
-		    		break;
+	    		startHour = ccv.getStartTime() / 60;
+		    	startMinute = ccv.getStartTime() % 60;
+		    	if (startHour > 12) {
+		    		startHour = startHour - 12;
+		    		//startAMPMField.setValue("PM");
 		    	}
+		    	else if (startHour == 12) {
+		    		//startAMPMField.setValue("PM");
+		    	}
+		    	else {
+		    		//startAMPMField.setValue("AM");
+		    	}
+	    		dayStartHoursArray[ccv.getDay() + 2].setText(Integer.toString(startHour));
+		    	dayStartMinutesArray[ccv.getDay() + 2].setText(Integer.toString(startMinute));
+
+		    	endHour = ccv.getEndTime() / 60;
+		    	endMinute = ccv.getEndTime() % 60;
+		    	if (endHour > 12) {
+		    		endHour = endHour - 12;
+		    		//endAMPMField.setValue("PM");
+		    	}
+		    	else if (endHour == 12) {
+		    		//endAMPMField.setValue("PM");
+		    	}
+		    	else {
+		    		//endAMPMField.setValue("AM");
+		    	}
+		    	dayEndHoursArray[ccv.getDay() + 2].setText(Integer.toString(endHour));
+		    	dayEndMinutesArray[ccv.getDay() + 2].setText(Integer.toString(endMinute));
 	    	}
 	    }
 
@@ -242,14 +231,6 @@ public class CreateEditCourseDialog {
 	    HBox.setHgrow(numberField, Priority.ALWAYS);
 	    HBox.setHgrow(sectionField, Priority.ALWAYS);
 	    VBox.setVgrow(idFieldRow, Priority.NEVER);
-
-	    HBox.setHgrow(timeLabel, Priority.NEVER);
-	    HBox.setHgrow(startHourField, Priority.ALWAYS);
-	    HBox.setHgrow(startMinuteField, Priority.ALWAYS);
-	    HBox.setHgrow(toLabel, Priority.NEVER);
-	    HBox.setHgrow(endHourField, Priority.ALWAYS);
-	    HBox.setHgrow(endMinuteField, Priority.ALWAYS);
-	    VBox.setVgrow(timeFieldRow, Priority.NEVER);
 
 	    HBox.setHgrow(professorLabel, Priority.NEVER);
 	    HBox.setHgrow(professorField, Priority.ALWAYS);

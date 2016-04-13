@@ -279,7 +279,7 @@ public class ClassNode{
             }
         }
     }
-    //This returns the interger array of start times, in minutes
+    //This returns the integer array of start times, in minutes
     public int[] getStartTime(){
         return startTime;
     }
@@ -345,6 +345,84 @@ public class ClassNode{
         return credits;
     }
     public void setCredit(float f){
+    	float cur = ClassParser.instructorCredit.get(instructor);
+    	cur -= credits;
+    	cur += f;
+    	ClassParser.instructorCredit.put(instructor, cur);
         credits = f;
+    }
+    public void setCourse(String c){
+    	String prevId = getId();
+    	String prevCourse = course;
+    	course = c;
+    	createId();
+    	String curId = getId();
+    	//Update class list
+    	ClassParser.classList.remove(prevId);
+    	ClassParser.classList.put(curId, this);
+    	//Update department list
+    	ClassParser.departmentList.get(prevCourse).remove(prevId);
+    	if (ClassParser.departmentList.containsKey(course)){
+    		ClassParser.departmentList.get(course).add(curId);
+    	}
+    	else{
+    		ClassParser.departmentList.put(course, new HashSet<String>());
+    		ClassParser.departmentList.get(course).add(curId);
+    	}
+    	//Update instructor list
+    	ClassParser.instructorList.get(instructor).remove(prevId);
+    	ClassParser.instructorList.get(instructor).add(curId);
+    	//Update section list
+    	ClassParser.sectionList.get(prevCourse + number).remove(prevId);
+    	if (ClassParser.sectionList.containsKey(course + number)){
+    		ClassParser.sectionList.get(course + number).add(curId);
+    	}
+    	else{
+    		ClassParser.sectionList.put(course + number, new HashSet<String>());
+    		ClassParser.sectionList.get(course + number).add(curId);
+    	}
+    }
+    public void setNumber(String num){
+    	String prevNum = num;
+    	String prevId = getId();
+    	number = num;
+    	createId();
+    	String curId = getId();
+    	//Update class list
+    	ClassParser.classList.remove(prevId);
+    	ClassParser.classList.put(curId, this);
+    	//Update department list
+    	ClassParser.departmentList.get(course).remove(prevId);
+    	ClassParser.departmentList.get(course).add(curId);
+    	//Update instructor list
+    	ClassParser.instructorList.get(instructor).remove(prevId);
+    	ClassParser.instructorList.get(instructor).add(curId);
+    	//Update section list
+    	ClassParser.sectionList.get(course + prevNum).remove(prevId);
+    	if (ClassParser.sectionList.containsKey(course + number)){
+    		ClassParser.sectionList.get(course + number).add(curId);
+    	}
+    	else{
+    		ClassParser.sectionList.put(course + number, new HashSet<String>());
+    		ClassParser.sectionList.get(course + number).add(curId);
+    	}
+    }
+    public void setSection(short s){
+    	String prevId = getId();
+    	section = s;
+    	createId();
+    	String curId = getId();
+    	//Update class list
+    	ClassParser.classList.remove(prevId);
+    	ClassParser.classList.put(curId, this);
+    	//Update department list
+    	ClassParser.departmentList.get(course).remove(prevId);
+    	ClassParser.departmentList.get(course).add(curId);
+    	//Update instructor list
+    	ClassParser.instructorList.get(instructor).remove(prevId);
+    	ClassParser.instructorList.get(instructor).add(curId);
+    	//Update section list
+    	ClassParser.sectionList.get(course + number).remove(prevId);
+    	ClassParser.sectionList.get(course + number).add(curId);
     }
 }

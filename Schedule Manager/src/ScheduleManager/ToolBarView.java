@@ -46,6 +46,9 @@ public class ToolBarView extends ToolBar {
 	public static Filter      filter;
 	public static Conflict    conflict;
 
+	private File checkFile;
+
+
 	public static WeeklyScheduleCourseTracks tracks;
 
 	public ToolBarView (Stage stage, WeeklyScheduleCourseTracks scheduleTracks) {
@@ -64,7 +67,7 @@ public class ToolBarView extends ToolBar {
 		btImport = new Button("Import");
 		btImport.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override public void handle(ActionEvent e) {
-		    	File checkFile = chooserImport.showOpenDialog(stage);
+		    	ToolBarView.this.checkFile = chooserImport.showOpenDialog(stage);
 
 		    	if (checkFile != null && checkFile.exists()) {
 		    		Main.spreadsheet = checkFile;
@@ -84,7 +87,7 @@ public class ToolBarView extends ToolBar {
 			@Override
 			public void handle(KeyEvent event) {
 				if (event.getCode().equals(KeyCode.ENTER)) {
-					if (!tfFilterEdit.getText().equals("")){
+					if (ToolBarView.this.checkFile != null && !tfFilterEdit.getText().equals("")){
 						HashSet<String> tempHashSet = filter.search(tfFilterEdit.getText());
 						for (int i = 0; i < 6; i++) {
 							Pane tempPane = (Pane)tracks.getChildren().get(i+1 + 2);

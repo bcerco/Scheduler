@@ -6,10 +6,11 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.CheckBox;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -59,6 +60,11 @@ public class CreateEditCourseDialog {
 	    HBox nameFieldRow      = new HBox();
 	    HBox idFieldRow        = new HBox();
 	    HBox professorFieldRow = new HBox();
+	    HBox roomFieldRow      = new HBox();
+	    HBox seatsFieldRow     = new HBox();
+	    HBox creditsFieldRow   = new HBox();
+	    HBox buttonRow		   = new HBox();
+	    buttonRow.alignmentProperty().set(Pos.BOTTOM_RIGHT);
 	    Label nameLabel		   = new Label("Course Title");
 	    nameLabel.setMinWidth(125);
 	    nameLabel.setMaxWidth(125);
@@ -80,6 +86,35 @@ public class CreateEditCourseDialog {
 	    professorLabel.alignmentProperty().set(Pos.CENTER);
 	    TextField professorField = new TextField();
 	    professorField.setPromptText("Professor");
+	    Label roomLabel = new Label("Room");
+	    roomLabel.setMinWidth(125);
+	    roomLabel.setMaxWidth(125);
+	    roomLabel.alignmentProperty().set(Pos.CENTER);
+	    TextField roomField = new TextField();
+	    roomField.setPromptText("Room");
+	    Label seatsLabel = new Label("Seats");
+	    seatsLabel.setMinWidth(125);
+	    seatsLabel.setMaxWidth(125);
+	    seatsLabel.alignmentProperty().set(Pos.CENTER);
+	    TextField seatsSoftField = new TextField();
+	    seatsSoftField.setPromptText("Soft");
+	    TextField seatsHardField = new TextField();
+	    seatsHardField.setPromptText("Hard");
+	    Label creditsLabel = new Label("Credits");
+	    creditsLabel.setMinWidth(125);
+	    creditsLabel.setMaxWidth(125);
+	    creditsLabel.alignmentProperty().set(Pos.CENTER);
+	    TextField creditsField = new TextField();
+	    creditsField.setPromptText("Credits");
+	    Button saveButton = new Button("Save");
+	    saveButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				String currentId = CreateEditCourseDialog.this.courseView.getCid();
+				ClassParser.classList.get(currentId).setInstructor(professorField.getText());
+				event.consume();
+			}
+	    });
 
 	    HBox[]      dayTimeRowArray      = new HBox[8];
 	    Label[]     dayLabelsArray       = new Label[8];
@@ -167,12 +202,24 @@ public class CreateEditCourseDialog {
 	    idFieldRow.getChildren().add(sectionField);
 	    professorFieldRow.getChildren().add(professorLabel);
 	    professorFieldRow.getChildren().add(professorField);
+	    roomFieldRow.getChildren().add(roomLabel);
+	    roomFieldRow.getChildren().add(roomField);
+	    seatsFieldRow.getChildren().add(seatsLabel);
+	    seatsFieldRow.getChildren().add(seatsSoftField);
+	    seatsFieldRow.getChildren().add(seatsHardField);
+	    creditsFieldRow.getChildren().add(creditsLabel);
+	    creditsFieldRow.getChildren().add(creditsField);
+	    buttonRow.getChildren().add(saveButton);
 	    createEditMainBox.getChildren().add(nameFieldRow);
 	    createEditMainBox.getChildren().add(idFieldRow);
 	    for (int i = 1; i < 8; i++) {
 	    	createEditMainBox.getChildren().add(dayTimeRowArray[i]);
 	    }
 	    createEditMainBox.getChildren().add(professorFieldRow);
+	    createEditMainBox.getChildren().add(roomFieldRow);
+	    createEditMainBox.getChildren().add(seatsFieldRow);
+	    createEditMainBox.getChildren().add(creditsFieldRow);
+	    createEditMainBox.getChildren().add(buttonRow);
 	    createEditRoot.setCenter(createEditMainBox);
 
 	    if (this.courseView != null) {
@@ -212,6 +259,10 @@ public class CreateEditCourseDialog {
 
 	    	nameField.setText(ClassParser.classList.get(this.courseView.getCid()).getTitle());
 	    	professorField.setText(ClassParser.classList.get(this.courseView.getCid()).getInstructor());
+	    	roomField.setText(ClassParser.classList.get(this.courseView.getCid()).getRoom());
+	    	seatsSoftField.setText(Short.toString(ClassParser.classList.get(this.courseView.getCid()).getSoft()));
+	    	seatsHardField.setText(Short.toString(ClassParser.classList.get(this.courseView.getCid()).getHard()));
+	    	creditsField.setText(Float.toString(ClassParser.classList.get(this.courseView.getCid()).getCredit()));
 
 	    	for (CompactCourseView ccv : this.courseView.sameCourses) {
 	    		startHour = ccv.getStartTime() / 60;
@@ -259,6 +310,22 @@ public class CreateEditCourseDialog {
 	    HBox.setHgrow(professorLabel, Priority.NEVER);
 	    HBox.setHgrow(professorField, Priority.ALWAYS);
 	    VBox.setVgrow(professorFieldRow, Priority.NEVER);
+
+	    HBox.setHgrow(roomLabel, Priority.NEVER);
+	    HBox.setHgrow(roomField, Priority.ALWAYS);
+	    VBox.setVgrow(roomFieldRow, Priority.NEVER);
+
+	    HBox.setHgrow(seatsLabel, Priority.NEVER);
+	    HBox.setHgrow(seatsSoftField, Priority.ALWAYS);
+	    HBox.setHgrow(seatsHardField, Priority.ALWAYS);
+	    VBox.setVgrow(seatsFieldRow, Priority.NEVER);
+
+	    HBox.setHgrow(creditsLabel, Priority.NEVER);
+	    HBox.setHgrow(creditsField, Priority.ALWAYS);
+	    VBox.setVgrow(creditsFieldRow, Priority.NEVER);
+
+	    HBox.setHgrow(saveButton, Priority.NEVER);
+	    VBox.setVgrow(buttonRow, Priority.ALWAYS);
 
 	    createEditStage.show();
 	    createEditStage.setResizable(false);

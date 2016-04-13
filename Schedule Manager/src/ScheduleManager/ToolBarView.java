@@ -1,7 +1,11 @@
 package ScheduleManager;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import Class.ClassNode;
@@ -33,6 +37,7 @@ import javafx.stage.WindowEvent;
 public class ToolBarView extends ToolBar {
 	private ClassParser parser;
 	private FileChooser chooserImport = new FileChooser();
+	private HashMap<String, String> colorMap = new HashMap<String, String>();
 
 	private Button      btImport;
 	private Button      btExport;
@@ -46,7 +51,7 @@ public class ToolBarView extends ToolBar {
 	public static Filter      filter;
 	public static Conflict    conflict;
 
-	private File checkFile;
+	private File checkFile; // Only used for checking purposes! NEVER reference elsewhere!
 
 
 	public static WeeklyScheduleCourseTracks tracks;
@@ -59,6 +64,24 @@ public class ToolBarView extends ToolBar {
 		ToolBarView.filter = new Filter();
 
 		ToolBarView.conflict = new Conflict("SMConfig/conflicts.txt");
+
+		BufferedReader colorsFile;
+
+		String   in        = "";
+		String[] colorsPair;
+		try {
+			colorsFile = new BufferedReader(new FileReader("SMConfig/colors.txt"));
+			if (colorsFile != null) {
+				while ((in = colorsFile.readLine()) != null) {
+					colorsPair = in.split(";");
+					colorMap.put(colorsPair[0], colorsPair[1]);
+					System.out.print(colorsPair[0] + " " + colorsPair[1]);
+				}
+			}
+		}
+		catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 
 		chooserImport.setTitle("File Import");
 		chooserImport.getExtensionFilters().addAll(
@@ -309,14 +332,9 @@ public class ToolBarView extends ToolBar {
 			    	if (sTimes[i] != 0 ) {
 			    		Pane tempPane = (Pane)tracks.getChildren().get(i + 1 + 2);
 			    		String color = "";
-			    		if (cur.getCourse().equals("MATH")) {
-			    			color = "#FF7777";
-			    		}
-			    		else if (cur.getCourse().equals("CMPSC")) {
-			    			color = "#77FF77";
-			    		}
-			    		else if (cur.getCourse().equals("COMP")) {
-			    			color = "#7777FF";
+
+			    		if (colorMap.containsKey(cur.getCourse())) {
+			    			color = colorMap.get(cur.getCourse());
 			    		}
 			    		else {
 			    			color = "#000000";

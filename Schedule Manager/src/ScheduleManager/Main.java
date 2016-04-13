@@ -20,6 +20,7 @@ import javafx.scene.layout.RowConstraints;
 
 public class Main extends Application {
 	public static File conflictsFile = null;
+	public static File colorsFile = null;
 	public static File spreadsheet = null;
 
 	public static double height;

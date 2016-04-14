@@ -406,6 +406,15 @@ public class ClassNode{
     		ClassParser.sectionList.put(course + number, new HashSet<String>());
     		ClassParser.sectionList.get(course + number).add(curId);
     	}
+    	//Update tier list
+    	ClassParser.tierList.get(Character.getNumericValue(prevNum.charAt(0))).remove(prevId);
+    	int tier = Character.getNumericValue(number.charAt(0));
+    	if (ClassParser.tierList.containsKey(tier))
+    		ClassParser.tierList.get(tier).add(curId);
+    	else{
+    		ClassParser.tierList.put(tier, new HashSet<String>());
+    		ClassParser.tierList.get(tier).add(curId);
+    	}
     }
     public void setSection(short s){
     	String prevId = getId();
@@ -424,5 +433,13 @@ public class ClassNode{
     	//Update section list
     	ClassParser.sectionList.get(course + number).remove(prevId);
     	ClassParser.sectionList.get(course + number).add(curId);
+    }
+    public void removeClass(){
+    	ClassParser.classList.remove(getId());
+    	ClassParser.instructorList.get(instructor).remove(getId());
+    	ClassParser.departmentList.get(course).remove(getId());
+    	ClassParser.sectionList.get(course + number).remove(getId());
+    	ClassParser.tierList.get(Character.getNumericValue(number.charAt(0))).remove(getId());
+    	ClassParser.instructorCredit.put(instructor, ClassParser.instructorCredit.get(instructor) - credits);
     }
 }

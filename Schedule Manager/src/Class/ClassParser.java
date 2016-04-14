@@ -104,8 +104,10 @@ public class ClassParser{
             Iterator<String> iter = classOrder.iterator();
             while(iter.hasNext()){
                 ClassNode cur = classList.get(iter.next());
-                writer.write(cur.exportClassNode());
-                writer.flush();
+                if (cur != null){
+                	writer.write(cur.exportClassNode());
+                	writer.flush();
+                }
             }
         }
         catch (FileNotFoundException e){

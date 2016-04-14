@@ -56,6 +56,16 @@ public class CreateEditCourseDialog {
 			}
 	    }));
 
+	    HBox[]      dayTimeRowArray      = new HBox[8];
+	    Label[]     dayLabelsArray       = new Label[8];
+	    TextField[] dayStartHoursArray   = new TextField[8];
+	    TextField[] dayStartMinutesArray = new TextField[8];
+	    ComboBox[]	dayStartAMPM		 = new ComboBox[8];
+	    TextField[] dayEndHoursArray     = new TextField[8];
+	    TextField[] dayEndMinutesArray   = new TextField[8];
+	    ComboBox[]	dayEndAMPM			 = new ComboBox[8];
+	    Label[]     timeSeparatorArray   = new Label[8];
+
 	    VBox createEditMainBox = new VBox();
 	    HBox nameFieldRow      = new HBox();
 	    HBox idFieldRow        = new HBox();
@@ -112,27 +122,174 @@ public class CreateEditCourseDialog {
 			public void handle(MouseEvent event) {
 				String currentId = CreateEditCourseDialog.this.courseView.getCid();
 				ClassParser.classList.get(currentId).setTitle(nameField.getText());
-				//ClassParser.classList.get(currentId).setCourse(courseField.getText());
-				//ClassParser.classList.get(currentId).setNumber(numberField.getText());
-				//ClassParser.classList.get(currentId).setSection(Short.parseShort(sectionField.getText()));
+
+				currentId = CreateEditCourseDialog.this.courseView.getCid();
+				ClassParser.classList.get(currentId).setCourse(courseField.getText());
+				CreateEditCourseDialog.this.courseView.setCourse(courseField.getText());
+				CreateEditCourseDialog.this.courseView.setCid(courseField.getText() +
+						CreateEditCourseDialog.this.courseView.getNumber() +
+						Short.toString(CreateEditCourseDialog.this.courseView.getSection()));
+
+				currentId = CreateEditCourseDialog.this.courseView.getCid();
+				ClassParser.classList.get(currentId).setNumber(numberField.getText());
+				CreateEditCourseDialog.this.courseView.setNumber(numberField.getText());
+				CreateEditCourseDialog.this.courseView.setCid(CreateEditCourseDialog.this.courseView.getCourse() +
+						numberField.getText() +
+						Short.toString(CreateEditCourseDialog.this.courseView.getSection()));
+
+				currentId = CreateEditCourseDialog.this.courseView.getCid();
+				ClassParser.classList.get(currentId).setSection(Short.parseShort(sectionField.getText()));
+				CreateEditCourseDialog.this.courseView.setSection(Short.parseShort(sectionField.getText()));
+				CreateEditCourseDialog.this.courseView.setCid(CreateEditCourseDialog.this.courseView.getCourse() +
+						CreateEditCourseDialog.this.courseView.getNumber() +
+						sectionField.getText());
+
+				currentId = CreateEditCourseDialog.this.courseView.getCid();
+
+				// Times here
+				String isStartPM = dayStartAMPM[CreateEditCourseDialog.this.courseView.getDay() + 2].getValue().toString();
+				int startOffset = 0;
+				if (isStartPM.equals("PM")) {
+					startOffset = 12 * 60;
+				}
+				ClassParser.classList.get(CreateEditCourseDialog.this.courseView.getCid())
+					.startTime[CreateEditCourseDialog.this.courseView.getDay()] =
+					(Integer.parseInt(dayStartHoursArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText()) * 60) +
+					(Integer.parseInt(dayStartMinutesArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText())) +
+					startOffset;
+				CreateEditCourseDialog.this.courseView.setStart(Integer.toString((Integer.parseInt(dayStartHoursArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText()) * 60) +
+						(Integer.parseInt(dayStartMinutesArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText())) +
+						startOffset));
+				CreateEditCourseDialog.this.courseView.setStartTime((Integer.parseInt(dayStartHoursArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText()) * 60) +
+						(Integer.parseInt(dayStartMinutesArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText())) +
+						startOffset);
+
+				String isEndPM = dayEndAMPM[CreateEditCourseDialog.this.courseView.getDay() + 2].getValue().toString();
+				int endOffset = 0;
+				if (isEndPM.equals("PM")) {
+					endOffset = 12 * 60;
+				}
+				ClassParser.classList.get(CreateEditCourseDialog.this.courseView.getCid())
+					.endTime[CreateEditCourseDialog.this.courseView.getDay()] =
+					(Integer.parseInt(dayEndHoursArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText()) * 60) +
+					(Integer.parseInt(dayEndMinutesArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText())) +
+					endOffset;
+				CreateEditCourseDialog.this.courseView.setEnd(Integer.toString((Integer.parseInt(dayEndHoursArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText()) * 60) +
+						(Integer.parseInt(dayEndMinutesArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText())) +
+						endOffset));
+				CreateEditCourseDialog.this.courseView.setEndTime((Integer.parseInt(dayEndHoursArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText()) * 60) +
+						(Integer.parseInt(dayEndMinutesArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText())) +
+						endOffset);
+
+				CreateEditCourseDialog.this.courseView.calculateDisplayTime();
+
+				//System.out.println(ClassParser.classList.get(CreateEditCourseDialog.this.courseView.getCid()).startTime[CreateEditCourseDialog.this.courseView.getDay()]);
+				//System.out.println(ClassParser.classList.get(CreateEditCourseDialog.this.courseView.getCid()).endTime[CreateEditCourseDialog.this.courseView.getDay()]);
+
 				ClassParser.classList.get(currentId).setInstructor(professorField.getText());
 				ClassParser.classList.get(currentId).setRoom(roomField.getText());
 				ClassParser.classList.get(currentId).setSoft(Short.parseShort(seatsSoftField.getText()));
 				ClassParser.classList.get(currentId).setHard(Short.parseShort(seatsHardField.getText()));
 				ClassParser.classList.get(currentId).setCredit(Float.parseFloat(creditsField.getText()));
+
+				// Update visual
+				CreateEditCourseDialog.this.courseView.courseLabel.setText(courseField.getText());
+				CreateEditCourseDialog.this.courseView.numberLabel.setText(numberField.getText());
+				CreateEditCourseDialog.this.courseView.sectionLabel.setText(sectionField.getText());
+
+				String courseColor = ToolBarView.colorMap.get(CreateEditCourseDialog.this.courseView.getCourse());
+				if (courseColor != null) {
+					CreateEditCourseDialog.this.courseView.setStyle("-fx-background-color: " + courseColor);
+				}
+				else {
+					CreateEditCourseDialog.this.courseView.setStyle("-fx-background-color: #000000");
+				}
+
+				double heightOfCell = (WeeklyScheduleCourseTracks.height)/(WeeklyScheduleView.endHour - WeeklyScheduleView.startHour);
+	    		double pixelMinutes = (heightOfCell / 60);
+	    		double positionOfClass = pixelMinutes * (CreateEditCourseDialog.this.courseView.getStartTime() - (WeeklyScheduleView.startHour * 60));
+	    		CreateEditCourseDialog.this.courseView.setTranslateY(positionOfClass);
+	    		double courseHeight = (CreateEditCourseDialog.this.courseView.getEndTime() - CreateEditCourseDialog.this.courseView.getStartTime()) * pixelMinutes;
+	    		CreateEditCourseDialog.this.courseView.setMinHeight(courseHeight);
+	    		CreateEditCourseDialog.this.courseView.setMaxHeight(courseHeight);
+
+				for (CompactCourseView ccv : CreateEditCourseDialog.this.courseView.sameCourses) {
+					ccv.setCourse(courseField.getText());
+					ccv.setCid(courseField.getText() +
+							ccv.getNumber() +
+							Short.toString(ccv.getSection()));
+
+					ccv.setNumber(numberField.getText());
+					ccv.setCid(ccv.getCourse() +
+							numberField.getText() +
+							Short.toString(ccv.getSection()));
+
+					ccv.setSection(Short.parseShort(sectionField.getText()));
+					ccv.setCid(ccv.getCourse() +
+							ccv.getNumber() +
+							sectionField.getText());
+
+					isStartPM = dayStartAMPM[ccv.getDay() + 2].getValue().toString();
+					startOffset = 0;
+					if (isStartPM.equals("PM")) {
+						startOffset = 12 * 60;
+					}
+					ClassParser.classList.get(CreateEditCourseDialog.this.courseView.getCid())
+						.startTime[ccv.getDay()] =
+						(Integer.parseInt(dayStartHoursArray[ccv.getDay() + 2].getText()) * 60) +
+						(Integer.parseInt(dayStartMinutesArray[ccv.getDay() + 2].getText())) +
+						startOffset;
+					ccv.setStart(Integer.toString((Integer.parseInt(dayStartHoursArray[ccv.getDay() + 2].getText()) * 60) +
+							(Integer.parseInt(dayStartMinutesArray[ccv.getDay() + 2].getText())) +
+							startOffset));
+					ccv.setStartTime((Integer.parseInt(dayStartHoursArray[ccv.getDay() + 2].getText()) * 60) +
+							(Integer.parseInt(dayStartMinutesArray[ccv.getDay() + 2].getText())) +
+							startOffset);
+
+					isEndPM = dayEndAMPM[ccv.getDay() + 2].getValue().toString();
+					endOffset = 0;
+					if (isEndPM.equals("PM")) {
+						endOffset = 12 * 60;
+					}
+					ClassParser.classList.get(CreateEditCourseDialog.this.courseView.getCid())
+						.endTime[ccv.getDay()] =
+						(Integer.parseInt(dayEndHoursArray[ccv.getDay() + 2].getText()) * 60) +
+						(Integer.parseInt(dayEndMinutesArray[ccv.getDay() + 2].getText())) +
+						endOffset;
+					ccv.setEnd(Integer.toString((Integer.parseInt(dayEndHoursArray[ccv.getDay() + 2].getText()) * 60) +
+							(Integer.parseInt(dayEndMinutesArray[ccv.getDay() + 2].getText())) +
+							endOffset));
+					ccv.setEndTime((Integer.parseInt(dayEndHoursArray[ccv.getDay() + 2].getText()) * 60) +
+							(Integer.parseInt(dayEndMinutesArray[ccv.getDay() + 2].getText())) +
+							endOffset);
+
+					ccv.calculateDisplayTime();
+
+					ccv.courseLabel.setText(courseField.getText());
+					ccv.numberLabel.setText(numberField.getText());
+					ccv.sectionLabel.setText(sectionField.getText());
+
+					courseColor = ToolBarView.colorMap.get(CreateEditCourseDialog.this.courseView.getCourse());
+					if (courseColor != null) {
+						ccv.setStyle("-fx-background-color: " + courseColor);
+					}
+					else {
+						ccv.setStyle("-fx-background-color: #000000");
+					}
+
+					positionOfClass = pixelMinutes * (ccv.getStartTime() - (WeeklyScheduleView.startHour * 60));
+		    		ccv.setTranslateY(positionOfClass);
+		    		courseHeight = (ccv.getEndTime() - ccv.getStartTime()) * pixelMinutes;
+		    		ccv.setMinHeight(courseHeight);
+		    		ccv.setMaxHeight(courseHeight);
+
+					//ccv.setStyle("-fx-background-color: " + ToolBarView.colorMap.get(ccv.getCourse()));
+				}
+
+				createEditStage.close();
 				event.consume();
 			}
 	    });
-
-	    HBox[]      dayTimeRowArray      = new HBox[8];
-	    Label[]     dayLabelsArray       = new Label[8];
-	    TextField[] dayStartHoursArray   = new TextField[8];
-	    TextField[] dayStartMinutesArray = new TextField[8];
-	    ComboBox[]	dayStartAMPM		 = new ComboBox[8];
-	    TextField[] dayEndHoursArray     = new TextField[8];
-	    TextField[] dayEndMinutesArray   = new TextField[8];
-	    ComboBox[]	dayEndAMPM			 = new ComboBox[8];
-	    Label[]     timeSeparatorArray   = new Label[8];
 
 	    for (int i = 1; i < 8; i++) {
 	    	dayTimeRowArray[i]      = new HBox();
@@ -231,9 +388,6 @@ public class CreateEditCourseDialog {
 	    createEditRoot.setCenter(createEditMainBox);
 
 	    if (this.courseView != null) {
-	    	courseField.setDisable(true);
-	    	numberField.setDisable(true);
-	    	sectionField.setDisable(true);
 
 	    	courseField.setText(this.courseView.getCourse());
 	    	numberField.setText(this.courseView.getNumber());

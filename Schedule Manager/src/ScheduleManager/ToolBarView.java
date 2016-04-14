@@ -37,7 +37,7 @@ import javafx.stage.WindowEvent;
 public class ToolBarView extends ToolBar {
 	private ClassParser parser;
 	private FileChooser chooserImport = new FileChooser();
-	private HashMap<String, String> colorMap = new HashMap<String, String>();
+	public static HashMap<String, String> colorMap = new HashMap<String, String>();
 
 	private Button      btImport;
 	private Button      btExport;

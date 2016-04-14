@@ -383,7 +383,7 @@ public class ClassNode{
     	}
     }
     public void setNumber(String num){
-    	String prevNum = num;
+    	String prevNum = number;
     	String prevId = getId();
     	number = num;
     	createId();

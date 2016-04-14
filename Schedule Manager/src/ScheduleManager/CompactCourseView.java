@@ -41,8 +41,13 @@ public class CompactCourseView extends VBox {
 	private String end;
 	private boolean isDragging;
 	private int    day;
-	private int    startTime;
-	private int    endTime;
+	public int    startTime;
+	public int    endTime;
+
+	public Label courseLabel;
+	public Label numberLabel;
+	public Label sectionLabel;
+
 
 	private int    track;
 
@@ -261,13 +266,13 @@ public class CompactCourseView extends VBox {
 	private void BuildCompactCourseView() {
 		HBox information = new HBox();
 		information.setAlignment(Pos.CENTER);
-		Label courseLabel = new Label(this.course);
+		courseLabel = new Label(this.course);
 		courseLabel.getStyleClass().add("CompactCourseText");
-		Label numberLabel = new Label(this.number);
+		numberLabel = new Label(this.number);
 		numberLabel.getStyleClass().add("CompactCourseText");
 		Label dividerLabel = new Label(this.divider);
 		dividerLabel.getStyleClass().add("CompactCourseText");
-		Label sectionLabel = new Label(Short.toString(this.section));
+		sectionLabel = new Label(Short.toString(this.section));
 		sectionLabel.getStyleClass().add("CompactCourseText");
 		information.getChildren().addAll(courseLabel, numberLabel, dividerLabel, sectionLabel);
 

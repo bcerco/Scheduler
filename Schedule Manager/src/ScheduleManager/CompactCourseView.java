@@ -455,6 +455,8 @@ public class CompactCourseView extends VBox {
 						}
 					}
 
+					ClassParser.classList.get(CompactCourseView.this.getCid()).removeClass();
+
 					popupStage.close();
 				}
 				else {

@@ -75,7 +75,6 @@ public class ToolBarView extends ToolBar {
 				while ((in = colorsFile.readLine()) != null) {
 					colorsPair = in.split(";");
 					colorMap.put(colorsPair[0], colorsPair[1]);
-					System.out.print(colorsPair[0] + " " + colorsPair[1]);
 				}
 			}
 		}

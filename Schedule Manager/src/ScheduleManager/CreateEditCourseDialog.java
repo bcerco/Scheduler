@@ -111,7 +111,15 @@ public class CreateEditCourseDialog {
 			@Override
 			public void handle(MouseEvent event) {
 				String currentId = CreateEditCourseDialog.this.courseView.getCid();
+				ClassParser.classList.get(currentId).setTitle(nameField.getText());
+				//ClassParser.classList.get(currentId).setCourse(courseField.getText());
+				//ClassParser.classList.get(currentId).setNumber(numberField.getText());
+				//ClassParser.classList.get(currentId).setSection(Short.parseShort(sectionField.getText()));
 				ClassParser.classList.get(currentId).setInstructor(professorField.getText());
+				ClassParser.classList.get(currentId).setRoom(roomField.getText());
+				ClassParser.classList.get(currentId).setSoft(Short.parseShort(seatsSoftField.getText()));
+				ClassParser.classList.get(currentId).setHard(Short.parseShort(seatsHardField.getText()));
+				ClassParser.classList.get(currentId).setCredit(Float.parseFloat(creditsField.getText()));
 				event.consume();
 			}
 	    });
@@ -223,6 +231,10 @@ public class CreateEditCourseDialog {
 	    createEditRoot.setCenter(createEditMainBox);
 
 	    if (this.courseView != null) {
+	    	courseField.setDisable(true);
+	    	numberField.setDisable(true);
+	    	sectionField.setDisable(true);
+
 	    	courseField.setText(this.courseView.getCourse());
 	    	numberField.setText(this.courseView.getNumber());
 	    	sectionField.setText(Short.toString(this.courseView.getSection()));

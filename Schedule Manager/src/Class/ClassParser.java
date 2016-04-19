@@ -175,4 +175,20 @@ public class ClassParser{
     public void updateTierList(String number, String id){
     	tierList.get(Character.getNumericValue(number.charAt(0))).add(id);
     }
+    public String exportInstructorCredits(){
+    	StringBuffer buffer = new StringBuffer();
+    	ArrayList<String> temp = new ArrayList<String>();
+    	temp.addAll(instructorCredit.keySet());
+    	Collections.sort(temp);
+    	for (String cur: temp){
+    		if (!cur.contains("?")){
+    			buffer.append(cur);
+    			for (int i = 0; i < (20 - cur.length()); i++){
+    				buffer.append(" ");
+    			}
+    			buffer.append(instructorCredit.get(cur) + "\n");
+    		}
+    	}
+    	return buffer.toString();
+    }
 }

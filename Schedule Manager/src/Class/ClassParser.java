@@ -1,6 +1,9 @@
 package Class;
 
 import java.util.*;
+
+import ScheduleManager.ToolBarView;
+
 import java.io.*;
 
 public class ClassParser{
@@ -175,7 +178,7 @@ public class ClassParser{
     public void updateTierList(String number, String id){
     	tierList.get(Character.getNumericValue(number.charAt(0))).add(id);
     }
-    public String exportInstructorCredits(){
+    public static String exportInstructorCredits(HashMap<String, Float> credits){
     	StringBuffer buffer = new StringBuffer();
     	ArrayList<String> temp = new ArrayList<String>();
     	temp.addAll(instructorCredit.keySet());
@@ -186,7 +189,20 @@ public class ClassParser{
     			for (int i = 0; i < (20 - cur.length()); i++){
     				buffer.append(" ");
     			}
-    			buffer.append(instructorCredit.get(cur) + "\n");
+    			buffer.append(instructorCredit.get(cur));
+    			if (credits.containsKey(cur)){
+    				for (int i = 0; i < (20 - instructorCredit.get(cur).toString().length()); i++){
+    					buffer.append(" ");
+    				}
+    				buffer.append(credits.get(cur));
+    			}
+    			else{
+    				for (int i = 0; i < (20 - instructorCredit.get(cur).toString().length()); i++){
+    					buffer.append(" ");
+    				}
+    				buffer.append("0.0");
+    			}
+    			buffer.append("\n");
     		}
     	}
     	return buffer.toString();

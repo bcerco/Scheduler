@@ -2,3 +2,5 @@ time;CMPSC4701;CMPSC4721
 ignore;time;MATH2322;MATH2312
 ignore;time;MATH2322;MATH2302
 ignore;time;MATH2312;MATH2302
+credit;Blum;20.0
+credit;Bui;3.0

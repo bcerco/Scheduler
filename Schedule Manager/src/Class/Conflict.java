@@ -8,7 +8,7 @@ public class Conflict{
 	private BufferedReader reader = null;
 	private HashMap<String, HashSet<String> > timeConflict;
 	private HashMap<String, HashSet<String> > ignoreTimeConflict;
-	private HashMap<String, Float> creditNum;
+	public  HashMap<String, Float> creditNum;
 
 	public Conflict(String fileToRead){
 		inFile = new File(fileToRead);
@@ -32,6 +32,7 @@ public class Conflict{
 						addTimeIgnore(params);
 						break;
 					case "credit":
+						addCreditNum(params);
 						break;
 					default:
 						//TODO throw error
@@ -41,7 +42,7 @@ public class Conflict{
 				if (params[0].equals("time")){
 					addTimeConflict(params);
 				}
-				if (params[0].equals("credit)")){
+				if (params[0].equals("credit")){
 					addCreditNum(params);
 				}
 			}

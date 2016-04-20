@@ -13,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -22,8 +23,16 @@ import javafx.stage.WindowEvent;
 public class CreateEditCourseDialog {
 	CompactCourseView courseView = null;
 
+	boolean[] dayCreateDeleteCheck;
+
 	public CreateEditCourseDialog(CompactCourseView ccv) {
 		this.courseView = ccv;
+		this.dayCreateDeleteCheck = new boolean[8];
+
+		for (int i = 1; i < 8; i++) {
+			this.dayCreateDeleteCheck[i] = false;
+		}
+
 		createDialog();
 	}
 
@@ -120,6 +129,73 @@ public class CreateEditCourseDialog {
 	    saveButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
+				boolean deleteThisCourse = true;
+				for (int i = 1; i < 8; i++) {
+					if (!dayStartHoursArray[i].getText().toString().equals("") ||
+						!dayStartMinutesArray[i].getText().toString().equals("")) {
+						deleteThisCourse = false;
+						break;
+					}
+				}
+
+				if (deleteThisCourse == true) {
+					Pane parent = (Pane) CreateEditCourseDialog.this.courseView.getParent();
+					parent.getChildren().remove(CreateEditCourseDialog.this.courseView);
+					for (CompactCourseView cv: CreateEditCourseDialog.this.courseView.sameCourses) {
+						cv.sameCourses.remove(CreateEditCourseDialog.this.courseView);
+					}
+
+					for (CompactCourseView cv: CreateEditCourseDialog.this.courseView.sameCourses) {
+						parent = (Pane) cv.getParent();
+						parent.getChildren().remove(cv);
+
+						for (CompactCourseView cv2: cv.sameCourses) {
+							cv2.sameCourses.remove(cv);
+						}
+					}
+
+					ClassParser.classList.get(CreateEditCourseDialog.this.courseView.getCid()).removeClass();
+
+					createEditStage.close();
+					event.consume();
+					return;
+				}
+				else {
+					CompactCourseView ccvDelete = null;
+					for (int i = 1; i < 8; i++) {
+						if (CreateEditCourseDialog.this.dayCreateDeleteCheck[i] == true) {
+							if (dayStartHoursArray[i].getText().toString().equals("") ||
+								dayStartMinutesArray[i].getText().toString().equals("")) {
+								// TODO: DELETE THE COURSE ON Course.day == i+2!
+
+								for (CompactCourseView cv : CreateEditCourseDialog.this.courseView.sameCourses) {
+									if (cv.getDay() == i - 2) {
+										ccvDelete = cv;
+									}
+								}
+
+								Pane parent = (Pane) ccvDelete.getParent();
+								parent.getChildren().remove(ccvDelete);
+
+								for (CompactCourseView ccv : ccvDelete.sameCourses) {
+									ccv.sameCourses.remove(ccvDelete);
+								}
+							}
+						}
+						else {
+							if (!dayStartHoursArray[i].getText().toString().equals("") &&
+								!dayStartMinutesArray[i].getText().toString().equals("")) {
+								// TODO: CREATE THE COURSE ON Course.day == i+2!
+							}
+						}
+					}
+					if (ccvDelete != null) {
+						System.out.println(ccvDelete.getDay());
+						ClassParser.classList.get(ccvDelete.getCid()).startTime[ccvDelete.getDay()] = 0;
+						ClassParser.classList.get(ccvDelete.getCid()).endTime[ccvDelete.getDay()] = 0;
+					}
+				}
+
 				String currentId = CreateEditCourseDialog.this.courseView.getCid();
 				ClassParser.classList.get(currentId).setTitle(nameField.getText());
 
@@ -152,36 +228,42 @@ public class CreateEditCourseDialog {
 				if (isStartPM.equals("PM")) {
 					startOffset = 12 * 60;
 				}
-				ClassParser.classList.get(CreateEditCourseDialog.this.courseView.getCid())
-					.startTime[CreateEditCourseDialog.this.courseView.getDay()] =
-					(Integer.parseInt(dayStartHoursArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText()) * 60) +
-					(Integer.parseInt(dayStartMinutesArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText())) +
-					startOffset;
-				CreateEditCourseDialog.this.courseView.setStart(Integer.toString((Integer.parseInt(dayStartHoursArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText()) * 60) +
+				if (!dayStartHoursArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText().toString().equals("") &&
+					!dayStartMinutesArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText().toString().equals("")) {
+					ClassParser.classList.get(CreateEditCourseDialog.this.courseView.getCid())
+						.startTime[CreateEditCourseDialog.this.courseView.getDay()] =
+						(Integer.parseInt(dayStartHoursArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText()) * 60) +
 						(Integer.parseInt(dayStartMinutesArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText())) +
-						startOffset));
-				CreateEditCourseDialog.this.courseView.setStartTime((Integer.parseInt(dayStartHoursArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText()) * 60) +
-						(Integer.parseInt(dayStartMinutesArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText())) +
-						startOffset);
+						startOffset;
+					CreateEditCourseDialog.this.courseView.setStart(Integer.toString((Integer.parseInt(dayStartHoursArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText()) * 60) +
+							(Integer.parseInt(dayStartMinutesArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText())) +
+							startOffset));
+					CreateEditCourseDialog.this.courseView.setStartTime((Integer.parseInt(dayStartHoursArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText()) * 60) +
+							(Integer.parseInt(dayStartMinutesArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText())) +
+							startOffset);
+				}
 
 				String isEndPM = dayEndAMPM[CreateEditCourseDialog.this.courseView.getDay() + 2].getValue().toString();
 				int endOffset = 0;
 				if (isEndPM.equals("PM")) {
 					endOffset = 12 * 60;
 				}
-				ClassParser.classList.get(CreateEditCourseDialog.this.courseView.getCid())
-					.endTime[CreateEditCourseDialog.this.courseView.getDay()] =
-					(Integer.parseInt(dayEndHoursArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText()) * 60) +
-					(Integer.parseInt(dayEndMinutesArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText())) +
-					endOffset;
-				CreateEditCourseDialog.this.courseView.setEnd(Integer.toString((Integer.parseInt(dayEndHoursArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText()) * 60) +
+				if (!dayStartHoursArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText().toString().equals("") &&
+					!dayStartMinutesArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText().toString().equals("")) {
+					ClassParser.classList.get(CreateEditCourseDialog.this.courseView.getCid())
+						.endTime[CreateEditCourseDialog.this.courseView.getDay()] =
+						(Integer.parseInt(dayEndHoursArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText()) * 60) +
 						(Integer.parseInt(dayEndMinutesArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText())) +
-						endOffset));
-				CreateEditCourseDialog.this.courseView.setEndTime((Integer.parseInt(dayEndHoursArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText()) * 60) +
-						(Integer.parseInt(dayEndMinutesArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText())) +
-						endOffset);
+						endOffset;
+					CreateEditCourseDialog.this.courseView.setEnd(Integer.toString((Integer.parseInt(dayEndHoursArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText()) * 60) +
+							(Integer.parseInt(dayEndMinutesArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText())) +
+							endOffset));
+					CreateEditCourseDialog.this.courseView.setEndTime((Integer.parseInt(dayEndHoursArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText()) * 60) +
+							(Integer.parseInt(dayEndMinutesArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText())) +
+							endOffset);
 
-				CreateEditCourseDialog.this.courseView.calculateDisplayTime();
+					CreateEditCourseDialog.this.courseView.calculateDisplayTime();
+				}
 
 				//System.out.println(ClassParser.classList.get(CreateEditCourseDialog.this.courseView.getCid()).startTime[CreateEditCourseDialog.this.courseView.getDay()]);
 				//System.out.println(ClassParser.classList.get(CreateEditCourseDialog.this.courseView.getCid()).endTime[CreateEditCourseDialog.this.courseView.getDay()]);
@@ -234,34 +316,40 @@ public class CreateEditCourseDialog {
 					if (isStartPM.equals("PM")) {
 						startOffset = 12 * 60;
 					}
-					ClassParser.classList.get(CreateEditCourseDialog.this.courseView.getCid())
-						.startTime[ccv.getDay()] =
-						(Integer.parseInt(dayStartHoursArray[ccv.getDay() + 2].getText()) * 60) +
-						(Integer.parseInt(dayStartMinutesArray[ccv.getDay() + 2].getText())) +
-						startOffset;
-					ccv.setStart(Integer.toString((Integer.parseInt(dayStartHoursArray[ccv.getDay() + 2].getText()) * 60) +
+					if (!dayStartHoursArray[ccv.getDay() + 2].getText().toString().equals("") &&
+						!dayStartMinutesArray[ccv.getDay() + 2].getText().toString().equals("")) {
+						ClassParser.classList.get(CreateEditCourseDialog.this.courseView.getCid())
+							.startTime[ccv.getDay()] =
+							(Integer.parseInt(dayStartHoursArray[ccv.getDay() + 2].getText()) * 60) +
 							(Integer.parseInt(dayStartMinutesArray[ccv.getDay() + 2].getText())) +
-							startOffset));
-					ccv.setStartTime((Integer.parseInt(dayStartHoursArray[ccv.getDay() + 2].getText()) * 60) +
-							(Integer.parseInt(dayStartMinutesArray[ccv.getDay() + 2].getText())) +
-							startOffset);
+							startOffset;
+						ccv.setStart(Integer.toString((Integer.parseInt(dayStartHoursArray[ccv.getDay() + 2].getText()) * 60) +
+								(Integer.parseInt(dayStartMinutesArray[ccv.getDay() + 2].getText())) +
+								startOffset));
+						ccv.setStartTime((Integer.parseInt(dayStartHoursArray[ccv.getDay() + 2].getText()) * 60) +
+								(Integer.parseInt(dayStartMinutesArray[ccv.getDay() + 2].getText())) +
+								startOffset);
+					}
 
 					isEndPM = dayEndAMPM[ccv.getDay() + 2].getValue().toString();
 					endOffset = 0;
 					if (isEndPM.equals("PM")) {
 						endOffset = 12 * 60;
 					}
-					ClassParser.classList.get(CreateEditCourseDialog.this.courseView.getCid())
-						.endTime[ccv.getDay()] =
-						(Integer.parseInt(dayEndHoursArray[ccv.getDay() + 2].getText()) * 60) +
-						(Integer.parseInt(dayEndMinutesArray[ccv.getDay() + 2].getText())) +
-						endOffset;
-					ccv.setEnd(Integer.toString((Integer.parseInt(dayEndHoursArray[ccv.getDay() + 2].getText()) * 60) +
+					if (!dayStartHoursArray[ccv.getDay() + 2].getText().toString().equals("") &&
+						!dayStartMinutesArray[ccv.getDay() + 2].getText().toString().equals("")) {
+						ClassParser.classList.get(CreateEditCourseDialog.this.courseView.getCid())
+							.endTime[ccv.getDay()] =
+							(Integer.parseInt(dayEndHoursArray[ccv.getDay() + 2].getText()) * 60) +
 							(Integer.parseInt(dayEndMinutesArray[ccv.getDay() + 2].getText())) +
-							endOffset));
-					ccv.setEndTime((Integer.parseInt(dayEndHoursArray[ccv.getDay() + 2].getText()) * 60) +
-							(Integer.parseInt(dayEndMinutesArray[ccv.getDay() + 2].getText())) +
-							endOffset);
+							endOffset;
+						ccv.setEnd(Integer.toString((Integer.parseInt(dayEndHoursArray[ccv.getDay() + 2].getText()) * 60) +
+								(Integer.parseInt(dayEndMinutesArray[ccv.getDay() + 2].getText())) +
+								endOffset));
+						ccv.setEndTime((Integer.parseInt(dayEndHoursArray[ccv.getDay() + 2].getText()) * 60) +
+								(Integer.parseInt(dayEndMinutesArray[ccv.getDay() + 2].getText())) +
+								endOffset);
+					}
 
 					ccv.calculateDisplayTime();
 
@@ -423,6 +511,8 @@ public class CreateEditCourseDialog {
 	    	dayEndHoursArray[this.courseView.getDay() + 2].setText(Integer.toString(endHour));
 	    	dayEndMinutesArray[this.courseView.getDay() + 2].setText(Integer.toString(endMinute));
 
+	    	this.dayCreateDeleteCheck[this.courseView.getDay() + 2] = true;
+
 	    	nameField.setText(ClassParser.classList.get(this.courseView.getCid()).getTitle());
 	    	professorField.setText(ClassParser.classList.get(this.courseView.getCid()).getInstructor());
 	    	roomField.setText(ClassParser.classList.get(this.courseView.getCid()).getRoom());
@@ -460,6 +550,8 @@ public class CreateEditCourseDialog {
 		    	}
 		    	dayEndHoursArray[ccv.getDay() + 2].setText(Integer.toString(endHour));
 		    	dayEndMinutesArray[ccv.getDay() + 2].setText(Integer.toString(endMinute));
+
+		    	this.dayCreateDeleteCheck[ccv.getDay() + 2] = true;
 	    	}
 	    }
 

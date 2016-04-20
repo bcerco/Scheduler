@@ -162,6 +162,7 @@ public class CreateEditCourseDialog {
 				}
 				else {
 					CompactCourseView ccvDelete = null;
+					boolean deleteOwnCourse = false;
 					for (int i = 1; i < 8; i++) {
 						if (CreateEditCourseDialog.this.dayCreateDeleteCheck[i] == true) {
 							if (dayStartHoursArray[i].getText().toString().equals("") ||
@@ -174,11 +175,22 @@ public class CreateEditCourseDialog {
 									}
 								}
 
-								Pane parent = (Pane) ccvDelete.getParent();
-								parent.getChildren().remove(ccvDelete);
+								if (CreateEditCourseDialog.this.courseView.getDay() == i - 2) {
+									deleteOwnCourse = true;
+									Pane parent = (Pane) CreateEditCourseDialog.this.courseView.getParent();
+									parent.getChildren().remove(CreateEditCourseDialog.this.courseView);
 
-								for (CompactCourseView ccv : ccvDelete.sameCourses) {
-									ccv.sameCourses.remove(ccvDelete);
+									for (CompactCourseView ccv : CreateEditCourseDialog.this.courseView.sameCourses) {
+										ccv.sameCourses.remove(ccvDelete);
+									}
+								}
+								else {
+									Pane parent = (Pane) ccvDelete.getParent();
+									parent.getChildren().remove(ccvDelete);
+
+									for (CompactCourseView ccv : ccvDelete.sameCourses) {
+										ccv.sameCourses.remove(ccvDelete);
+									}
 								}
 							}
 						}
@@ -189,10 +201,15 @@ public class CreateEditCourseDialog {
 							}
 						}
 					}
-					if (ccvDelete != null) {
-						System.out.println(ccvDelete.getDay());
-						ClassParser.classList.get(ccvDelete.getCid()).startTime[ccvDelete.getDay()] = 0;
-						ClassParser.classList.get(ccvDelete.getCid()).endTime[ccvDelete.getDay()] = 0;
+					if (deleteOwnCourse) {
+						ClassParser.classList.get(CreateEditCourseDialog.this.courseView.getCid()).startTime[CreateEditCourseDialog.this.courseView.getDay()] = 0;
+						ClassParser.classList.get(CreateEditCourseDialog.this.courseView.getCid()).endTime[CreateEditCourseDialog.this.courseView.getDay()] = 0;
+					}
+					else {
+						if (ccvDelete != null) {
+							ClassParser.classList.get(ccvDelete.getCid()).startTime[ccvDelete.getDay()] = 0;
+							ClassParser.classList.get(ccvDelete.getCid()).endTime[ccvDelete.getDay()] = 0;
+						}
 					}
 				}
 
@@ -225,7 +242,7 @@ public class CreateEditCourseDialog {
 				// Times here
 				String isStartPM = dayStartAMPM[CreateEditCourseDialog.this.courseView.getDay() + 2].getValue().toString();
 				int startOffset = 0;
-				if (isStartPM.equals("PM")) {
+				if (isStartPM.equals("PM") && !dayStartHoursArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText().toString().equals("12")) {
 					startOffset = 12 * 60;
 				}
 				if (!dayStartHoursArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText().toString().equals("") &&
@@ -245,7 +262,7 @@ public class CreateEditCourseDialog {
 
 				String isEndPM = dayEndAMPM[CreateEditCourseDialog.this.courseView.getDay() + 2].getValue().toString();
 				int endOffset = 0;
-				if (isEndPM.equals("PM")) {
+				if (isEndPM.equals("PM") && !dayEndHoursArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText().toString().equals("12")) {
 					endOffset = 12 * 60;
 				}
 				if (!dayStartHoursArray[CreateEditCourseDialog.this.courseView.getDay() + 2].getText().toString().equals("") &&
@@ -313,7 +330,7 @@ public class CreateEditCourseDialog {
 
 					isStartPM = dayStartAMPM[ccv.getDay() + 2].getValue().toString();
 					startOffset = 0;
-					if (isStartPM.equals("PM")) {
+					if (isStartPM.equals("PM") && !dayStartHoursArray[ccv.getDay() + 2].getText().toString().equals("12")) {
 						startOffset = 12 * 60;
 					}
 					if (!dayStartHoursArray[ccv.getDay() + 2].getText().toString().equals("") &&
@@ -333,7 +350,7 @@ public class CreateEditCourseDialog {
 
 					isEndPM = dayEndAMPM[ccv.getDay() + 2].getValue().toString();
 					endOffset = 0;
-					if (isEndPM.equals("PM")) {
+					if (isEndPM.equals("PM") && !dayEndHoursArray[ccv.getDay() + 2].getText().toString().equals("12")) {
 						endOffset = 12 * 60;
 					}
 					if (!dayStartHoursArray[ccv.getDay() + 2].getText().toString().equals("") &&

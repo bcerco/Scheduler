@@ -7,7 +7,16 @@ public class Filter{
     public Filter(){
 
     }
-
+    public HashSet<String> daySearch(int day, int time){
+    	HashSet<String> result = new HashSet<String>();
+    	for (String cur: ClassParser.classList.keySet()){
+    		if (ClassParser.classList.get(cur).startTime[day] >= time &&
+    				ClassParser.classList.get(cur).startTime[day] < (time + 60)){
+    			result.add(cur);
+    		}
+    	}
+    	return result;
+    }
     public HashSet<String> search(String query){
         return recursiveSearch(query);
     }

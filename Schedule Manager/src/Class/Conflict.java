@@ -189,6 +189,8 @@ public class Conflict{
 		while (outerIt.hasNext()){
 			ClassNode outer = ClassParser.classList.get(outerIt.next());
 			Iterator<String> innerIt = ClassParser.instructorList.get(prof).iterator();
+			if (outer.getInstructor().contains("?"))
+				continue;
 			while (innerIt.hasNext()){
 				ClassNode inner = ClassParser.classList.get(innerIt.next());
                 if (ignoreTimeConflict.containsKey(inner.getId())){

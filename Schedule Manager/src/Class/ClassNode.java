@@ -4,11 +4,11 @@ import java.util.*;
 
 //Class for class objects
 public class ClassNode{
-    private String instructor;
-    private String course;
-    private String number;
-    private short section;
-    private float credits;
+    public String instructor;
+    public String course;
+    public String number;
+    public short section;
+    public float credits;
     private String title;
     private short soft;
     private short hard;
@@ -20,7 +20,9 @@ public class ClassNode{
     public int [] endTime;
 
     public ClassNode(){
-
+    	links = new ArrayList<String>();
+        startTime = new int[7];
+        endTime = new int[7];
     }
     public ClassNode(String line, int comma){
         links = new ArrayList<String>();

@@ -1,5 +1,6 @@
 package ScheduleManager;
 
+import Class.ClassNode;
 import Class.ClassParser;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,6 +26,8 @@ public class CreateEditCourseDialog {
 
 	boolean[] dayCreateDeleteCheck;
 
+	boolean isCreating;
+
 	public CreateEditCourseDialog(CompactCourseView ccv) {
 		this.courseView = ccv;
 		this.dayCreateDeleteCheck = new boolean[8];
@@ -43,12 +46,19 @@ public class CreateEditCourseDialog {
 	    	        "PM"
 	    	    );
 
+		if (courseView != null) {
+			isCreating = false;
+		}
+		else {
+			isCreating = true;
+		}
+
 		Stage createEditStage = new Stage();
     	BorderPane createEditRoot = new BorderPane();
 	    Scene createEditScene = new Scene(createEditRoot,640,480);
 	    createEditScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 	    createEditStage.setScene(createEditScene);
-	    if (courseView != null) {
+	    if (!isCreating) {
 	    	createEditStage.setTitle("Edit Dialog");
 	    }
 	    else {
@@ -126,12 +136,14 @@ public class CreateEditCourseDialog {
 	    TextField creditsField = new TextField();
 	    creditsField.setPromptText("Credits");
 	    Button saveButton = new Button("Save");
+	    Button createButton = new Button("Create");
+
 	    saveButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
 				boolean deleteThisCourse = true;
 				for (int i = 1; i < 8; i++) {
-					if (!dayStartHoursArray[i].getText().toString().equals("") ||
+					if (!dayStartHoursArray[i].getText().toString().equals("") ||		// TODO: This may need to have the !'s removed!!!!
 						!dayStartMinutesArray[i].getText().toString().equals("")) {
 						deleteThisCourse = false;
 						break;
@@ -330,7 +342,7 @@ public class CreateEditCourseDialog {
 
 				// Update visual
 				CreateEditCourseDialog.this.courseView.courseLabel.setText(courseField.getText());
-				CreateEditCourseDialog.this.courseView.numberLabel.setText(numberField.getText());
+				Cre		// TODO: This may need to have the !'s removed!!!!ateEditCourseDialog.this.courseView.numberLabel.setText(numberField.getText());
 				CreateEditCourseDialog.this.courseView.sectionLabel.setText(sectionField.getText());
 
 				String courseColor = ToolBarView.colorMap.get(CreateEditCourseDialog.this.courseView.getCourse());
@@ -433,6 +445,55 @@ public class CreateEditCourseDialog {
 			}
 	    });
 
+	    createButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				if (ClassParser.classList != null) {
+					String tempCid = courseField.getText().toString() + numberField.getText().toString() + sectionField.getText().toString();
+					if (ClassParser.classList.get(tempCid) == null) {
+						ClassNode cnode = new ClassNode();
+						cnode.course = courseField.getText().toString();
+						cnode.number = numberField.getText().toString();
+						cnode.section = Short.parseShort(sectionField.getText().toString());
+						cnode.setTitle(nameField.getText().toString());
+						cnode.credits = Float.parseFloat(creditsField.getText().toString());
+						cnode.setSoft(Short.parseShort(seatsSoftField.getText().toString()));
+						cnode.setHard(Short.parseShort(seatsHardField.getText().toString()));
+						cnode.instructor = professorField.getText().toString();
+						cnode.setRoom(roomField.getText().toString());
+
+						for (int i = 1; i < 8; i++) {
+							if (!dayStartHoursArray[i].getText().toString().equals("") && !dayStartMinutesArray[i].getText().toString().equals("") &&
+								!dayEndHoursArray[i].getText().toString().equals("") && !dayEndMinutesArray[i].getText().toString().equals("")) {
+								String times = dayStartHoursArray[i].getText().toString() + ":" + dayStartMinutesArray[i].getText().toString() +
+										"-" + dayEndHoursArray[i].getText().toString() + ":" + dayEndMinutesArray[i].getText().toString();
+
+								if (dayEndAMPM[i].getValue().equals("AM")) {
+									times += "A";
+								}
+								else {
+									times += "P";
+								}
+
+								cnode.fillDays(Character.toString(cnode.intToDay(i-2)), times);
+							}
+						}
+
+						cnode.createId();
+						ClassParser.classList.put(cnode.getId(), cnode);
+						ToolBarView.parser.updateMapping(cnode);
+
+						Main.toolBarView.PopulateTracks();
+					}
+					else {
+						// TODO: Class already exists
+					}
+				}
+				createEditStage.close();
+				event.consume();
+			}
+	    });
+
 	    for (int i = 1; i < 8; i++) {
 	    	dayTimeRowArray[i]      = new HBox();
 	    	dayLabelsArray[i]       = new Label();
@@ -516,7 +577,12 @@ public class CreateEditCourseDialog {
 	    seatsFieldRow.getChildren().add(seatsHardField);
 	    creditsFieldRow.getChildren().add(creditsLabel);
 	    creditsFieldRow.getChildren().add(creditsField);
-	    buttonRow.getChildren().add(saveButton);
+	    if (!isCreating) {
+	    	buttonRow.getChildren().add(saveButton);
+	    }
+	    else {
+	    	buttonRow.getChildren().add(createButton);
+	    }
 	    createEditMainBox.getChildren().add(nameFieldRow);
 	    createEditMainBox.getChildren().add(idFieldRow);
 	    for (int i = 1; i < 8; i++) {

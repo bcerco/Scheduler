@@ -90,7 +90,7 @@ public class WeeklyScheduleCourseTracks extends GridPane {
 		// Popup dialog when right-clicking on a classview
     	Stage popupStage = new Stage(StageStyle.UNDECORATED);
     	BorderPane popupRoot = new BorderPane();
-	    Scene popupScene = new Scene(popupRoot,100,25);
+	    Scene popupScene = new Scene(popupRoot,100,50);
 	    popupScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 	    popupStage.setScene(popupScene);
 	    popupStage.setTitle("Popup Dialog");
@@ -98,7 +98,7 @@ public class WeeklyScheduleCourseTracks extends GridPane {
 	    popupStage.initOwner(Main.mainStage);
 
 	    popupStage.setX(x - 50);
-	    popupStage.setY(y - 12);
+	    popupStage.setY(y - 24);
 
 	    /*popupStage.setOnCloseRequest((new EventHandler<WindowEvent>() {
 			@Override
@@ -110,13 +110,45 @@ public class WeeklyScheduleCourseTracks extends GridPane {
 	    }));*/
 
 	    VBox  mainBox      = new VBox();
+	    HBox  createRow      = new HBox();
 	    HBox  closeRow      = new HBox();
+	    Label createButton   = new Label("Create");
 	    Label closeButton   = new Label("Close");
+
+	    createRow.getChildren().add(createButton);
+	    createRow.alignmentProperty().set(Pos.CENTER);
+
+	    createRow.getStyleClass().add("ScheduleCell");
 
 	    closeRow.getChildren().add(closeButton);
 	    closeRow.alignmentProperty().set(Pos.CENTER);
 
 	    closeRow.getStyleClass().add("ScheduleCell");
+
+	    createRow.setOnMouseEntered(new EventHandler<MouseEvent> () {
+			@Override
+			public void handle(MouseEvent event) {
+				createRow.getStyleClass().remove("PopupButton");
+				createRow.getStyleClass().add("PopupButtonHighlight");
+				event.consume();
+			}
+	    });
+	    createRow.setOnMouseExited(new EventHandler<MouseEvent> () {
+			@Override
+			public void handle(MouseEvent event) {
+				createRow.getStyleClass().remove("PopupButtonHighlight");
+				createRow.getStyleClass().add("PopupButton");
+				event.consume();
+			}
+	    });
+	    createRow.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				new CreateEditCourseDialog(null);
+				popupStage.close();
+				event.consume();
+			}
+	    });
 
 	    closeRow.setOnMouseEntered(new EventHandler<MouseEvent> () {
 			@Override
@@ -142,10 +174,13 @@ public class WeeklyScheduleCourseTracks extends GridPane {
 			}
 	    });
 
+	    mainBox.getChildren().add(createRow);
 	    mainBox.getChildren().add(closeRow);
 
+	    HBox.setHgrow(createButton, Priority.ALWAYS);
 	    HBox.setHgrow(closeButton, Priority.ALWAYS);
 
+	    VBox.setVgrow(createRow, Priority.ALWAYS);
 	    VBox.setVgrow(closeRow, Priority.ALWAYS);
 
 	    popupRoot.setCenter(mainBox);

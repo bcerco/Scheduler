@@ -167,8 +167,6 @@ public class CreateEditCourseDialog {
 						if (CreateEditCourseDialog.this.dayCreateDeleteCheck[i] == true) {
 							if (dayStartHoursArray[i].getText().toString().equals("") ||
 								dayStartMinutesArray[i].getText().toString().equals("")) {
-								// TODO: DELETE THE COURSE ON Course.day == i+2!
-
 								for (CompactCourseView cv : CreateEditCourseDialog.this.courseView.sameCourses) {
 									if (cv.getDay() == i - 2) {
 										ccvDelete = cv;
@@ -197,7 +195,46 @@ public class CreateEditCourseDialog {
 						else {
 							if (!dayStartHoursArray[i].getText().toString().equals("") &&
 								!dayStartMinutesArray[i].getText().toString().equals("")) {
-								// TODO: CREATE THE COURSE ON Course.day == i+2!
+								CompactCourseView newCourse = new CompactCourseView(courseField.getText().toString(),
+										numberField.getText().toString(), Short.parseShort(sectionField.getText().toString()),
+										i - 2,
+										(Integer.parseInt(dayStartHoursArray[i].getText().toString()) * 60)  + Integer.parseInt(dayStartMinutesArray[i].getText().toString()),
+										(Integer.parseInt(dayEndHoursArray[i].getText().toString()) * 60) + Integer.parseInt(dayEndMinutesArray[i].getText().toString()),
+										ToolBarView.colorMap.get(courseField.getText().toString()));
+								for (int t = 0; t < 6; t++) {
+									if (i - 2 == t) {
+							    		Pane tempPane = (Pane)ToolBarView.tracks.getChildren().get(t+1 + 2);
+							    		tempPane.getChildren().add(newCourse);
+							    		newCourse.setVisible(true);
+
+							    		double heightOfCell = (WeeklyScheduleCourseTracks.height)/(WeeklyScheduleView.endHour - WeeklyScheduleView.startHour);
+							    		double pixelMinutes = (heightOfCell / 60);
+							    		double positionOfClass;
+
+							    		if (dayStartAMPM[i].getValue().equals("AM")) {
+							    			positionOfClass = pixelMinutes * (((Integer.parseInt(dayStartHoursArray[i].getText().toString()) * 60) + Integer.parseInt(dayStartMinutesArray[i].getText().toString())) - (WeeklyScheduleView.startHour * 60));
+							    		}
+							    		else {
+							    			int add = 0;
+							    			if (Integer.parseInt(dayStartHoursArray[i].getText().toString()) < 12) {
+							    				add = 720;
+							    			}
+							    			newCourse.setStartTime(newCourse.getStartTime() + add);
+							    			newCourse.setStart(Integer.toString(newCourse.getStartTime()));
+							    			positionOfClass = pixelMinutes * (((Integer.parseInt(dayStartHoursArray[i].getText().toString()) * 60) + Integer.parseInt(dayStartMinutesArray[i].getText().toString()) + add) - (WeeklyScheduleView.startHour * 60));
+							    		}
+
+							    		if (dayEndAMPM[i].getValue().equals("PM") && Integer.parseInt(dayEndHoursArray[i].getText().toString()) != 12) {
+							    			newCourse.setEndTime(newCourse.getEndTime() + 720);
+							    			newCourse.setEnd(Integer.toString(newCourse.getEndTime()));
+							    		}
+									}
+								}
+
+								ClassParser.classList.get(newCourse.getCid()).startTime[newCourse.getDay()] = newCourse.getStartTime();
+								ClassParser.classList.get(newCourse.getCid()).endTime[newCourse.getDay()] = newCourse.getEndTime();
+
+								Main.toolBarView.PopulateTracks();
 							}
 						}
 					}

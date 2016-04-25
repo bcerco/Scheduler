@@ -28,7 +28,7 @@ public class Main extends Application {
 	public static double appWidth;
 	public static double minAppWidth;
 	public static double minAppHeight;
-	ToolBarView toolBarView;
+	public static ToolBarView toolBarView;
 
 	public static Stage mainStage;
 

@@ -89,7 +89,11 @@ public class ToolBarView extends ToolBar {
 		btImport = new Button("Import");
 		btImport.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override public void handle(ActionEvent e) {
-		    	ToolBarView.this.checkFile = chooserImport.showOpenDialog(stage);
+		    	File tempFile = chooserImport.showOpenDialog(stage);
+
+		    	if (tempFile != null) {
+		    		ToolBarView.this.checkFile = tempFile;
+		    	}
 
 		    	if (checkFile != null && checkFile.exists()) {
 		    		Main.spreadsheet = checkFile;

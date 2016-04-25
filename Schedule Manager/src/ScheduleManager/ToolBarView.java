@@ -363,6 +363,9 @@ public class ToolBarView extends ToolBar {
 			    		}
 
 			    		curCourseView.setTranslateY(positionOfClass);
+			    		curCourseView.setMinWidth(WeeklyScheduleCourseTracks.width - 6);
+			    		curCourseView.setMaxWidth(WeeklyScheduleCourseTracks.width - 6);
+			    		curCourseView.setLayoutX(3);
 			    		tempPane.getChildren().add(curCourseView);
 			    	}
 			    }

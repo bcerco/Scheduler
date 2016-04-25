@@ -1,13 +1,25 @@
 package ScheduleManager;
 
+import Class.ClassParser;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class WeeklyScheduleCourseTracks extends GridPane {
 
@@ -60,7 +72,93 @@ public class WeeklyScheduleCourseTracks extends GridPane {
 			}
 			this.getColumnConstraints().add(ccColGrow);
 			tempPane = new Pane();
+			tempPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(MouseEvent event) {
+					if (event.getButton() == MouseButton.SECONDARY && CompactCourseView.classPopupVisible == false) {
+						showPopupDialog(event.getScreenX(), event.getScreenY());
+						return;
+					}
+					event.consume();
+				}
+		    });
 			this.add(tempPane, i+1, 1);
 		}
+	}
+
+	public void showPopupDialog(double x, double y) {
+		// Popup dialog when right-clicking on a classview
+    	Stage popupStage = new Stage(StageStyle.UNDECORATED);
+    	BorderPane popupRoot = new BorderPane();
+	    Scene popupScene = new Scene(popupRoot,100,25);
+	    popupScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+	    popupStage.setScene(popupScene);
+	    popupStage.setTitle("Popup Dialog");
+	    popupStage.initModality(Modality.WINDOW_MODAL);
+	    popupStage.initOwner(Main.mainStage);
+
+	    popupStage.setX(x - 50);
+	    popupStage.setY(y - 12);
+
+	    /*popupStage.setOnCloseRequest((new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent event) {
+				popupStage.close();
+				event.consume();
+			}
+
+	    }));*/
+
+	    VBox  mainBox      = new VBox();
+	    HBox  closeRow      = new HBox();
+	    Label closeButton   = new Label("Close");
+
+	    closeRow.getChildren().add(closeButton);
+	    closeRow.alignmentProperty().set(Pos.CENTER);
+
+	    closeRow.getStyleClass().add("ScheduleCell");
+
+	    closeRow.setOnMouseEntered(new EventHandler<MouseEvent> () {
+			@Override
+			public void handle(MouseEvent event) {
+				closeRow.getStyleClass().remove("PopupButton");
+				closeRow.getStyleClass().add("PopupButtonHighlight");
+				event.consume();
+			}
+	    });
+	    closeRow.setOnMouseExited(new EventHandler<MouseEvent> () {
+			@Override
+			public void handle(MouseEvent event) {
+				closeRow.getStyleClass().remove("PopupButtonHighlight");
+				closeRow.getStyleClass().add("PopupButton");
+				event.consume();
+			}
+	    });
+	    closeRow.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				popupStage.close();
+				event.consume();
+			}
+	    });
+
+	    mainBox.getChildren().add(closeRow);
+
+	    HBox.setHgrow(closeButton, Priority.ALWAYS);
+
+	    VBox.setVgrow(closeRow, Priority.ALWAYS);
+
+	    popupRoot.setCenter(mainBox);
+
+	    /*popupScene.setOnMouseExited(new EventHandler<MouseEvent> () {
+			@Override
+			public void handle(MouseEvent event) {
+				popupStage.close();
+				event.consume();
+			}
+	    });*/
+
+	    popupStage.show();
+	    popupStage.setResizable(false);
 	}
 }

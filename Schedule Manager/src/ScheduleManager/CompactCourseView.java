@@ -53,6 +53,7 @@ public class CompactCourseView extends VBox {
 
 	private boolean isRightClicked;
 	private boolean isLocked;
+	public  static boolean classPopupVisible = false;
 
 	Label startTimeLabel = new Label();
 	Label endTimeLabel = new Label();
@@ -166,6 +167,7 @@ public class CompactCourseView extends VBox {
 
 				if (event.getButton() == MouseButton.SECONDARY && isRightClicked == false) {
 					isRightClicked = true;
+					classPopupVisible = true;
 
 					showPopupDialog(event.getScreenX(), event.getScreenY());
 
@@ -221,7 +223,7 @@ public class CompactCourseView extends VBox {
 		    			//Pane currentTrack = (Pane)ToolBarView.tracks.getChildren().get(day + track + 3);
 			    		//System.out.println(currentTrack.getChildren().toString());
 		    		}
-					CompactCourseView.this.setLayoutX(0);
+					CompactCourseView.this.setLayoutX(3);
 
 					if (CompactCourseView.this.isLocked) {
 						ClassParser.classList.get(cid).startTime[CompactCourseView.this.day] = startTime;
@@ -238,7 +240,7 @@ public class CompactCourseView extends VBox {
 							cv.day = cv.day + CompactCourseView.this.track;
 							ClassParser.classList.get(cv.cid).startTime[cv.day] = cv.startTime;
 							ClassParser.classList.get(cv.cid).endTime[cv.day] = cv.endTime;
-							cv.setLayoutX(0);
+							cv.setLayoutX(3);
 						}
 					}
 
@@ -420,6 +422,7 @@ public class CompactCourseView extends VBox {
 			@Override
 			public void handle(MouseEvent event) {
 				new CreateEditCourseDialog(CompactCourseView.this);
+				classPopupVisible = false;
 				popupStage.close();
 				event.consume();
 			}
@@ -462,6 +465,7 @@ public class CompactCourseView extends VBox {
 
 					ClassParser.classList.get(CompactCourseView.this.getCid()).removeClass();
 
+					classPopupVisible = false;
 					popupStage.close();
 				}
 				else {
@@ -470,6 +474,7 @@ public class CompactCourseView extends VBox {
 					for (CompactCourseView cv: sameCourses) {
 						cv.sameCourses.remove(CompactCourseView.this);
 					}
+					classPopupVisible = false;
 					popupStage.close();
 				}
 				event.consume();
@@ -502,6 +507,7 @@ public class CompactCourseView extends VBox {
 		    		cv.isLocked = isLocked;
 				}
 
+				classPopupVisible = false;
 				popupStage.close();
 				event.consume();
 			}
@@ -526,6 +532,7 @@ public class CompactCourseView extends VBox {
 	    closeRow.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
+				classPopupVisible = false;
 				popupStage.close();
 				event.consume();
 			}

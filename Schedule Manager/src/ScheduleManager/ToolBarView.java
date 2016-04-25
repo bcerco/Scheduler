@@ -82,13 +82,12 @@ public class ToolBarView extends ToolBar {
 			ioe.printStackTrace();
 		}
 
-		chooserImport.setTitle("File Import");
-		chooserImport.getExtensionFilters().addAll(
-				new ExtensionFilter("Text CSV", "*.csv"));
-
 		btImport = new Button("Import");
 		btImport.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override public void handle(ActionEvent e) {
+		    	chooserImport.setTitle("File Import");
+				chooserImport.getExtensionFilters().addAll(
+						new ExtensionFilter("Text CSV", "*.csv"));
 		    	File tempFile = chooserImport.showOpenDialog(stage);
 
 		    	if (tempFile != null) {
@@ -148,6 +147,9 @@ public class ToolBarView extends ToolBar {
 		btExport = new Button("Export");
 		btExport.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override public void handle(ActionEvent e) {
+		    	chooserImport.setTitle("File Export");
+				chooserImport.getExtensionFilters().addAll(
+						new ExtensionFilter("Text CSV", "*.csv"));
 		    	File checkFile = chooserImport.showSaveDialog(stage);
 		    	if (checkFile != null) {
 		    		parser.exportClassList(checkFile.getAbsolutePath());

@@ -342,7 +342,7 @@ public class CreateEditCourseDialog {
 
 				// Update visual
 				CreateEditCourseDialog.this.courseView.courseLabel.setText(courseField.getText());
-				Cre		// TODO: This may need to have the !'s removed!!!!ateEditCourseDialog.this.courseView.numberLabel.setText(numberField.getText());
+				CreateEditCourseDialog.this.courseView.numberLabel.setText(numberField.getText());
 				CreateEditCourseDialog.this.courseView.sectionLabel.setText(sectionField.getText());
 
 				String courseColor = ToolBarView.colorMap.get(CreateEditCourseDialog.this.courseView.getCourse());

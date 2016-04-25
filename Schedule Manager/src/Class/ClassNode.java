@@ -19,11 +19,14 @@ public class ClassNode{
     public int [] startTime;
     public int [] endTime;
 
+    public ClassNode(){
+
+    }
     public ClassNode(String line, int comma){
         links = new ArrayList<String>();
         String [] args = line.split(",");
-        startTime = new int[6];
-        endTime = new int[6];
+        startTime = new int[7];
+        endTime = new int[7];
         course = args[0];
         number = args[1];
         section = Short.parseShort(args[2]);
@@ -217,7 +220,6 @@ public class ClassNode{
     public String getId(){
         return id;
     }
-    //TODO: add something for am/pm
     public void fillDays(String day, String time){
         int start, end;
         day = day.replace("\"","");
@@ -239,12 +241,7 @@ public class ClassNode{
         else{
             end = Integer.parseInt(times[1].substring(0,
                         times[1].length() - 1)) * 60;
-        }/*
-        if (times[1].split(":")[1].charAt(2) == 'P'){
-            if (end < 720) end += 720;
-            if (start < 540) start += 720;
         }
-        */
         if (times[1].charAt(times[1].length() - 1) == 'P'){
             if (end < 720) end += 720;
             if (start < 540) start += 720;

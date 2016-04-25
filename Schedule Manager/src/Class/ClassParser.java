@@ -1,9 +1,6 @@
 package Class;
 
 import java.util.*;
-
-import ScheduleManager.ToolBarView;
-
 import java.io.*;
 
 public class ClassParser{

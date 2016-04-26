@@ -390,7 +390,7 @@ public class ToolBarView extends ToolBar {
 			    			color = colorMap.get(cur.getCourse());
 			    		}
 			    		else {
-			    			color = "#000000";
+			    			color = "#777777";
 			    		}
 
 			    		double heightOfCell = (WeeklyScheduleCourseTracks.height)/(WeeklyScheduleView.endHour - WeeklyScheduleView.startHour);

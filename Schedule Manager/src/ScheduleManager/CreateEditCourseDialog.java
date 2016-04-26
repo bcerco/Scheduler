@@ -350,7 +350,7 @@ public class CreateEditCourseDialog {
 					CreateEditCourseDialog.this.courseView.setStyle("-fx-background-color: " + courseColor);
 				}
 				else {
-					CreateEditCourseDialog.this.courseView.setStyle("-fx-background-color: #000000");
+					CreateEditCourseDialog.this.courseView.setStyle("-fx-background-color: #777777");
 				}
 
 				double heightOfCell = (WeeklyScheduleCourseTracks.height)/(WeeklyScheduleView.endHour - WeeklyScheduleView.startHour);
@@ -428,7 +428,7 @@ public class CreateEditCourseDialog {
 						ccv.setStyle("-fx-background-color: " + courseColor);
 					}
 					else {
-						ccv.setStyle("-fx-background-color: #000000");
+						ccv.setStyle("-fx-background-color: #777777");
 					}
 
 					positionOfClass = pixelMinutes * (ccv.getStartTime() - (WeeklyScheduleView.startHour * 60));

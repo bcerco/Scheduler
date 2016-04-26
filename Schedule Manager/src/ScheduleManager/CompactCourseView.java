@@ -452,11 +452,9 @@ public class CompactCourseView extends VBox {
 			    if (ToolBarView.filter != null) {
 			    	int timeSlot = (CompactCourseView.this.getStartTime()) - (CompactCourseView.this.getStartTime() % 60);
 			    	HashSet<String> classListHashList = ToolBarView.filter.daySearch(CompactCourseView.this.getDay(), timeSlot);
-			    	System.out.println("BYE NOW!");
 
 			    	for (String cid : classListHashList) {
 			    		classListStringList += cid + ";";
-			    		System.out.println(cid);
 			    	}
 			    }
 
@@ -467,6 +465,7 @@ public class CompactCourseView extends VBox {
 					@Override
 					public void handle(MouseEvent event) {
 						String classId = classList.getSelectionModel().getSelectedItem();
+						classId = classId.replaceAll("\\.", "");
 
 						for (int i = 0; i < 6; i++) {
 					    	Pane tempPane = (Pane)ToolBarView.tracks.getChildren().get(i+1 + 2);
@@ -490,6 +489,7 @@ public class CompactCourseView extends VBox {
 
 			    classListStage.show();
 
+			    classPopupVisible = false;
 				popupStage.close();
 				event.consume();
 			}

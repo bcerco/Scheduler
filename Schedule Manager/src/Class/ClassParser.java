@@ -101,6 +101,7 @@ public class ClassParser{
         outFile = new File(path);
         try {
             writer = new BufferedWriter(new FileWriter(outFile.getAbsoluteFile()));
+            Collections.sort(classOrder);
             Iterator<String> iter = classOrder.iterator();
             while(iter.hasNext()){
                 ClassNode cur = classList.get(iter.next());

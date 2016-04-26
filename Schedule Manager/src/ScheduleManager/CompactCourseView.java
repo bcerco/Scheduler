@@ -1,15 +1,18 @@
 package ScheduleManager;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import Class.ClassParser;
 import Class.Conflict;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -379,15 +382,19 @@ public class CompactCourseView extends VBox {
 	    }));*/
 
 	    VBox  mainBox      = new VBox();
+	    HBox  listRow      = new HBox();
 	    HBox  editRow      = new HBox();
 	    HBox  deleteRow    = new HBox();
 	    HBox  lockRow      = new HBox();
 	    HBox  closeRow      = new HBox();
+	    Label listButton   = new Label("Class List");
 	    Label editButton   = new Label("Edit");
 	    Label deleteButton = new Label("Delete");
 	    Label lockButton   = new Label("Lock");
 	    Label closeButton   = new Label("Close");
 
+	    listRow.getChildren().add(listButton);
+	    listRow.alignmentProperty().set(Pos.CENTER);
 	    editRow.getChildren().add(editButton);
 	    editRow.alignmentProperty().set(Pos.CENTER);
 	    deleteRow.getChildren().add(deleteButton);
@@ -397,10 +404,96 @@ public class CompactCourseView extends VBox {
 	    closeRow.getChildren().add(closeButton);
 	    closeRow.alignmentProperty().set(Pos.CENTER);
 
+	    listRow.getStyleClass().add("ScheduleCell");
 	    editRow.getStyleClass().add("ScheduleCell");
 	    deleteRow.getStyleClass().add("ScheduleCell");
 	    lockRow.getStyleClass().add("ScheduleCell");
 	    closeRow.getStyleClass().add("ScheduleCell");
+
+	    listRow.setOnMouseEntered(new EventHandler<MouseEvent> () {
+			@Override
+			public void handle(MouseEvent event) {
+				listRow.getStyleClass().remove("PopupButton");
+				listRow.getStyleClass().add("PopupButtonHighlight");
+				event.consume();
+			}
+	    });
+	    listRow.setOnMouseExited(new EventHandler<MouseEvent> () {
+			@Override
+			public void handle(MouseEvent event) {
+				listRow.getStyleClass().remove("PopupButtonHighlight");
+				listRow.getStyleClass().add("PopupButton");
+				event.consume();
+			}
+	    });
+	    listRow.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				Stage classListStage = new Stage();
+			    BorderPane classListRoot = new BorderPane();
+			    Scene classListScene = new Scene(classListRoot,200,400);
+			    classListStage.setScene(classListScene);
+			    classListStage.setTitle("Class List");
+			    classListStage.initModality(Modality.WINDOW_MODAL);
+			    classListStage.initOwner(Main.mainStage);
+
+			    classListStage.setOnCloseRequest((new EventHandler<WindowEvent>() {
+					@Override
+					public void handle(WindowEvent event) {
+						classListStage.close();
+						event.consume();
+					}
+
+			    }));
+
+			    ListView<String> classList = new ListView<String>();
+
+			    String classListStringList = "";
+			    if (ToolBarView.filter != null) {
+			    	int timeSlot = (CompactCourseView.this.getStartTime()) - (CompactCourseView.this.getStartTime() % 60);
+			    	HashSet<String> classListHashList = ToolBarView.filter.daySearch(CompactCourseView.this.getDay(), timeSlot);
+			    	System.out.println("BYE NOW!");
+
+			    	for (String cid : classListHashList) {
+			    		classListStringList += cid + ";";
+			    		System.out.println(cid);
+			    	}
+			    }
+
+			    ObservableList<String> items = FXCollections.observableArrayList(classListStringList.split(";"));
+			    classList.setItems(items);
+
+			    classList.setOnMouseClicked(new EventHandler<MouseEvent> () {
+					@Override
+					public void handle(MouseEvent event) {
+						String classId = classList.getSelectionModel().getSelectedItem();
+
+						for (int i = 0; i < 6; i++) {
+					    	Pane tempPane = (Pane)ToolBarView.tracks.getChildren().get(i+1 + 2);
+					    	for (int n = 0; n < tempPane.getChildren().size(); n++) {
+					    		CompactCourseView tempCourse = (CompactCourseView)tempPane.getChildren().get(n);
+
+					    		if (tempCourse.getCid().equals(classId)) {
+					    			tempPane.getChildren().remove(tempCourse);
+					    			tempPane.getChildren().add(tempCourse);
+					    		}
+					    	}
+					    }
+
+						event.consume();
+					}
+			    });
+
+			    classList.setStyle("-fx-font-family: 'monospace';");
+
+			    classListRoot.setCenter(classList);
+
+			    classListStage.show();
+
+				popupStage.close();
+				event.consume();
+			}
+	    });
 
 	    editRow.setOnMouseEntered(new EventHandler<MouseEvent> () {
 			@Override
@@ -538,16 +631,19 @@ public class CompactCourseView extends VBox {
 			}
 	    });
 
+	    mainBox.getChildren().add(listRow);
 	    mainBox.getChildren().add(editRow);
 	    mainBox.getChildren().add(deleteRow);
 	    mainBox.getChildren().add(lockRow);
 	    mainBox.getChildren().add(closeRow);
 
+	    HBox.setHgrow(listButton, Priority.ALWAYS);
 	    HBox.setHgrow(editButton, Priority.ALWAYS);
 	    HBox.setHgrow(deleteButton, Priority.ALWAYS);
 	    HBox.setHgrow(lockButton, Priority.ALWAYS);
 	    HBox.setHgrow(closeButton, Priority.ALWAYS);
 
+	    VBox.setVgrow(listRow, Priority.ALWAYS);
 	    VBox.setVgrow(editRow, Priority.ALWAYS);
 	    VBox.setVgrow(deleteRow, Priority.ALWAYS);
 	    VBox.setVgrow(lockRow, Priority.ALWAYS);

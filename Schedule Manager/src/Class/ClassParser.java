@@ -185,17 +185,20 @@ public class ClassParser{
     		if (!cur.contains("?")){
     			buffer.append(cur);
     			for (int i = 0; i < (20 - cur.length()); i++){
+    				//buffer.append("\t");
     				buffer.append(" ");
     			}
     			buffer.append(instructorCredit.get(cur));
     			if (credits.containsKey(cur)){
     				for (int i = 0; i < (20 - instructorCredit.get(cur).toString().length()); i++){
+    					//buffer.append("\t");
     					buffer.append(" ");
     				}
     				buffer.append(credits.get(cur));
     			}
     			else{
     				for (int i = 0; i < (20 - instructorCredit.get(cur).toString().length()); i++){
+    					//buffer.append("\t");
     					buffer.append(" ");
     				}
     				buffer.append("0.0");

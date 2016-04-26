@@ -102,6 +102,8 @@ public class Main extends Application {
 			        //System.out.println(WeeklyScheduleCourseTracks.width);
 			        appWidth = (double)newSceneWidth;
 			        //System.out.println(weeklyTracks.getPrefHeight());
+			        toolBarView.PopulateTracks(); // Only populating in height may be what causes graphical bugs on Mac
+					  							  // But updating in both width AND height causes performance issues.
 			    }
 			});
 			scene.heightProperty().addListener(new ChangeListener<Number>() {

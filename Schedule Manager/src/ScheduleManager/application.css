@@ -3,10 +3,12 @@
 .ScheduleHeaderText {
 	-fx-font-weight      : bold;
 	-fx-text-fill        : #FFFFFF;
+	-fx-font-family		 : 'monospace';
 }
 .ScheduleHeaderCell {
 	-fx-background-color : #7AA5B3;
 	-fx-text-fill        : #FFFFFF;
+	-fx-font-family		 : 'monospace';
 }
 
 .ScheduleCell {
@@ -14,6 +16,7 @@
 	-fx-background-color : #FFFFFF;
 	-fx-border-color     : #7AA5B3;
 	-fx-border-width     : 0 1 1 0;
+	-fx-font-family		 : 'monospace';
 }
 
 .CompactCourse {
@@ -23,31 +26,41 @@
 	-fx-border-color     : #000000;
 	-fx-border-width     : 0.5 0.5 0.5 0.5;
 	-fx-border-radius	 : 5 5 5 5;
+	-fx-font-family		 : 'monospace';
 }
 
 .CompactCourseText {
-	-fx-font-size        : 8;
+	-fx-font-size        : 10;
 	-fx-font-weight      : bold;
 	-fx-text-fill        : #FFFFFF;
+	-fx-font-family		 : 'monospace';
 }
 
 .TrackHeaderText {
 	-fx-font-weight      : bold;
 	-fx-text-fill        : transparent;
+	-fx-font-family		 : 'monospace';
 }
 
 .Temp {
 	-fx-background-color : #FFB347;
+	-fx-font-family		 : 'monospace';
 }
 
 .PopupButton {
 	-fx-background-color : #FFFFFF;
 	-fx-border-color     : #7AA5B3;
 	-fx-border-width     : 0 1 1 0;
+	-fx-font-family		 : 'monospace';
 }
 
 .PopupButtonHighlight {
 	-fx-background-color : #7AA5B3;
 	-fx-text-fill        : #FFFFFF;
 	-fx-border-width     : 0 1 1 0;
+	-fx-font-family		 : 'monospace';
+}
+
+.ListItemText {
+	-fx-font-family		 : 'monospace';
 }

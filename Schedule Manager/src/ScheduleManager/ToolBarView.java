@@ -19,6 +19,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
@@ -42,11 +43,15 @@ public class ToolBarView extends ToolBar {
 	private Button      btImport;
 	private Button      btExport;
 	private Button      btConflict;
+	private Button      btCredits;
 	public static TextField	tfFilterEdit;
 
 	private BorderPane  conflictRoot;
 	ListView<String>    conflictList;
 	private boolean		conflictsVisible;
+
+	private BorderPane  creditsRoot;
+	ListView<String>    creditsList;
 
 	public static Filter      filter;
 	public static Conflict    conflict;
@@ -169,7 +174,7 @@ public class ToolBarView extends ToolBar {
 				    Scene conflictScene = new Scene(ToolBarView.this.conflictRoot,800,400);
 				    conflictStage.setScene(conflictScene);
 				    conflictStage.setTitle("Conflicts");
-				    conflictStage.initModality(Modality.NONE);
+				    conflictStage.initModality(Modality.WINDOW_MODAL);
 				    conflictStage.initOwner(
 				        ((Node)e.getSource()).getScene().getWindow() );
 
@@ -301,6 +306,8 @@ public class ToolBarView extends ToolBar {
 
 				    HBox conflictCommandPanel = new HBox();
 
+				    conflictList.setStyle("-fx-font-family: 'monospace';");
+
 				    conflictCommandPanel.getChildren().add(btnIgnoreConflict);
 				    ToolBarView.this.conflictRoot.setCenter(conflictList);
 				    ToolBarView.this.conflictRoot.setTop(conflictCommandPanel);
@@ -311,9 +318,50 @@ public class ToolBarView extends ToolBar {
 		    }
 		});
 
+		btCredits = new Button("Credits");
+		btCredits.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override public void handle(ActionEvent e) {
+		    	Stage creditsStage = new Stage();
+			    ToolBarView.this.creditsRoot = new BorderPane();
+			    Scene creditsScene = new Scene(ToolBarView.this.creditsRoot,800,400);
+			    creditsStage.setScene(creditsScene);
+			    creditsStage.setTitle("Credits");
+			    creditsStage.initModality(Modality.WINDOW_MODAL);
+			    creditsStage.initOwner(
+			        ((Node)e.getSource()).getScene().getWindow() );
+
+			    creditsStage.setOnCloseRequest((new EventHandler<WindowEvent>() {
+					@Override
+					public void handle(WindowEvent event) {
+						creditsStage.close();
+						event.consume();
+					}
+
+			    }));
+
+			    Label header = new Label(" Instructor          Current             Expected");
+			    header.setStyle("-fx-font-family: 'monospace';");
+
+			    conflictList = new ListView<String>();
+			    if (ClassParser.instructorCredit != null) {
+			    	String creditStringList = ClassParser.exportInstructorCredits(ClassParser.instructorCredit);
+			    	ObservableList<String> items = FXCollections.observableArrayList(creditStringList.split("\n"));
+			    	conflictList.setItems(items);
+			    }
+
+			    conflictList.setStyle("-fx-font-family: 'monospace';");
+
+			    ToolBarView.this.creditsRoot.setTop(header);
+			    ToolBarView.this.creditsRoot.setCenter(conflictList);
+
+			    creditsStage.show();
+		    }
+		});
+
 		this.getItems().add(btImport);
 		this.getItems().add(btExport);
 		this.getItems().add(btConflict);
+		this.getItems().add(btCredits);
 		filterBox.getChildren().add(tfFilterEdit);
 		this.getItems().add(filterBox);
 		HBox.setHgrow(filterBox, Priority.ALWAYS);

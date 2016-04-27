@@ -12,6 +12,8 @@ import Class.ClassNode;
 import Class.ClassParser;
 import Class.Conflict;
 import Class.Filter;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,16 +21,21 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -309,8 +316,86 @@ public class ToolBarView extends ToolBar {
 				    conflictList.setStyle("-fx-font-family: 'monospace';");
 
 				    conflictCommandPanel.getChildren().add(btnIgnoreConflict);
-				    ToolBarView.this.conflictRoot.setCenter(conflictList);
-				    ToolBarView.this.conflictRoot.setTop(conflictCommandPanel);
+
+				    TabPane conflictTabPane  = new TabPane();
+				    Tab     conflictTab      = new Tab("Conflicts");
+				    Tab     conflictEditTab  = new Tab("Editor");
+
+				    VBox    conflictPane     = new VBox();
+				    conflictPane.getChildren().add(conflictCommandPanel);
+				    conflictPane.getChildren().add(conflictList);
+
+				    VBox             conflictEditPane = new VBox();
+				    HBox             conflictEditRow  = new HBox();
+				    ObservableList<String> conflictTypes =
+				    	    FXCollections.observableArrayList(
+				    	        "Time",
+				    	        "Credit"
+				    	    );
+				    ComboBox<String> conflictType     = new ComboBox<String>(conflictTypes);
+				    TextField        conflictParam1   = new TextField();
+				    TextField        conflictParam2   = new TextField();
+				    Button			 conflictSave     = new Button("Save Conflict");
+				    conflictEditRow.getChildren().add(conflictType);
+				    conflictEditRow.getChildren().add(conflictParam1);
+				    conflictEditRow.getChildren().add(conflictParam2);
+				    conflictEditRow.getChildren().add(conflictSave);
+				    conflictEditPane.getChildren().add(conflictEditRow);
+
+				    // conflictType.getSelectionModel().getSelectedItem();
+				    conflictType.valueProperty().addListener(new ChangeListener<String>() {
+						@Override
+						public void changed(ObservableValue<? extends String> observable, String oldValue,
+								String newValue) {
+							if (newValue.equals("Time")) {
+								conflictParam1.setPromptText("Class");
+								conflictParam2.setPromptText("Class(es)");
+							}
+							else if (newValue.equals("Credit")) {
+								conflictParam1.setPromptText("Professor");
+								conflictParam2.setPromptText("Credits");
+							}
+						}
+				    });
+
+				    conflictSave.setOnMouseEntered(new EventHandler<MouseEvent> () {
+						@Override
+						public void handle(MouseEvent event) {
+							String item = conflictType.getSelectionModel().getSelectedItem();
+							String conf = "";
+							if (item.equals("Time")) {
+								if (!conflictParam1.getText().toString().equals("") &&
+									!conflictParam2.getText().toString().equals("")) {
+									conf += "time;" + conflictParam1.getText().toString() + ";" + conflictParam2.getText().toString();
+									conflict.appendConflict(conf);
+									conflict.fillConflict();
+								}
+							}
+							else if (item.equals("Credit")) {
+								if (!conflictParam1.getText().toString().equals("") &&
+									!conflictParam2.getText().toString().equals("")) {
+									conf += "credit;" + conflictParam1.getText().toString() + ";" + conflictParam2.getText().toString();
+									conflict.appendConflict(conf);
+									conflict.fillConflict();
+								}
+							}
+							event.consume();
+						}
+				    });
+				    //System.out.println(conflictType.getSelectionModel().getSelectedItem();
+
+				    conflictTabPane.getTabs().add(conflictTab);
+				    conflictTabPane.getTabs().add(conflictEditTab);
+
+				    conflictTab.setContent(conflictPane);
+				    conflictEditTab.setContent(conflictEditPane);
+
+				    //ToolBarView.this.conflictRoot.setCenter(conflictList);
+				    //ToolBarView.this.conflictRoot.setTop(conflictCommandPanel);
+				    ToolBarView.this.conflictRoot.setCenter(conflictTabPane);
+
+				    HBox.setHgrow(conflictParam1, Priority.ALWAYS);
+				    HBox.setHgrow(conflictParam2, Priority.ALWAYS);
 
 				    conflictStage.show();
 				    conflictsVisible = true;

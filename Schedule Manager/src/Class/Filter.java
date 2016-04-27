@@ -60,17 +60,17 @@ public class Filter{
     }
     private HashSet<String> atomicSearch(String query){
         HashSet<String> result = new HashSet<String>();
-        if (ClassParser.classList.containsKey(query)){
+        if (ClassParser.classList.containsKey(query.toUpperCase())){
             result.add(query);
         }
-        else if(ClassParser.departmentList.containsKey(query)){
-            result.addAll(ClassParser.departmentList.get(query));
+        else if(ClassParser.departmentList.containsKey(query.toUpperCase())){
+            result.addAll(ClassParser.departmentList.get(query.toUpperCase()));
         }
         else if(ClassParser.instructorList.containsKey(query)){
             result.addAll(ClassParser.instructorList.get(query));
         }
-        else if(ClassParser.sectionList.containsKey(query)){
-            result.addAll(ClassParser.sectionList.get(query));
+        else if(ClassParser.sectionList.containsKey(query.toUpperCase())){
+            result.addAll(ClassParser.sectionList.get(query.toUpperCase()));
         }
         else if(ClassParser.tierList.containsKey(Character.getNumericValue(query.charAt(0)))){
         	result.addAll(ClassParser.tierList.get(Character.getNumericValue(query.charAt(0))));

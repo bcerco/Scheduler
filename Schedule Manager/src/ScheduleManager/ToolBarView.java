@@ -344,7 +344,7 @@ public class ToolBarView extends ToolBar {
 
 			    conflictList = new ListView<String>();
 			    if (ClassParser.instructorCredit != null) {
-			    	String creditStringList = ClassParser.exportInstructorCredits(ClassParser.instructorCredit);
+			    	String creditStringList = ClassParser.exportInstructorCredits(conflict.creditNum);
 			    	ObservableList<String> items = FXCollections.observableArrayList(creditStringList.split("\n"));
 			    	conflictList.setItems(items);
 			    }

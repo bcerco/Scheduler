@@ -61,7 +61,7 @@ public class Filter{
     private HashSet<String> atomicSearch(String query){
         HashSet<String> result = new HashSet<String>();
         if (ClassParser.classList.containsKey(query.toUpperCase())){
-            result.add(query);
+            result.add(query.toUpperCase());
         }
         else if(ClassParser.departmentList.containsKey(query.toUpperCase())){
             result.addAll(ClassParser.departmentList.get(query.toUpperCase()));

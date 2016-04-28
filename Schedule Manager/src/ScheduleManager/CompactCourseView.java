@@ -167,7 +167,7 @@ public class CompactCourseView extends VBox {
 							cv.setLayoutX(cv.getLayoutX() + event.getX() - halfWidth);
 							cv.setLayoutY(cv.getLayoutY() + event.getY() - halfHeight);
 
-				    		cv.startTime = (int)((cv.getLayoutY() + CompactCourseView.this.getTranslateY()) / pixelMinutes) + (WeeklyScheduleView.startHour * 60);
+				    		cv.startTime = (int)((cv.getLayoutY() + cv.getTranslateY()) / pixelMinutes) + (WeeklyScheduleView.startHour * 60);
 							//cv.startTime = (int)((cv.getLayoutY() + event.getY()) / pixelMinutes) + (WeeklyScheduleView.startHour * 60);
 				    		cv.endTime = (int)(cv.startTime + (cv.getHeight() / pixelMinutes));
 				    		//System.out.println("Here - "+cv.startTime + ":" + cv.endTime);

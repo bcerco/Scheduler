@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -256,6 +257,9 @@ public class ToolBarView extends ToolBar {
 
 				    ListView<String> localConflictList = new ListView<String>();
 
+				    Button			 conflictSave     = new Button("Add");
+				    Button			 conflictDelete   = new Button("Remove");
+
 				    btnIgnoreConflict = new Button("Ignore");
 				    btnIgnoreConflict.setOnAction(new EventHandler<ActionEvent>() {
 				    	String conflictFileContents2 = "";
@@ -329,7 +333,7 @@ public class ToolBarView extends ToolBar {
 							    conflictPane.getChildren().add(conflictList);
 						    }
 
-					    	// TODO: Turn conflict button red
+					    	// Turn conflict button red
 							if (!(ClassParser.classList == null)) {
 							    String conflictStringList = "";
 							    HashSet<String> visited = new HashSet<String>();
@@ -378,7 +382,7 @@ public class ToolBarView extends ToolBar {
 							    	//ToolBarView.btConflict.getStyleClass().add("ConflictPresentButton");
 							    }
 
-							    // TODO: Populate conflict file list
+							    // Populate conflict file list
 							    String   in        = "";
 								BufferedReader tempConfFile;
 								try {
@@ -398,7 +402,9 @@ public class ToolBarView extends ToolBar {
 							    localConflictList.setItems(items);
 
 							    conflictEditPane.getChildren().clear();
+							    conflictEditPane.getChildren().add(conflictEditRow);
 							    conflictEditPane.getChildren().add(localConflictList);
+							    conflictEditPane.getChildren().add(conflictDelete);
 							}
 					    }
 					});
@@ -418,7 +424,6 @@ public class ToolBarView extends ToolBar {
 				    ComboBox<String> conflictType     = new ComboBox<String>(conflictTypes);
 				    TextField        conflictParam1   = new TextField();
 				    TextField        conflictParam2   = new TextField();
-				    Button			 conflictSave     = new Button("Save Conflict");
 				    conflictEditRow.getChildren().add(conflictType);
 				    conflictEditRow.getChildren().add(conflictParam1);
 				    conflictEditRow.getChildren().add(conflictParam2);
@@ -486,6 +491,79 @@ public class ToolBarView extends ToolBar {
 							event.consume();
 						}
 				    });
+
+
+				    conflictDelete.setOnMouseClicked(new EventHandler<MouseEvent> () {
+						@Override
+						public void handle(MouseEvent event) {
+							localConflictList.getItems().remove(localConflictList.getSelectionModel().getSelectedItem());
+							String toFile = "";
+							for (String item : localConflictList.getItems()) {
+								toFile += item + "\n";
+							}
+							// TODO: Rewrite conflict file
+							PrintWriter tempConfFile;
+							try {
+								tempConfFile = new PrintWriter("SMConfig/conflicts.txt");
+								if (tempConfFile != null) {
+									tempConfFile.print(toFile);
+									tempConfFile.close();
+								}
+							}
+							catch (IOException ioe) {
+								ioe.printStackTrace();
+							}
+
+							conflict = new Conflict("SMConfig/conflicts.txt");
+					    	if (!(ClassParser.classList == null)) {
+							    String conflictStringList = "";
+							    HashSet<String> visited = new HashSet<String>();
+							    for (String cur: ClassParser.classList.keySet()){
+							    	String conflictResult = ToolBarView.conflict.timeCheck(cur);
+							    	if (conflictResult != null){
+							    		String[] conflictResultArray = conflictResult.split("\n");
+							    		for (int i = 0; i < conflictResultArray.length; i++) {
+							    			if (!conflictResultArray[i].equals("null")) {
+								    			String [] tmp = conflictResultArray[i].split(" ");
+								    			String c = tmp[1]; c = c.replace(".", "");
+								    			String c2 = tmp[4]; c2 = c2.replace(".", "");
+							    				if (!visited.contains(c2)){
+							    					conflictStringList += conflictResultArray[i];
+							    					conflictStringList += ";";
+							    				}
+							    			}
+								    	}
+							    	}
+							    	visited.add(cur);
+							    }
+							    for (String inst : ClassParser.instructorList.keySet()) {
+							    	//String conflictResult = ToolBarView.conflict.professorCheck(ClassParser.classList.get(id).getInstructor());
+							    	String conflictResult = ToolBarView.conflict.professorCheck(inst);
+							    	//String conflictCreditResult = ToolBarView.conflict.creditCheck(inst);
+							    	//if (conflictCreditResult != null)
+							    		//conflictStringList += conflictCreditResult.replace("\n","") + ";";
+							    	if (conflictResult != null && !conflictResult.equals("null")) {
+							    		String[] conflictResultArray = conflictResult.split("\n");
+							    		for (int i = 0; i < conflictResultArray.length; i++) {
+							    			if (!conflictResultArray[i].equals("null")) {
+								    			conflictStringList += conflictResultArray[i];
+									    		conflictStringList += ";";
+							    			}
+								    	}
+							    	}
+							    }
+
+							    ObservableList<String> items = FXCollections.observableArrayList(conflictStringList.split(";"));
+
+							    conflictList = new ListView<String>();
+							    conflictList.setItems(items);
+							    conflictPane.getChildren().clear();
+							    conflictPane.getChildren().add(conflictCommandPanel);
+							    conflictPane.getChildren().add(conflictList);
+					    	}
+							event.consume();
+						}
+				    });
 				    //System.out.println(conflictType.getSelectionModel().getSelectedItem();
 
 				    conflictTabPane.getTabs().add(conflictTab);
@@ -494,7 +572,7 @@ public class ToolBarView extends ToolBar {
 				    conflictTab.setContent(conflictPane);
 				    conflictEditTab.setContent(conflictEditPane);
 
-				    // TODO: Populate conflict file list
+				    // Populate conflict file list
 				    String   in        = "";
 					BufferedReader tempConfFile;
 					try {
@@ -514,6 +592,7 @@ public class ToolBarView extends ToolBar {
 				    localConflictList.setItems(items);
 
 				    conflictEditPane.getChildren().add(localConflictList);
+				    conflictEditPane.getChildren().add(conflictDelete);
 
 				    //ToolBarView.this.conflictRoot.setCenter(conflictList);
 				    //ToolBarView.this.conflictRoot.setTop(conflictCommandPanel);
@@ -651,7 +730,7 @@ public class ToolBarView extends ToolBar {
 		    }
 		}
 
-		// TODO: Turn conflict button red
+		// Turn conflict button red
 		if (!(ClassParser.classList == null)) {
 		    String conflictStringList = "";
 		    HashSet<String> visited = new HashSet<String>();

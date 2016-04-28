@@ -143,10 +143,20 @@ public class CreateEditCourseDialog {
 			public void handle(MouseEvent event) {
 				boolean deleteThisCourse = true;
 				for (int i = 1; i < 8; i++) {
-					if (!dayStartHoursArray[i].getText().toString().equals("") ||		// TODO: This may need to have the !'s removed!!!!
+					if (!dayStartHoursArray[i].getText().toString().equals("") ||
 						!dayStartMinutesArray[i].getText().toString().equals("")) {
 						deleteThisCourse = false;
 						break;
+					}
+				}
+
+				for (int i = 1; i < 8; i++) {
+					if (dayStartMinutesArray[i].getText().toString().length() == 1) {
+						dayStartMinutesArray[i].setText("0" + dayStartMinutesArray[i].getText().toString());
+					}
+
+					if (dayEndMinutesArray[i].getText().toString().length() == 1) {
+						dayEndMinutesArray[i].setText("0" + dayEndMinutesArray[i].getText().toString());
 					}
 				}
 
@@ -451,6 +461,17 @@ public class CreateEditCourseDialog {
 			public void handle(MouseEvent event) {
 				if (ClassParser.classList != null) {
 					String tempCid = courseField.getText().toString() + numberField.getText().toString() + sectionField.getText().toString();
+
+					for (int i = 1; i < 8; i++) {
+						if (dayStartMinutesArray[i].getText().toString().length() == 1) {
+							dayStartMinutesArray[i].setText("0" + dayStartMinutesArray[i].getText().toString());
+						}
+
+						if (dayEndMinutesArray[i].getText().toString().length() == 1) {
+							dayEndMinutesArray[i].setText("0" + dayEndMinutesArray[i].getText().toString());
+						}
+					}
+
 					if (ClassParser.classList.get(tempCid) == null) {
 						ClassNode cnode = new ClassNode();
 						cnode.course = courseField.getText().toString();

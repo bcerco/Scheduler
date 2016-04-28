@@ -106,11 +106,12 @@ public class ToolBarView extends ToolBar {
 		    		ToolBarView.this.checkFile = tempFile;
 		    	}
 
-		    	if (checkFile != null && checkFile.exists()) {
+		    	if (checkFile != null && checkFile.exists() && tempFile != null) {
 		    		Main.spreadsheet = checkFile;
 		    		String pathString = Main.spreadsheet.getAbsolutePath();
 		        	parser = new ClassParser(pathString);
 		        	parser.fillclassList();
+
 		        	PopulateTracks();
 		    	}
 		    }
@@ -164,7 +165,8 @@ public class ToolBarView extends ToolBar {
 						new ExtensionFilter("Text CSV", "*.csv"));
 		    	File checkFile = chooserImport.showSaveDialog(stage);
 		    	if (checkFile != null) {
-		    		parser.exportClassList(checkFile.getAbsolutePath());
+		    		String filePath = checkFile.getAbsolutePath().replaceAll("\\.csv", "");
+		    		parser.exportClassList(filePath + ".csv");
 		    	}
 		    }
 		});
@@ -358,7 +360,8 @@ public class ToolBarView extends ToolBar {
 						}
 				    });
 
-				    conflictSave.setOnMouseEntered(new EventHandler<MouseEvent> () {
+				    ListView<String> localConflictList = new ListView<String>();
+				    conflictSave.setOnMouseClicked(new EventHandler<MouseEvent> () {
 						@Override
 						public void handle(MouseEvent event) {
 							String item = conflictType.getSelectionModel().getSelectedItem();
@@ -379,6 +382,27 @@ public class ToolBarView extends ToolBar {
 									conflict.fillConflict();
 								}
 							}
+
+							String conflictFileContents = "";
+
+						    String   in        = "";
+							BufferedReader tempConfFile;
+							try {
+								tempConfFile = new BufferedReader(new FileReader("SMConfig/conflicts.txt"));
+								if (tempConfFile != null) {
+									while ((in = tempConfFile.readLine()) != null) {
+										conflictFileContents += in + "\n";
+									}
+								}
+							}
+							catch (IOException ioe) {
+								ioe.printStackTrace();
+							}
+
+						    ObservableList<String> items = FXCollections.observableArrayList(conflictFileContents.split("\n"));
+
+						    localConflictList.setItems(items);
+
 							event.consume();
 						}
 				    });
@@ -389,6 +413,28 @@ public class ToolBarView extends ToolBar {
 
 				    conflictTab.setContent(conflictPane);
 				    conflictEditTab.setContent(conflictEditPane);
+
+				    String conflictFileContents = "";
+
+				    String   in        = "";
+					BufferedReader tempConfFile;
+					try {
+						tempConfFile = new BufferedReader(new FileReader("SMConfig/conflicts.txt"));
+						if (tempConfFile != null) {
+							while ((in = tempConfFile.readLine()) != null) {
+								conflictFileContents += in + "\n";
+							}
+						}
+					}
+					catch (IOException ioe) {
+						ioe.printStackTrace();
+					}
+
+				    ObservableList<String> items = FXCollections.observableArrayList(conflictFileContents.split("\n"));
+
+				    localConflictList.setItems(items);
+
+				    conflictEditPane.getChildren().add(localConflictList);
 
 				    //ToolBarView.this.conflictRoot.setCenter(conflictList);
 				    //ToolBarView.this.conflictRoot.setTop(conflictCommandPanel);

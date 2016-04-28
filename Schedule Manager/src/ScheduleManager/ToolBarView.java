@@ -691,6 +691,7 @@ public class ToolBarView extends ToolBar {
 			    courseField.setPromptText("Course");
 			    TextField colorField = new TextField();
 			    colorField.setPromptText("Color");
+			    colorField.setEditable(false);
 			    Button saveColorsButton = new Button("Save");
 
 			    ListView<String> colorListing = new ListView<String>();

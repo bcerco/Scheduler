@@ -98,13 +98,15 @@ public class ClassParser{
     }
 
     public void exportClassList(String path){
+    	classOrder.addAll(classList.keySet());
         outFile = new File(path);
         try {
             writer = new BufferedWriter(new FileWriter(outFile.getAbsoluteFile()));
             Collections.sort(classOrder);
             Iterator<String> iter = classOrder.iterator();
             while(iter.hasNext()){
-                ClassNode cur = classList.get(iter.next());
+            	String scur = iter.next();
+                ClassNode cur = classList.get(scur);
                 if (cur != null){
                 	writer.write(cur.exportClassNode());
                 	writer.flush();
@@ -136,7 +138,7 @@ public class ClassParser{
         updateInstructorCredit(cur.getInstructor(),
                 cur.getCredit());
         updateTierList(cur.getNumber(), cur.getId());
-        classOrder.add(cur.getId());
+        //classOrder.add(cur.getId());
     }
     public void updateSectionList(String courseNumber, String id){
         if (sectionList.containsKey(courseNumber)){

@@ -339,6 +339,7 @@ public class CreateEditCourseDialog {
 				ClassParser.classList.get(currentId).setSoft(Short.parseShort(seatsSoftField.getText()));
 				ClassParser.classList.get(currentId).setHard(Short.parseShort(seatsHardField.getText()));
 				ClassParser.classList.get(currentId).setCredit(Float.parseFloat(creditsField.getText()));
+				//ToolBarView.parser.updateMapping(ClassParser.classList.get(currentId));
 
 				// Update visual
 				CreateEditCourseDialog.this.courseView.courseLabel.setText(courseField.getText());

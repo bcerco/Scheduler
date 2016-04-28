@@ -97,8 +97,6 @@ public class CompactCourseView extends VBox {
 							|| event.getSceneX() - halfWidth < 200 || event.getSceneY() - halfHeight < Main.minAppHeight)
 						return;
 					for (CompactCourseView cv: CompactCourseView.this.sameCourses){
-						if (cv.startTime < 480 || cv.endTime > 1020)
-							return;
 						int trackDelta = cv.day - CompactCourseView.this.day;
 						System.out.println(trackDelta);
 						double deltaWidth = 0, deltaHeight = 0;

@@ -98,8 +98,13 @@ public class CompactCourseView extends VBox {
 						return;
 					for (CompactCourseView cv: CompactCourseView.this.sameCourses){
 						int trackDelta = cv.day - CompactCourseView.this.day;
-						System.out.println(trackDelta);
-						double deltaWidth = 0, deltaHeight = 0;
+						double cheightOfCell = (WeeklyScheduleCourseTracks.height) / (WeeklyScheduleView.endHour - WeeklyScheduleView.startHour);
+			    		double cpixelMinutes = (cheightOfCell / 60);
+			    		if (event.getSceneY() +halfHeight + ((cpixelMinutes * cv.endTime) - (cpixelMinutes * CompactCourseView.this.endTime)) > Main.appHeight ||
+			    				event.getSceneY() - halfHeight - Math.abs((cpixelMinutes * cv.startTime) - (cpixelMinutes * CompactCourseView.this.startTime)) < Main.minAppHeight)
+			    			return;
+						//System.out.println(trackDelta);
+						double deltaWidth = 0;
 						if (trackDelta > 0){
 							switch(trackDelta){
 							case 1:

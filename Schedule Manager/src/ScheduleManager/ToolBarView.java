@@ -22,6 +22,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -52,6 +53,7 @@ public class ToolBarView extends ToolBar {
 	private Button      btExport;
 	public static Button      btConflict;
 	private Button      btCredits;
+	private Button		btColors;
 	public static TextField	tfFilterEdit;
 
 	private BorderPane  conflictRoot;
@@ -63,6 +65,8 @@ public class ToolBarView extends ToolBar {
 
 	public static Filter      filter;
 	public static Conflict    conflict;
+
+	ColorPicker   colorPicker = new ColorPicker();
 
 	private File checkFile; // Only used for checking purposes! NEVER reference elsewhere!
 
@@ -666,10 +670,144 @@ public class ToolBarView extends ToolBar {
 		    }
 		});
 
+		// TODO: Colors
+		btColors = new Button("Colors");
+		btColors.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override public void handle(ActionEvent e) {
+		    	Stage colorsStage = new Stage();
+		    	BorderPane colorsRoot = new BorderPane();
+			    Scene creditsScene = new Scene(colorsRoot,500,400);
+			    colorsStage.setScene(creditsScene);
+			    colorsStage.setTitle("Course Colors");
+			    colorsStage.initModality(Modality.WINDOW_MODAL);
+			    colorsStage.initOwner(
+			        ((Node)e.getSource()).getScene().getWindow() );
+
+			    HBox colorPanelBox = new HBox();
+			    HBox colorChooserBox = new HBox();
+			    VBox colorParameterBox = new VBox();
+
+			    TextField courseField = new TextField();
+			    courseField.setPromptText("Course");
+			    TextField colorField = new TextField();
+			    colorField.setPromptText("Color");
+			    Button saveColorsButton = new Button("Save");
+
+			    ListView<String> colorListing = new ListView<String>();
+
+			    colorPicker.setOnAction(new EventHandler<ActionEvent>() {
+			    	@Override public void handle(ActionEvent e) {
+			    		String tempColor = colorPicker.getValue().toString().toUpperCase();
+			    		String color = "";
+			    		for (int i = 2; i < tempColor.length() - 2; i++) {
+			    			color += tempColor.charAt(i);
+			    		}
+			    		colorField.setText("#" + color);
+			    	}
+		    	});
+
+			    saveColorsButton.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						boolean shouldAdd = true;
+						String toFile = "";
+
+			    		if (!courseField.equals("") && !colorField.equals("")) {
+			    			if (colorMap.containsKey(courseField.getText().toString())) {
+			    				shouldAdd = false;
+			    			}
+
+			    			colorMap.put(courseField.getText().toString(), colorField.getText().toString());
+
+			    			for (int i = 0; i < colorListing.getItems().size(); i++) {
+			    				String[] colorMapping = colorListing.getItems().get(i).split(";");
+			    				if (colorMapping[0].equals(courseField.getText().toString())) {
+			    					colorListing.getItems().remove(i);
+			    				}
+			    			}
+			    			colorListing.getItems().add(courseField.getText().toString() + ";" + colorField.getText().toString());
+
+			    			for (String i : colorListing.getItems()) {
+			    				toFile += i + "\n";
+			    			}
+
+		    				// Rewrite color file
+		    				PrintWriter tempConfFile;
+							try {
+								tempConfFile = new PrintWriter("SMConfig/colors.txt");
+								if (tempConfFile != null) {
+									tempConfFile.print(toFile);
+									tempConfFile.close();
+								}
+							}
+							catch (IOException ioe) {
+								ioe.printStackTrace();
+							}
+			    		}
+
+			    		for (int i = 0; i < 6; i++) {
+				    		Pane tempPane = (Pane)tracks.getChildren().get(i + 1 + 2);
+				    		for (Node child : tempPane.getChildren()) {
+				    			CompactCourseView curCourse = (CompactCourseView) child;
+				    			curCourse.setStyle("-fx-background-color: " + colorMap.get(curCourse.getCourse()));
+				    		}
+					    }
+					}
+			    });
+
+			    colorsStage.setOnCloseRequest((new EventHandler<WindowEvent>() {
+					@Override
+					public void handle(WindowEvent event) {
+						colorsStage.close();
+						event.consume();
+					}
+
+			    }));
+
+			    BufferedReader tempColorsFile;
+
+				String   in        = "";
+				String   colList   = "";
+				try {
+					tempColorsFile = new BufferedReader(new FileReader("SMConfig/colors.txt"));
+					if (tempColorsFile != null) {
+						while ((in = tempColorsFile.readLine()) != null) {
+							colList += in + "\n";
+						}
+					}
+				}
+				catch (IOException ioe) {
+					ioe.printStackTrace();
+				}
+
+				ObservableList<String> items = FXCollections.observableArrayList(colList.split("\n"));
+
+				colorListing.setItems(items);
+				colorListing.setStyle("-fx-font-family: 'monospace';");
+
+				colorChooserBox.getChildren().add(colorField);
+				colorChooserBox.getChildren().add(colorPicker);
+				colorParameterBox.getChildren().add(courseField);
+				colorParameterBox.getChildren().add(colorChooserBox);
+				colorParameterBox.getChildren().add(saveColorsButton);
+				colorPanelBox.getChildren().add(colorListing);
+				colorPanelBox.getChildren().add(colorParameterBox);
+				colorsRoot.setCenter(colorPanelBox);
+
+				HBox.setHgrow(colorParameterBox, Priority.ALWAYS);
+				HBox.setHgrow(colorField, Priority.ALWAYS);
+
+				// TODO: Change all classes to their new colors
+			    colorsStage.show();
+			    colorsStage.setResizable(false);
+		    }
+		});
+
 		this.getItems().add(btImport);
 		this.getItems().add(btExport);
 		this.getItems().add(btConflict);
 		this.getItems().add(btCredits);
+		this.getItems().add(btColors);
 		filterBox.getChildren().add(tfFilterEdit);
 		this.getItems().add(filterBox);
 		HBox.setHgrow(filterBox, Priority.ALWAYS);

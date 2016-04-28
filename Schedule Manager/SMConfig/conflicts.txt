@@ -4,4 +4,4 @@ ignore;time;MATH2312;MATH2302
 ignore;time;MATH2513;MATH2503
 credit;Blum;100.0
 credit;El Ariss;9.0
-time;CMPSC4701;CMPSC4721
+credit;Dudding;10.0

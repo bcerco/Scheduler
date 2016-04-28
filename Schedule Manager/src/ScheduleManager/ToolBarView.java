@@ -455,16 +455,35 @@ public class ToolBarView extends ToolBar {
 								if (!conflictParam1.getText().toString().equals("") &&
 									!conflictParam2.getText().toString().equals("")) {
 									conf += "time;" + conflictParam1.getText().toString() + ";" + conflictParam2.getText().toString();
-									conflict.appendConflict(conf);
-									conflict.fillConflict();
+									boolean shouldAdd = true;
+									for (String c : localConflictList.getItems()) {
+										String[] ca = c.split(";");
+										if ((ca[1].equals(conflictParam1.getText().toString()) && ca[2].equals(conflictParam2.getText().toString())) ||
+											(ca[1].equals(conflictParam2.getText().toString()) && ca[2].equals(conflictParam1.getText().toString()))) {
+											shouldAdd = false;
+										}
+									}
+									if (shouldAdd) {
+										conflict.appendConflict(conf);
+										conflict.fillConflict();
+									}
 								}
 							}
 							else if (item.equals("Credit")) {
 								if (!conflictParam1.getText().toString().equals("") &&
 									!conflictParam2.getText().toString().equals("")) {
 									conf += "credit;" + conflictParam1.getText().toString() + ";" + conflictParam2.getText().toString();
-									conflict.appendConflict(conf);
-									conflict.fillConflict();
+									boolean shouldAdd = true;
+									for (String c : localConflictList.getItems()) {
+										String[] ca = c.split(";");
+										if (ca[1].equals(conflictParam1.getText().toString())) {
+											shouldAdd = false;
+										}
+									}
+									if (shouldAdd) {
+										conflict.appendConflict(conf);
+										conflict.fillConflict();
+									}
 								}
 							}
 

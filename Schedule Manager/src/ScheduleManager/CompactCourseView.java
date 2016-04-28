@@ -302,7 +302,7 @@ public class CompactCourseView extends VBox {
 					//ToolBarView.conflict.timeCheck(cid);
 				}
 
-				// TODO: Turn conflict button red
+				// Turn conflict button red
 				if (!(ClassParser.classList == null)) {
 				    String conflictStringList = "";
 				    HashSet<String> visited = new HashSet<String>();

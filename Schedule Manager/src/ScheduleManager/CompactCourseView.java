@@ -94,9 +94,56 @@ public class CompactCourseView extends VBox {
 
 				if (event.getY() < (CompactCourseView.this.getHeight() - 5) && CompactCourseView.this.isDragging == false) {
 					if (event.getSceneY() + halfHeight > Main.appHeight || event.getSceneX() + halfWidth > Main.appWidth
-							|| event.getSceneX() - halfWidth < 75 || event.getSceneY() - halfHeight < Main.minAppHeight)
+							|| event.getSceneX() - halfWidth < 200 || event.getSceneY() - halfHeight < Main.minAppHeight)
 						return;
+					for (CompactCourseView cv: CompactCourseView.this.sameCourses){
+						if (cv.startTime < 480 || cv.endTime > 1020)
+							return;
+						int trackDelta = cv.day - CompactCourseView.this.day;
+						System.out.println(trackDelta);
+						double deltaWidth = 0, deltaHeight = 0;
+						if (trackDelta > 0){
+							switch(trackDelta){
+							case 1:
+								deltaWidth = (3 * halfWidth);
+								break;
+							case 2:
+								deltaWidth = (5 * halfWidth);
+								break;
+							case 3:
+								deltaWidth = (7 * halfWidth);
+								break;
+							case 4:
+								deltaWidth = (9 * halfWidth);
+								break;
+							default:
+								break;
+							}
+							if (event.getSceneX() + deltaWidth > Main.appWidth)
+								return;
+						}
+						else{
+							switch(trackDelta){
+							case -1:
+								deltaWidth = (3 * halfWidth);
+								break;
+							case -2:
+								deltaWidth = (5 * halfWidth);
+								break;
+							case -3:
+								deltaWidth = (7 * halfWidth);
+								break;
+							case -4:
+								deltaWidth = (9 * halfWidth);
+								break;
+							default:
+								break;
+							}
+							if (event.getSceneX() - deltaWidth < 202)
+								return;
+						}
 
+					}
 					CompactCourseView.this.setLayoutX(CompactCourseView.this.getLayoutX() + event.getX() - halfWidth);
 					CompactCourseView.this.setLayoutY(CompactCourseView.this.getLayoutY() + event.getY() - halfHeight);
 
@@ -116,8 +163,9 @@ public class CompactCourseView extends VBox {
 		    		//System.out.println(CompactCourseView.this.day + track + 3);
 
 					if (isLocked) {
-						System.out.println(sameCourses.size());
+						//System.out.println(sameCourses.size());
 						for (CompactCourseView cv: sameCourses) {
+
 							cv.setLayoutX(cv.getLayoutX() + event.getX() - halfWidth);
 							cv.setLayoutY(cv.getLayoutY() + event.getY() - halfHeight);
 

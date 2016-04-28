@@ -144,6 +144,8 @@ public class CreateEditCourseDialog {
 			public void handle(MouseEvent event) {
 				// TODO: START INPUT VALIDATION!
 				boolean error = false;
+				boolean startTimeError = false;
+				boolean endTimeError = false;
 				boolean invalidStartEndTime = false;
 				if (courseField.getText().toString().equals("")) {
 					courseField.getStyleClass().remove("InputErrorCreateEdit");
@@ -203,6 +205,7 @@ public class CreateEditCourseDialog {
 						dayStartHoursArray[i].getStyleClass().add("InputErrorCreateEdit");
 						dayStartMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
 						dayStartMinutesArray[i].getStyleClass().add("InputErrorCreateEdit");
+						startTimeError = true;
 						error = true;
 					}
 					else {
@@ -216,6 +219,7 @@ public class CreateEditCourseDialog {
 						dayEndHoursArray[i].getStyleClass().add("InputErrorCreateEdit");
 						dayEndMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
 						dayEndMinutesArray[i].getStyleClass().add("InputErrorCreateEdit");
+						endTimeError = true;
 						error = true;
 					}
 					else {
@@ -229,11 +233,14 @@ public class CreateEditCourseDialog {
 						dayStartHoursArray[i].getStyleClass().add("InputErrorCreateEdit");
 						dayStartMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
 						dayStartMinutesArray[i].getStyleClass().add("InputErrorCreateEdit");
+						startTimeError = true;
 						error = true;
 					}
 					else {
-						dayStartHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
-						dayStartMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						if (!startTimeError) {
+							dayStartHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayStartMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						}
 					}
 
 					if ((!dayEndHoursArray[i].getText().toString().equals("") && !dayEndMinutesArray[i].getText().toString().equals("")) &&
@@ -242,17 +249,21 @@ public class CreateEditCourseDialog {
 						dayEndHoursArray[i].getStyleClass().add("InputErrorCreateEdit");
 						dayEndMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
 						dayEndMinutesArray[i].getStyleClass().add("InputErrorCreateEdit");
+						endTimeError = true;
 						error = true;
 					}
 					else {
-						dayEndHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
-						dayEndMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						if (!endTimeError) {
+							dayEndHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayEndMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						}
 					}
 
 					if (!dayStartHoursArray[i].getText().toString().equals("") && !dayStartMinutesArray[i].getText().toString().equals("")) {
 						if (dayStartAMPM[i].getValue() == null || dayStartAMPM[i].getValue().toString().equals("")) {
 							dayStartAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
 							dayStartAMPM[i].getStyleClass().add("InputErrorCreateEditCombo");
+							startTimeError = true;
 							error = true;
 						}
 						else {
@@ -264,6 +275,7 @@ public class CreateEditCourseDialog {
 						if (dayEndAMPM[i].getValue() == null || dayEndAMPM[i].getValue().toString().equals("")) {
 							dayEndAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
 							dayEndAMPM[i].getStyleClass().add("InputErrorCreateEditCombo");
+							endTimeError = true;
 							error = true;
 						}
 						else {
@@ -341,7 +353,7 @@ public class CreateEditCourseDialog {
 					error = true;
 				}
 				else {
-					if (!invalidStartEndTime) {
+					if (!invalidStartEndTime && !startTimeError && !endTimeError) {
 						for (int i = 1; i < 8; i++) {
 							dayStartHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
 							dayStartMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
@@ -678,6 +690,8 @@ public class CreateEditCourseDialog {
 			public void handle(MouseEvent event) {
 				// TODO: START INPUT VALIDATION!
 				boolean error = false;
+				boolean startTimeError = false;
+				boolean endTimeError = false;
 				boolean invalidStartEndTime = false;
 				if (courseField.getText().toString().equals("")) {
 					courseField.getStyleClass().remove("InputErrorCreateEdit");
@@ -737,6 +751,7 @@ public class CreateEditCourseDialog {
 						dayStartHoursArray[i].getStyleClass().add("InputErrorCreateEdit");
 						dayStartMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
 						dayStartMinutesArray[i].getStyleClass().add("InputErrorCreateEdit");
+						startTimeError = true;
 						error = true;
 					}
 					else {
@@ -750,6 +765,7 @@ public class CreateEditCourseDialog {
 						dayEndHoursArray[i].getStyleClass().add("InputErrorCreateEdit");
 						dayEndMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
 						dayEndMinutesArray[i].getStyleClass().add("InputErrorCreateEdit");
+						endTimeError = true;
 						error = true;
 					}
 					else {
@@ -763,11 +779,14 @@ public class CreateEditCourseDialog {
 						dayStartHoursArray[i].getStyleClass().add("InputErrorCreateEdit");
 						dayStartMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
 						dayStartMinutesArray[i].getStyleClass().add("InputErrorCreateEdit");
+						startTimeError = true;
 						error = true;
 					}
 					else {
-						dayStartHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
-						dayStartMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						if (!startTimeError) {
+							dayStartHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayStartMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						}
 					}
 
 					if ((!dayEndHoursArray[i].getText().toString().equals("") && !dayEndMinutesArray[i].getText().toString().equals("")) &&
@@ -776,17 +795,21 @@ public class CreateEditCourseDialog {
 						dayEndHoursArray[i].getStyleClass().add("InputErrorCreateEdit");
 						dayEndMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
 						dayEndMinutesArray[i].getStyleClass().add("InputErrorCreateEdit");
+						endTimeError = true;
 						error = true;
 					}
 					else {
-						dayEndHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
-						dayEndMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						if (!endTimeError) {
+							dayEndHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayEndMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						}
 					}
 
 					if (!dayStartHoursArray[i].getText().toString().equals("") && !dayStartMinutesArray[i].getText().toString().equals("")) {
 						if (dayStartAMPM[i].getValue() == null || dayStartAMPM[i].getValue().toString().equals("")) {
 							dayStartAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
 							dayStartAMPM[i].getStyleClass().add("InputErrorCreateEditCombo");
+							startTimeError = true;
 							error = true;
 						}
 						else {
@@ -798,6 +821,7 @@ public class CreateEditCourseDialog {
 						if (dayEndAMPM[i].getValue() == null || dayEndAMPM[i].getValue().toString().equals("")) {
 							dayEndAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
 							dayEndAMPM[i].getStyleClass().add("InputErrorCreateEditCombo");
+							endTimeError = true;
 							error = true;
 						}
 						else {
@@ -875,7 +899,7 @@ public class CreateEditCourseDialog {
 					error = true;
 				}
 				else {
-					if (!invalidStartEndTime) {
+					if (!invalidStartEndTime && !startTimeError && !endTimeError) {
 						for (int i = 1; i < 8; i++) {
 							dayStartHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
 							dayStartMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");

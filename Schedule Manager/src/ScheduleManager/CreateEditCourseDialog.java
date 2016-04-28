@@ -42,6 +42,7 @@ public class CreateEditCourseDialog {
 	public void createDialog() {
 		ObservableList<String> optionsAMPM =
 	    	    FXCollections.observableArrayList(
+	    	    	"",
 	    	        "AM",
 	    	        "PM"
 	    	    );
@@ -141,6 +142,222 @@ public class CreateEditCourseDialog {
 	    saveButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
+				// TODO: START INPUT VALIDATION!
+				boolean error = false;
+				boolean invalidStartEndTime = false;
+				if (courseField.getText().toString().equals("")) {
+					courseField.getStyleClass().remove("InputErrorCreateEdit");
+					courseField.getStyleClass().add("InputErrorCreateEdit");
+					error = true;
+				}
+				else {
+					courseField.getStyleClass().remove("InputErrorCreateEdit");
+				}
+
+				if (numberField.getText().toString().equals("")) {
+					numberField.getStyleClass().remove("InputErrorCreateEdit");
+					numberField.getStyleClass().add("InputErrorCreateEdit");
+					error = true;
+				}
+				else {
+					numberField.getStyleClass().remove("InputErrorCreateEdit");
+				}
+
+				if (sectionField.getText().toString().equals("")) {
+					sectionField.getStyleClass().remove("InputErrorCreateEdit");
+					sectionField.getStyleClass().add("InputErrorCreateEdit");
+					error = true;
+				}
+				else {
+					sectionField.getStyleClass().remove("InputErrorCreateEdit");
+				}
+
+				if (professorField.getText().toString().equals("")) {
+					professorField.getStyleClass().remove("InputErrorCreateEdit");
+					professorField.getStyleClass().add("InputErrorCreateEdit");
+					error = true;
+				}
+				else {
+					professorField.getStyleClass().remove("InputErrorCreateEdit");
+				}
+
+				if (creditsField.getText().toString().equals("")) {
+					creditsField.getStyleClass().remove("InputErrorCreateEdit");
+					creditsField.getStyleClass().add("InputErrorCreateEdit");
+					error = true;
+				}
+				else {
+					creditsField.getStyleClass().remove("InputErrorCreateEdit");
+				}
+
+				boolean allTimesEmpty = true;
+				for (int i = 1; i < 8; i++) {
+					if (!dayStartHoursArray[i].getText().toString().equals("") || !dayStartMinutesArray[i].getText().toString().equals("") ||
+						!dayEndHoursArray[i].getText().toString().equals("") || !dayEndMinutesArray[i].getText().toString().equals("")) {
+						allTimesEmpty = false;
+					}
+
+					if ((dayStartHoursArray[i].getText().toString().equals("") && !dayStartMinutesArray[i].getText().toString().equals("")) ||
+						(dayStartMinutesArray[i].getText().toString().equals("") && !dayStartHoursArray[i].getText().toString().equals(""))) {
+						dayStartHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayStartHoursArray[i].getStyleClass().add("InputErrorCreateEdit");
+						dayStartMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayStartMinutesArray[i].getStyleClass().add("InputErrorCreateEdit");
+						error = true;
+					}
+					else {
+						dayStartHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayStartMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+					}
+
+					if ((dayEndHoursArray[i].getText().toString().equals("") && !dayEndMinutesArray[i].getText().toString().equals("")) ||
+						(dayEndMinutesArray[i].getText().toString().equals("") && !dayEndHoursArray[i].getText().toString().equals(""))) {
+						dayEndHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayEndHoursArray[i].getStyleClass().add("InputErrorCreateEdit");
+						dayEndMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayEndMinutesArray[i].getStyleClass().add("InputErrorCreateEdit");
+						error = true;
+					}
+					else {
+						dayEndHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayEndMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+					}
+
+					if ((!dayStartHoursArray[i].getText().toString().equals("") && !dayStartMinutesArray[i].getText().toString().equals("")) &&
+						(dayEndHoursArray[i].getText().toString().equals("") && dayEndMinutesArray[i].getText().toString().equals(""))) {
+						dayStartHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayStartHoursArray[i].getStyleClass().add("InputErrorCreateEdit");
+						dayStartMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayStartMinutesArray[i].getStyleClass().add("InputErrorCreateEdit");
+						error = true;
+					}
+					else {
+						dayStartHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayStartMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+					}
+
+					if ((!dayEndHoursArray[i].getText().toString().equals("") && !dayEndMinutesArray[i].getText().toString().equals("")) &&
+						(dayStartHoursArray[i].getText().toString().equals("") && dayStartMinutesArray[i].getText().toString().equals(""))) {
+						dayEndHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayEndHoursArray[i].getStyleClass().add("InputErrorCreateEdit");
+						dayEndMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayEndMinutesArray[i].getStyleClass().add("InputErrorCreateEdit");
+						error = true;
+					}
+					else {
+						dayEndHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayEndMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+					}
+
+					if (!dayStartHoursArray[i].getText().toString().equals("") && !dayStartMinutesArray[i].getText().toString().equals("")) {
+						if (dayStartAMPM[i].getValue() == null || dayStartAMPM[i].getValue().toString().equals("")) {
+							dayStartAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
+							dayStartAMPM[i].getStyleClass().add("InputErrorCreateEditCombo");
+							error = true;
+						}
+						else {
+							dayStartAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
+						}
+					}
+
+					if (!dayEndHoursArray[i].getText().toString().equals("") && !dayEndMinutesArray[i].getText().toString().equals("")) {
+						if (dayEndAMPM[i].getValue() == null || dayEndAMPM[i].getValue().toString().equals("")) {
+							dayEndAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
+							dayEndAMPM[i].getStyleClass().add("InputErrorCreateEditCombo");
+							error = true;
+						}
+						else {
+							dayEndAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
+						}
+					}
+
+					if (dayStartAMPM[i].getValue() != null && !dayStartAMPM[i].getValue().toString().equals("") &&
+						dayEndAMPM[i].getValue() != null && !dayEndAMPM[i].getValue().toString().equals("") &&
+						!dayStartHoursArray[i].getText().toString().equals("") && !dayStartMinutesArray[i].getText().toString().equals("") &&
+						!dayEndHoursArray[i].getText().toString().equals("") && !dayEndMinutesArray[i].getText().toString().equals("")) {
+
+						int tempStartTime = 0;
+						int tempEndTime = 0;
+						if (dayStartAMPM[i].getValue().toString().equals("AM")) {
+							tempStartTime = (Integer.parseInt(dayStartHoursArray[i].getText().toString()) * 60) +
+									Integer.parseInt(dayStartMinutesArray[i].getText().toString());
+						}
+						else if (dayStartAMPM[i].getValue().toString().equals("PM")) {
+							tempStartTime = ((Integer.parseInt(dayStartHoursArray[i].getText().toString()) + 12) * 60) +
+									Integer.parseInt(dayStartMinutesArray[i].getText().toString());
+						}
+
+						if (dayEndAMPM[i].getValue().toString().equals("AM")) {
+							tempEndTime = (Integer.parseInt(dayEndHoursArray[i].getText().toString()) * 60) +
+									Integer.parseInt(dayEndMinutesArray[i].getText().toString());
+						}
+						else if (dayEndAMPM[i].getValue().toString().equals("PM")) {
+							tempEndTime = ((Integer.parseInt(dayEndHoursArray[i].getText().toString()) + 12) * 60) +
+									Integer.parseInt(dayEndMinutesArray[i].getText().toString());
+						}
+
+						if (tempEndTime <= tempStartTime) {
+							dayStartHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayStartHoursArray[i].getStyleClass().add("InputErrorCreateEdit");
+							dayStartMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayStartMinutesArray[i].getStyleClass().add("InputErrorCreateEdit");
+							dayEndHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayEndHoursArray[i].getStyleClass().add("InputErrorCreateEdit");
+							dayEndMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayEndMinutesArray[i].getStyleClass().add("InputErrorCreateEdit");
+							dayStartAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
+							dayStartAMPM[i].getStyleClass().add("InputErrorCreateEditCombo");
+							dayEndAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
+							dayEndAMPM[i].getStyleClass().add("InputErrorCreateEditCombo");
+							error = true;
+							invalidStartEndTime = true;
+						}
+						else {
+							dayStartHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayStartMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayEndHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayEndMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayStartAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
+							dayEndAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
+						}
+					}
+				}
+
+				if (allTimesEmpty) {
+					for (int i = 1; i < 8; i++) {
+						dayStartHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayStartHoursArray[i].getStyleClass().add("InputErrorCreateEdit");
+						dayStartMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayStartMinutesArray[i].getStyleClass().add("InputErrorCreateEdit");
+						dayEndHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayEndHoursArray[i].getStyleClass().add("InputErrorCreateEdit");
+						dayEndMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayEndMinutesArray[i].getStyleClass().add("InputErrorCreateEdit");
+						dayStartAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
+						dayStartAMPM[i].getStyleClass().add("InputErrorCreateEditCombo");
+						dayEndAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
+						dayEndAMPM[i].getStyleClass().add("InputErrorCreateEditCombo");
+					}
+					error = true;
+				}
+				else {
+					if (!invalidStartEndTime) {
+						for (int i = 1; i < 8; i++) {
+							dayStartHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayStartMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayEndHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayEndMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayStartAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
+							dayEndAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
+						}
+					}
+				}
+
+				if (error) {
+					return;
+				}
+				// TODO: END INPUT VALIDATION!
+
 				boolean deleteThisCourse = true;
 				for (int i = 1; i < 8; i++) {
 					if (!dayStartHoursArray[i].getText().toString().equals("") ||
@@ -459,6 +676,222 @@ public class CreateEditCourseDialog {
 	    createButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
+				// TODO: START INPUT VALIDATION!
+				boolean error = false;
+				boolean invalidStartEndTime = false;
+				if (courseField.getText().toString().equals("")) {
+					courseField.getStyleClass().remove("InputErrorCreateEdit");
+					courseField.getStyleClass().add("InputErrorCreateEdit");
+					error = true;
+				}
+				else {
+					courseField.getStyleClass().remove("InputErrorCreateEdit");
+				}
+
+				if (numberField.getText().toString().equals("")) {
+					numberField.getStyleClass().remove("InputErrorCreateEdit");
+					numberField.getStyleClass().add("InputErrorCreateEdit");
+					error = true;
+				}
+				else {
+					numberField.getStyleClass().remove("InputErrorCreateEdit");
+				}
+
+				if (sectionField.getText().toString().equals("")) {
+					sectionField.getStyleClass().remove("InputErrorCreateEdit");
+					sectionField.getStyleClass().add("InputErrorCreateEdit");
+					error = true;
+				}
+				else {
+					sectionField.getStyleClass().remove("InputErrorCreateEdit");
+				}
+
+				if (professorField.getText().toString().equals("")) {
+					professorField.getStyleClass().remove("InputErrorCreateEdit");
+					professorField.getStyleClass().add("InputErrorCreateEdit");
+					error = true;
+				}
+				else {
+					professorField.getStyleClass().remove("InputErrorCreateEdit");
+				}
+
+				if (creditsField.getText().toString().equals("")) {
+					creditsField.getStyleClass().remove("InputErrorCreateEdit");
+					creditsField.getStyleClass().add("InputErrorCreateEdit");
+					error = true;
+				}
+				else {
+					creditsField.getStyleClass().remove("InputErrorCreateEdit");
+				}
+
+				boolean allTimesEmpty = true;
+				for (int i = 1; i < 8; i++) {
+					if (!dayStartHoursArray[i].getText().toString().equals("") || !dayStartMinutesArray[i].getText().toString().equals("") ||
+						!dayEndHoursArray[i].getText().toString().equals("") || !dayEndMinutesArray[i].getText().toString().equals("")) {
+						allTimesEmpty = false;
+					}
+
+					if ((dayStartHoursArray[i].getText().toString().equals("") && !dayStartMinutesArray[i].getText().toString().equals("")) ||
+						(dayStartMinutesArray[i].getText().toString().equals("") && !dayStartHoursArray[i].getText().toString().equals(""))) {
+						dayStartHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayStartHoursArray[i].getStyleClass().add("InputErrorCreateEdit");
+						dayStartMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayStartMinutesArray[i].getStyleClass().add("InputErrorCreateEdit");
+						error = true;
+					}
+					else {
+						dayStartHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayStartMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+					}
+
+					if ((dayEndHoursArray[i].getText().toString().equals("") && !dayEndMinutesArray[i].getText().toString().equals("")) ||
+						(dayEndMinutesArray[i].getText().toString().equals("") && !dayEndHoursArray[i].getText().toString().equals(""))) {
+						dayEndHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayEndHoursArray[i].getStyleClass().add("InputErrorCreateEdit");
+						dayEndMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayEndMinutesArray[i].getStyleClass().add("InputErrorCreateEdit");
+						error = true;
+					}
+					else {
+						dayEndHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayEndMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+					}
+
+					if ((!dayStartHoursArray[i].getText().toString().equals("") && !dayStartMinutesArray[i].getText().toString().equals("")) &&
+						(dayEndHoursArray[i].getText().toString().equals("") && dayEndMinutesArray[i].getText().toString().equals(""))) {
+						dayStartHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayStartHoursArray[i].getStyleClass().add("InputErrorCreateEdit");
+						dayStartMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayStartMinutesArray[i].getStyleClass().add("InputErrorCreateEdit");
+						error = true;
+					}
+					else {
+						dayStartHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayStartMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+					}
+
+					if ((!dayEndHoursArray[i].getText().toString().equals("") && !dayEndMinutesArray[i].getText().toString().equals("")) &&
+						(dayStartHoursArray[i].getText().toString().equals("") && dayStartMinutesArray[i].getText().toString().equals(""))) {
+						dayEndHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayEndHoursArray[i].getStyleClass().add("InputErrorCreateEdit");
+						dayEndMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayEndMinutesArray[i].getStyleClass().add("InputErrorCreateEdit");
+						error = true;
+					}
+					else {
+						dayEndHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayEndMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+					}
+
+					if (!dayStartHoursArray[i].getText().toString().equals("") && !dayStartMinutesArray[i].getText().toString().equals("")) {
+						if (dayStartAMPM[i].getValue() == null || dayStartAMPM[i].getValue().toString().equals("")) {
+							dayStartAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
+							dayStartAMPM[i].getStyleClass().add("InputErrorCreateEditCombo");
+							error = true;
+						}
+						else {
+							dayStartAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
+						}
+					}
+
+					if (!dayEndHoursArray[i].getText().toString().equals("") && !dayEndMinutesArray[i].getText().toString().equals("")) {
+						if (dayEndAMPM[i].getValue() == null || dayEndAMPM[i].getValue().toString().equals("")) {
+							dayEndAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
+							dayEndAMPM[i].getStyleClass().add("InputErrorCreateEditCombo");
+							error = true;
+						}
+						else {
+							dayEndAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
+						}
+					}
+
+					if (dayStartAMPM[i].getValue() != null && !dayStartAMPM[i].getValue().toString().equals("") &&
+						dayEndAMPM[i].getValue() != null && !dayEndAMPM[i].getValue().toString().equals("") &&
+						!dayStartHoursArray[i].getText().toString().equals("") && !dayStartMinutesArray[i].getText().toString().equals("") &&
+						!dayEndHoursArray[i].getText().toString().equals("") && !dayEndMinutesArray[i].getText().toString().equals("")) {
+
+						int tempStartTime = 0;
+						int tempEndTime = 0;
+						if (dayStartAMPM[i].getValue().toString().equals("AM")) {
+							tempStartTime = (Integer.parseInt(dayStartHoursArray[i].getText().toString()) * 60) +
+									Integer.parseInt(dayStartMinutesArray[i].getText().toString());
+						}
+						else if (dayStartAMPM[i].getValue().toString().equals("PM")) {
+							tempStartTime = ((Integer.parseInt(dayStartHoursArray[i].getText().toString()) + 12) * 60) +
+									Integer.parseInt(dayStartMinutesArray[i].getText().toString());
+						}
+
+						if (dayEndAMPM[i].getValue().toString().equals("AM")) {
+							tempEndTime = (Integer.parseInt(dayEndHoursArray[i].getText().toString()) * 60) +
+									Integer.parseInt(dayEndMinutesArray[i].getText().toString());
+						}
+						else if (dayEndAMPM[i].getValue().toString().equals("PM")) {
+							tempEndTime = ((Integer.parseInt(dayEndHoursArray[i].getText().toString()) + 12) * 60) +
+									Integer.parseInt(dayEndMinutesArray[i].getText().toString());
+						}
+
+						if (tempEndTime <= tempStartTime) {
+							dayStartHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayStartHoursArray[i].getStyleClass().add("InputErrorCreateEdit");
+							dayStartMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayStartMinutesArray[i].getStyleClass().add("InputErrorCreateEdit");
+							dayEndHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayEndHoursArray[i].getStyleClass().add("InputErrorCreateEdit");
+							dayEndMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayEndMinutesArray[i].getStyleClass().add("InputErrorCreateEdit");
+							dayStartAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
+							dayStartAMPM[i].getStyleClass().add("InputErrorCreateEditCombo");
+							dayEndAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
+							dayEndAMPM[i].getStyleClass().add("InputErrorCreateEditCombo");
+							error = true;
+							invalidStartEndTime = true;
+						}
+						else {
+							dayStartHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayStartMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayEndHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayEndMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayStartAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
+							dayEndAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
+						}
+					}
+				}
+
+				if (allTimesEmpty) {
+					for (int i = 1; i < 8; i++) {
+						dayStartHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayStartHoursArray[i].getStyleClass().add("InputErrorCreateEdit");
+						dayStartMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayStartMinutesArray[i].getStyleClass().add("InputErrorCreateEdit");
+						dayEndHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayEndHoursArray[i].getStyleClass().add("InputErrorCreateEdit");
+						dayEndMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+						dayEndMinutesArray[i].getStyleClass().add("InputErrorCreateEdit");
+						dayStartAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
+						dayStartAMPM[i].getStyleClass().add("InputErrorCreateEditCombo");
+						dayEndAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
+						dayEndAMPM[i].getStyleClass().add("InputErrorCreateEditCombo");
+					}
+					error = true;
+				}
+				else {
+					if (!invalidStartEndTime) {
+						for (int i = 1; i < 8; i++) {
+							dayStartHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayStartMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayEndHoursArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayEndMinutesArray[i].getStyleClass().remove("InputErrorCreateEdit");
+							dayStartAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
+							dayEndAMPM[i].getStyleClass().remove("InputErrorCreateEditCombo");
+						}
+					}
+				}
+
+				if (error) {
+					return;
+				}
+				// TODO: END INPUT VALIDATION!
+
 				if (ClassParser.classList != null) {
 					String tempCid = courseField.getText().toString() + numberField.getText().toString() + sectionField.getText().toString();
 

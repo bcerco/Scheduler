@@ -68,3 +68,13 @@
 .ConflictPresentButton {
 	-fx-background-color : #FF7777;
 }
+
+.InputErrorCreateEdit {
+	-fx-background-color : #FF7777;
+	-fx-border-color     : #000000;
+	-fx-border-width     : 0.25 0.25 0.25 0.25;
+}
+
+.InputErrorCreateEditCombo {
+	-fx-background-color : #FF7777;
+}

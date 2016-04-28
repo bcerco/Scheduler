@@ -245,8 +245,20 @@ public class ToolBarView extends ToolBar {
 				    HBox conflictCommandPanel = new HBox();
 				    VBox    conflictPane     = new VBox();
 
+				    TabPane conflictTabPane  = new TabPane();
+				    Tab     conflictTab      = new Tab("Conflicts");
+				    Tab     conflictEditTab  = new Tab("Editor");
+
+				    VBox             conflictEditPane = new VBox();
+				    HBox             conflictEditRow  = new HBox();
+
+				    String conflictFileContents = "";
+
+				    ListView<String> localConflictList = new ListView<String>();
+
 				    btnIgnoreConflict = new Button("Ignore");
 				    btnIgnoreConflict.setOnAction(new EventHandler<ActionEvent>() {
+				    	String conflictFileContents2 = "";
 					    @Override public void handle(ActionEvent e) {
 					    	//int selectedIndex = conflictList.getSelectionModel().getSelectedIndex();
 					    	//conflictList.getItems().remove(selectedIndex);
@@ -365,6 +377,28 @@ public class ToolBarView extends ToolBar {
 							    	ToolBarView.btConflict.getStyleClass().remove("ConflictPresentButton");
 							    	//ToolBarView.btConflict.getStyleClass().add("ConflictPresentButton");
 							    }
+
+							    // TODO: Populate conflict file list
+							    String   in        = "";
+								BufferedReader tempConfFile;
+								try {
+									tempConfFile = new BufferedReader(new FileReader("SMConfig/conflicts.txt"));
+									if (tempConfFile != null) {
+										while ((in = tempConfFile.readLine()) != null) {
+											conflictFileContents2 += in + "\n";
+										}
+									}
+								}
+								catch (IOException ioe) {
+									ioe.printStackTrace();
+								}
+
+							    ObservableList<String> items = FXCollections.observableArrayList(conflictFileContents2.split("\n"));
+
+							    localConflictList.setItems(items);
+
+							    conflictEditPane.getChildren().clear();
+							    conflictEditPane.getChildren().add(localConflictList);
 							}
 					    }
 					});
@@ -373,15 +407,9 @@ public class ToolBarView extends ToolBar {
 
 				    conflictCommandPanel.getChildren().add(btnIgnoreConflict);
 
-				    TabPane conflictTabPane  = new TabPane();
-				    Tab     conflictTab      = new Tab("Conflicts");
-				    Tab     conflictEditTab  = new Tab("Editor");
-
 				    conflictPane.getChildren().add(conflictCommandPanel);
 				    conflictPane.getChildren().add(conflictList);
 
-				    VBox             conflictEditPane = new VBox();
-				    HBox             conflictEditRow  = new HBox();
 				    ObservableList<String> conflictTypes =
 				    	    FXCollections.observableArrayList(
 				    	        "Time",
@@ -413,7 +441,6 @@ public class ToolBarView extends ToolBar {
 						}
 				    });
 
-				    ListView<String> localConflictList = new ListView<String>();
 				    conflictSave.setOnMouseClicked(new EventHandler<MouseEvent> () {
 						@Override
 						public void handle(MouseEvent event) {
@@ -467,8 +494,7 @@ public class ToolBarView extends ToolBar {
 				    conflictTab.setContent(conflictPane);
 				    conflictEditTab.setContent(conflictEditPane);
 
-				    String conflictFileContents = "";
-
+				    // TODO: Populate conflict file list
 				    String   in        = "";
 					BufferedReader tempConfFile;
 					try {

@@ -90,8 +90,10 @@ public class ToolBarView extends ToolBar {
 			colorsFile = new BufferedReader(new FileReader("SMConfig/colors.txt"));
 			if (colorsFile != null) {
 				while ((in = colorsFile.readLine()) != null) {
-					colorsPair = in.split(";");
-					colorMap.put(colorsPair[0], colorsPair[1]);
+					if (in != null && !in.equals("") && !in.equals("\n")) {
+						colorsPair = in.split(";");
+						colorMap.put(colorsPair[0], colorsPair[1]);
+					}
 				}
 			}
 		}
@@ -721,8 +723,9 @@ public class ToolBarView extends ToolBar {
 			    			colorMap.put(courseField.getText().toString(), colorField.getText().toString());
 
 			    			for (int i = 0; i < colorListing.getItems().size(); i++) {
-			    				String[] colorMapping = colorListing.getItems().get(i).split(";");
-			    				if (colorMapping[0].equals(courseField.getText().toString())) {
+			    				String tempColor = colorListing.getItems().get(i);
+			    				String[] colorMapping = tempColor.split(";");
+			    				if (colorMapping[0].equals(courseField.getText().toString()) || tempColor.equals("") || tempColor.equals("\n")) {
 			    					colorListing.getItems().remove(i);
 			    				}
 			    			}
@@ -737,7 +740,7 @@ public class ToolBarView extends ToolBar {
 							try {
 								tempConfFile = new PrintWriter("SMConfig/colors.txt");
 								if (tempConfFile != null) {
-									tempConfFile.print(toFile);
+									tempConfFile.println(toFile);
 									tempConfFile.close();
 								}
 							}
@@ -750,7 +753,12 @@ public class ToolBarView extends ToolBar {
 				    		Pane tempPane = (Pane)tracks.getChildren().get(i + 1 + 2);
 				    		for (Node child : tempPane.getChildren()) {
 				    			CompactCourseView curCourse = (CompactCourseView) child;
-				    			curCourse.setStyle("-fx-background-color: " + colorMap.get(curCourse.getCourse()));
+				    			if (colorMap.containsKey(curCourse.getCourse())) {
+				    				curCourse.setStyle("-fx-background-color: " + colorMap.get(curCourse.getCourse()));
+				    			}
+				    			else {
+				    				curCourse.setStyle("-fx-background-color: #777777");
+				    			}
 				    		}
 					    }
 					}

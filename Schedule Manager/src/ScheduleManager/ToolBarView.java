@@ -49,7 +49,7 @@ public class ToolBarView extends ToolBar {
 
 	private Button      btImport;
 	private Button      btExport;
-	private Button      btConflict;
+	public static Button      btConflict;
 	private Button      btCredits;
 	public static TextField	tfFilterEdit;
 
@@ -242,6 +242,9 @@ public class ToolBarView extends ToolBar {
 					    conflictList.setItems(items);
 				    }
 
+				    HBox conflictCommandPanel = new HBox();
+				    VBox    conflictPane     = new VBox();
+
 				    btnIgnoreConflict = new Button("Ignore");
 				    btnIgnoreConflict.setOnAction(new EventHandler<ActionEvent>() {
 					    @Override public void handle(ActionEvent e) {
@@ -249,7 +252,8 @@ public class ToolBarView extends ToolBar {
 					    	//conflictList.getItems().remove(selectedIndex);
 
 					    	String selectedItem = conflictList.getSelectionModel().getSelectedItem();
-					    	if (selectedItem == null)
+					    	if (selectedItem == null || selectedItem.split(" ")[0].equals("time") || selectedItem.split(" ")[0].equals("credit") ||
+					    		selectedItem.split(" ")[0].equals("WARNING:"))
 					    		return;
 
 					    	String[] selectedItemArray = selectedItem.split(" ");
@@ -308,12 +312,62 @@ public class ToolBarView extends ToolBar {
 
 							    conflictList = new ListView<String>();
 							    conflictList.setItems(items);
-							    ToolBarView.this.conflictRoot.setCenter(conflictList);
+							    conflictPane.getChildren().clear();
+							    conflictPane.getChildren().add(conflictCommandPanel);
+							    conflictPane.getChildren().add(conflictList);
 						    }
+
+					    	// TODO: Turn conflict button red
+							if (!(ClassParser.classList == null)) {
+							    String conflictStringList = "";
+							    HashSet<String> visited = new HashSet<String>();
+							    for (String cur: ClassParser.classList.keySet()){
+							    	String conflictResult = ToolBarView.conflict.timeCheck(cur);
+							    	if (conflictResult != null){
+							    		String[] conflictResultArray = conflictResult.split("\n");
+							    		for (int i = 0; i < conflictResultArray.length; i++) {
+							    			if (!conflictResultArray[i].equals("null")) {
+								    			String [] tmp = conflictResultArray[i].split(" ");
+								    			String c = tmp[1]; c = c.replace(".", "");
+								    			String c2 = tmp[4]; c2 = c2.replace(".", "");
+							    				if (!visited.contains(c2)){
+							    					conflictStringList += conflictResultArray[i];
+							    					conflictStringList += ";";
+							    				}
+							    			}
+								    	}
+							    	}
+							    	visited.add(cur);
+							    }
+
+							    for (String inst : ClassParser.instructorList.keySet()) {
+							    	//String conflictResult = ToolBarView.conflict.professorCheck(ClassParser.classList.get(id).getInstructor());
+							    	String conflictResult = ToolBarView.conflict.professorCheck(inst);
+							    	//String conflictCreditResult = ToolBarView.conflict.creditCheck(inst);
+							    	//if (conflictCreditResult != null)
+							    		//conflictStringList += conflictCreditResult.replace("\n","") + ";";
+							    	if (conflictResult != null && !conflictResult.equals("null")) {
+							    		String[] conflictResultArray = conflictResult.split("\n");
+							    		for (int i = 0; i < conflictResultArray.length; i++) {
+							    			if (!conflictResultArray[i].equals("null")) {
+								    			conflictStringList += conflictResultArray[i];
+									    		conflictStringList += ";";
+							    			}
+								    	}
+							    	}
+							    }
+
+							    if (conflictStringList != null && !conflictStringList.equals("")) {
+							    	ToolBarView.btConflict.getStyleClass().remove("ConflictPresentButton");
+							    	ToolBarView.btConflict.getStyleClass().add("ConflictPresentButton");
+							    }
+							    else {
+							    	ToolBarView.btConflict.getStyleClass().remove("ConflictPresentButton");
+							    	//ToolBarView.btConflict.getStyleClass().add("ConflictPresentButton");
+							    }
+							}
 					    }
 					});
-
-				    HBox conflictCommandPanel = new HBox();
 
 				    conflictList.setStyle("-fx-font-family: 'monospace';");
 
@@ -323,7 +377,6 @@ public class ToolBarView extends ToolBar {
 				    Tab     conflictTab      = new Tab("Conflicts");
 				    Tab     conflictEditTab  = new Tab("Editor");
 
-				    VBox    conflictPane     = new VBox();
 				    conflictPane.getChildren().add(conflictCommandPanel);
 				    conflictPane.getChildren().add(conflictList);
 
@@ -569,6 +622,56 @@ public class ToolBarView extends ToolBar {
 		    			tempCourse.setVisible(false);
 		    		}
 		    	}
+		    }
+		}
+
+		// TODO: Turn conflict button red
+		if (!(ClassParser.classList == null)) {
+		    String conflictStringList = "";
+		    HashSet<String> visited = new HashSet<String>();
+		    for (String cur: ClassParser.classList.keySet()){
+		    	String conflictResult = ToolBarView.conflict.timeCheck(cur);
+		    	if (conflictResult != null){
+		    		String[] conflictResultArray = conflictResult.split("\n");
+		    		for (int i = 0; i < conflictResultArray.length; i++) {
+		    			if (!conflictResultArray[i].equals("null")) {
+			    			String [] tmp = conflictResultArray[i].split(" ");
+			    			String c = tmp[1]; c = c.replace(".", "");
+			    			String c2 = tmp[4]; c2 = c2.replace(".", "");
+		    				if (!visited.contains(c2)){
+		    					conflictStringList += conflictResultArray[i];
+		    					conflictStringList += ";";
+		    				}
+		    			}
+			    	}
+		    	}
+		    	visited.add(cur);
+		    }
+
+		    for (String inst : ClassParser.instructorList.keySet()) {
+		    	//String conflictResult = ToolBarView.conflict.professorCheck(ClassParser.classList.get(id).getInstructor());
+		    	String conflictResult = ToolBarView.conflict.professorCheck(inst);
+		    	//String conflictCreditResult = ToolBarView.conflict.creditCheck(inst);
+		    	//if (conflictCreditResult != null)
+		    		//conflictStringList += conflictCreditResult.replace("\n","") + ";";
+		    	if (conflictResult != null && !conflictResult.equals("null")) {
+		    		String[] conflictResultArray = conflictResult.split("\n");
+		    		for (int i = 0; i < conflictResultArray.length; i++) {
+		    			if (!conflictResultArray[i].equals("null")) {
+			    			conflictStringList += conflictResultArray[i];
+				    		conflictStringList += ";";
+		    			}
+			    	}
+		    	}
+		    }
+
+		    if (conflictStringList != null && !conflictStringList.equals("")) {
+		    	ToolBarView.btConflict.getStyleClass().remove("ConflictPresentButton");
+		    	ToolBarView.btConflict.getStyleClass().add("ConflictPresentButton");
+		    }
+		    else {
+		    	ToolBarView.btConflict.getStyleClass().remove("ConflictPresentButton");
+		    	//ToolBarView.btConflict.getStyleClass().add("ConflictPresentButton");
 		    }
 		}
 	}

@@ -1,9 +1,8 @@
-time;CMPSC4701;CMPSC4721
 ignore;time;MATH2322;MATH2312
 ignore;time;MATH2322;MATH2302
 ignore;time;MATH2312;MATH2302
 ignore;time;MATH2513;MATH2503
 credit;Blum;100.0
 credit;El Ariss;9.0
-time;CMPSC3121;CMPSC2211
 credit;Dudding;1000
+time;CMPSC4701;CMPSC4721

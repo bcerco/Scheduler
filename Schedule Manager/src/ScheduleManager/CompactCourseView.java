@@ -297,6 +297,56 @@ public class CompactCourseView extends VBox {
 					//ToolBarView.conflict.timeCheck(cid);
 				}
 
+				// TODO: Turn conflict button red
+				if (!(ClassParser.classList == null)) {
+				    String conflictStringList = "";
+				    HashSet<String> visited = new HashSet<String>();
+				    for (String cur: ClassParser.classList.keySet()){
+				    	String conflictResult = ToolBarView.conflict.timeCheck(cur);
+				    	if (conflictResult != null){
+				    		String[] conflictResultArray = conflictResult.split("\n");
+				    		for (int i = 0; i < conflictResultArray.length; i++) {
+				    			if (!conflictResultArray[i].equals("null")) {
+					    			String [] tmp = conflictResultArray[i].split(" ");
+					    			String c = tmp[1]; c = c.replace(".", "");
+					    			String c2 = tmp[4]; c2 = c2.replace(".", "");
+				    				if (!visited.contains(c2)){
+				    					conflictStringList += conflictResultArray[i];
+				    					conflictStringList += ";";
+				    				}
+				    			}
+					    	}
+				    	}
+				    	visited.add(cur);
+				    }
+
+				    for (String inst : ClassParser.instructorList.keySet()) {
+				    	//String conflictResult = ToolBarView.conflict.professorCheck(ClassParser.classList.get(id).getInstructor());
+				    	String conflictResult = ToolBarView.conflict.professorCheck(inst);
+				    	//String conflictCreditResult = ToolBarView.conflict.creditCheck(inst);
+				    	//if (conflictCreditResult != null)
+				    		//conflictStringList += conflictCreditResult.replace("\n","") + ";";
+				    	if (conflictResult != null && !conflictResult.equals("null")) {
+				    		String[] conflictResultArray = conflictResult.split("\n");
+				    		for (int i = 0; i < conflictResultArray.length; i++) {
+				    			if (!conflictResultArray[i].equals("null")) {
+					    			conflictStringList += conflictResultArray[i];
+						    		conflictStringList += ";";
+				    			}
+					    	}
+				    	}
+				    }
+
+				    if (conflictStringList != null && !conflictStringList.equals("")) {
+				    	ToolBarView.btConflict.getStyleClass().remove("ConflictPresentButton");
+				    	ToolBarView.btConflict.getStyleClass().add("ConflictPresentButton");
+				    }
+				    else {
+				    	ToolBarView.btConflict.getStyleClass().remove("ConflictPresentButton");
+				    	//ToolBarView.btConflict.getStyleClass().add("ConflictPresentButton");
+				    }
+				}
+
 				event.consume();
 			}
 

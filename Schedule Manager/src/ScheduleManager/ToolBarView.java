@@ -687,6 +687,7 @@ public class ToolBarView extends ToolBar {
 
 			    HBox colorPanelBox = new HBox();
 			    HBox colorChooserBox = new HBox();
+			    VBox colorListBox = new VBox();
 			    VBox colorParameterBox = new VBox();
 
 			    TextField courseField = new TextField();
@@ -695,6 +696,7 @@ public class ToolBarView extends ToolBar {
 			    colorField.setPromptText("Color");
 			    colorField.setEditable(false);
 			    Button saveColorsButton = new Button("Save");
+			    Button deleteColorsButton = new Button("Remove");
 
 			    ListView<String> colorListing = new ListView<String>();
 
@@ -715,7 +717,7 @@ public class ToolBarView extends ToolBar {
 						boolean shouldAdd = true;
 						String toFile = "";
 
-			    		if (!courseField.equals("") && !colorField.equals("")) {
+			    		if (!courseField.getText().toString().equals("") && !colorField.getText().toString().equals("")) {
 			    			if (colorMap.containsKey(courseField.getText().toString())) {
 			    				shouldAdd = false;
 			    			}
@@ -750,6 +752,50 @@ public class ToolBarView extends ToolBar {
 			    		}
 
 			    		for (int i = 0; i < 6; i++) {
+				    		Pane tempPane = (Pane)tracks.getChildren().get(i + 1 + 2);
+				    		for (Node child : tempPane.getChildren()) {
+				    			CompactCourseView curCourse = (CompactCourseView) child;
+				    			if (colorMap.containsKey(curCourse.getCourse())) {
+				    				curCourse.setStyle("-fx-background-color: " + colorMap.get(curCourse.getCourse()));
+				    			}
+				    			else {
+				    				curCourse.setStyle("-fx-background-color: #777777");
+				    			}
+				    		}
+					    }
+					}
+			    });
+
+			    deleteColorsButton.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						String toFile = "";
+						String item = colorListing.getSelectionModel().getSelectedItem();
+						String[] itemArray = item.split(";");
+
+						if (!item.equals("") && item != null) {
+							colorMap.remove(itemArray[0]);
+							colorListing.getItems().remove(item);
+
+							for (String i : colorListing.getItems()) {
+			    				toFile += i + "\n";
+			    			}
+
+							// Rewrite color file
+		    				PrintWriter tempConfFile;
+							try {
+								tempConfFile = new PrintWriter("SMConfig/colors.txt");
+								if (tempConfFile != null) {
+									tempConfFile.println(toFile);
+									tempConfFile.close();
+								}
+							}
+							catch (IOException ioe) {
+								ioe.printStackTrace();
+							}
+						}
+
+						for (int i = 0; i < 6; i++) {
 				    		Pane tempPane = (Pane)tracks.getChildren().get(i + 1 + 2);
 				    		for (Node child : tempPane.getChildren()) {
 				    			CompactCourseView curCourse = (CompactCourseView) child;
@@ -799,7 +845,9 @@ public class ToolBarView extends ToolBar {
 				colorParameterBox.getChildren().add(courseField);
 				colorParameterBox.getChildren().add(colorChooserBox);
 				colorParameterBox.getChildren().add(saveColorsButton);
-				colorPanelBox.getChildren().add(colorListing);
+				colorListBox.getChildren().add(colorListing);
+				colorListBox.getChildren().add(deleteColorsButton);
+				colorPanelBox.getChildren().add(colorListBox);
 				colorPanelBox.getChildren().add(colorParameterBox);
 				colorsRoot.setCenter(colorPanelBox);
 

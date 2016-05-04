@@ -749,14 +749,16 @@ public class CompactCourseView extends VBox {
 			    		if (tempCourse.getCid().equals(CompactCourseView.this.getCid())) {
 			    			tempCourse.setStartTime(ClassParser.classList.get(tempCourse.getCid()).startTime[i]);
 			    			tempCourse.setEndTime(ClassParser.classList.get(tempCourse.getCid()).endTime[i]);
-			    			double positionOfClass = pixelMinutes * ((tempCourse.getStartTime()) - (startTimes[i]));
+			    			double positionOfClass = pixelMinutes * (tempCourse.getStartTime() - startTimes[i]);
 
-			    			//tempPane.getChildren().remove(tempCourse);
+			    			//tempCourse.setPrefHeight(Math.round((endTimes[i] - startTimes[i]) * pixelMinutes));
+			    			// TODO: This doesnt seem to be working just yet?
+			    			tempCourse.setMinHeight((endTimes[i] - startTimes[i]) * pixelMinutes);
+			    			tempCourse.setMaxHeight((endTimes[i] - startTimes[i]) * pixelMinutes);
 
-			    			tempCourse.setTranslateY(positionOfClass);
+			    			tempCourse.setLayoutY(positionOfClass);
 
 			    			tempCourse.calculateDisplayTime();
-			    			//tempPane.getChildren().add(tempCourse);
 			    		}
 			    	}
 			    }

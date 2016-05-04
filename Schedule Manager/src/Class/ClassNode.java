@@ -16,6 +16,8 @@ public class ClassNode{
     private String id;
     private ArrayList<String> links;
     //arrays for days and times, may change later
+    private Stack<int []> prevStartStack;
+    private Stack<int []> prevEndStack;
     public int [] startTime;
     public int [] endTime;
 
@@ -23,12 +25,16 @@ public class ClassNode{
     	links = new ArrayList<String>();
         startTime = new int[7];
         endTime = new int[7];
+        prevStartStack = new Stack<int []>();
+        prevEndStack = new Stack<int []>();
     }
     public ClassNode(String line, int comma){
         links = new ArrayList<String>();
         String [] args = line.split(",");
         startTime = new int[7];
         endTime = new int[7];
+        prevStartStack = new Stack<int []>();
+        prevEndStack = new Stack<int []>();
         course = args[0].replaceAll(" ", "");
         number = args[1].replaceAll(" ", "");
         section = Short.parseShort(args[2]);
@@ -84,6 +90,19 @@ public class ClassNode{
         }
 
     }
+    public void savePrevTime(){
+    	int [] prevStart = startTime;
+    	int [] prevEnd = endTime;
+    	prevStartStack.push(prevStart);
+    	prevEndStack.push(prevEnd);
+    }
+    public void restorePrevTime(){
+    	if (prevStartStack.isEmpty()){
+    		return;
+    	}
+    	startTime = prevStartStack.pop();
+    	endTime = prevEndStack.pop();
+    }
     public String exportClassNode(){
         generateLinks();
         String ret = "";
@@ -94,8 +113,10 @@ public class ClassNode{
     public String exportSection(){
         if (section < 10)
             return "00" + Short.toString(section);
-        else
+        else if (section < 100)
             return "0" + Short.toString(section);
+        else
+        	return Short.toString(section);
     }
     public String exportTitle(){
         if (title.contains(",")){

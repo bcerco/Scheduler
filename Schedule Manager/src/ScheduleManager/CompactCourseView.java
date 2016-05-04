@@ -464,7 +464,7 @@ public class CompactCourseView extends VBox {
 		// Popup dialog when right-clicking on a classview
     	Stage popupStage = new Stage(StageStyle.UNDECORATED);
     	BorderPane popupRoot = new BorderPane();
-	    Scene popupScene = new Scene(popupRoot,100,100);
+	    Scene popupScene = new Scene(popupRoot,100,125);
 	    popupScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 	    popupStage.setScene(popupScene);
 	    popupStage.setTitle("Popup Dialog");
@@ -472,7 +472,7 @@ public class CompactCourseView extends VBox {
 	    popupStage.initOwner(Main.mainStage);
 
 	    popupStage.setX(x - 50);
-	    popupStage.setY(y - 48);
+	    popupStage.setY(y - 62);
 
 	    /*popupStage.setOnCloseRequest((new EventHandler<WindowEvent>() {
 			@Override
@@ -732,65 +732,34 @@ public class CompactCourseView extends VBox {
 	    undoRow.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				Stage classListStage = new Stage();
-			    BorderPane classListRoot = new BorderPane();
-			    Scene classListScene = new Scene(classListRoot,200,400);
-			    classListStage.setScene(classListScene);
-			    classListStage.setTitle("Class List");
-			    classListStage.initModality(Modality.WINDOW_MODAL);
-			    classListStage.initOwner(Main.mainStage);
+				int[]	startTimes = ClassParser.classList.get(CompactCourseView.this.getCid()).startTime;
+				int[]	endTimes   = ClassParser.classList.get(CompactCourseView.this.getCid()).endTime;
 
-			    classListStage.setOnCloseRequest((new EventHandler<WindowEvent>() {
-					@Override
-					public void handle(WindowEvent event) {
-						classListStage.close();
-						event.consume();
-					}
+				ClassParser.classList.get(CompactCourseView.this.getCid()).restorePrevTime();
 
-			    }));
+				double heightOfCell = (WeeklyScheduleCourseTracks.height) / (WeeklyScheduleView.endHour - WeeklyScheduleView.startHour);
+	    		double pixelMinutes = (heightOfCell / 60);
 
-			    ListView<String> classList = new ListView<String>();
+				// TODO:
+				for (int i = 0; i < 6; i++) {
+			    	Pane tempPane = (Pane)ToolBarView.tracks.getChildren().get(i+1 + 2);
+			    	for (int n = 0; n < tempPane.getChildren().size(); n++) {
+			    		CompactCourseView tempCourse = (CompactCourseView)tempPane.getChildren().get(n);
 
-			    String classListStringList = "";
-			    if (ToolBarView.filter != null) {
-			    	int timeSlot = (CompactCourseView.this.getStartTime()) - (CompactCourseView.this.getStartTime() % 60);
-			    	HashSet<String> classListHashList = ToolBarView.filter.daySearch(CompactCourseView.this.getDay(), timeSlot);
+			    		if (tempCourse.getCid().equals(CompactCourseView.this.getCid())) {
+			    			tempCourse.setStartTime(ClassParser.classList.get(tempCourse.getCid()).startTime[i]);
+			    			tempCourse.setEndTime(ClassParser.classList.get(tempCourse.getCid()).endTime[i]);
+			    			double positionOfClass = pixelMinutes * ((tempCourse.getStartTime()) - (startTimes[i]));
 
-			    	for (String cid : classListHashList) {
-			    		classListStringList += cid + ";";
+			    			//tempPane.getChildren().remove(tempCourse);
+
+			    			tempCourse.setTranslateY(positionOfClass);
+
+			    			tempCourse.calculateDisplayTime();
+			    			//tempPane.getChildren().add(tempCourse);
+			    		}
 			    	}
 			    }
-
-			    ObservableList<String> items = FXCollections.observableArrayList(classListStringList.split(";"));
-			    classList.setItems(items);
-
-			    classList.setOnMouseClicked(new EventHandler<MouseEvent> () {
-					@Override
-					public void handle(MouseEvent event) {
-						String classId = classList.getSelectionModel().getSelectedItem();
-						classId = classId.replaceAll("\\.", "");
-
-						for (int i = 0; i < 6; i++) {
-					    	Pane tempPane = (Pane)ToolBarView.tracks.getChildren().get(i+1 + 2);
-					    	for (int n = 0; n < tempPane.getChildren().size(); n++) {
-					    		CompactCourseView tempCourse = (CompactCourseView)tempPane.getChildren().get(n);
-
-					    		if (tempCourse.getCid().equals(classId)) {
-					    			tempPane.getChildren().remove(tempCourse);
-					    			tempPane.getChildren().add(tempCourse);
-					    		}
-					    	}
-					    }
-
-						event.consume();
-					}
-			    });
-
-			    classList.setStyle("-fx-font-family: 'monospace';");
-
-			    classListRoot.setCenter(classList);
-
-			    classListStage.show();
 
 			    classPopupVisible = false;
 				popupStage.close();
@@ -827,18 +796,21 @@ public class CompactCourseView extends VBox {
 	    mainBox.getChildren().add(editRow);
 	    mainBox.getChildren().add(deleteRow);
 	    mainBox.getChildren().add(lockRow);
+	    mainBox.getChildren().add(undoRow);
 	    mainBox.getChildren().add(closeRow);
 
 	    HBox.setHgrow(listButton, Priority.ALWAYS);
 	    HBox.setHgrow(editButton, Priority.ALWAYS);
 	    HBox.setHgrow(deleteButton, Priority.ALWAYS);
 	    HBox.setHgrow(lockButton, Priority.ALWAYS);
+	    HBox.setHgrow(undoButton, Priority.ALWAYS);
 	    HBox.setHgrow(closeButton, Priority.ALWAYS);
 
 	    VBox.setVgrow(listRow, Priority.ALWAYS);
 	    VBox.setVgrow(editRow, Priority.ALWAYS);
 	    VBox.setVgrow(deleteRow, Priority.ALWAYS);
 	    VBox.setVgrow(lockRow, Priority.ALWAYS);
+	    VBox.setVgrow(undoRow, Priority.ALWAYS);
 	    VBox.setVgrow(closeRow, Priority.ALWAYS);
 
 	    popupRoot.setCenter(mainBox);

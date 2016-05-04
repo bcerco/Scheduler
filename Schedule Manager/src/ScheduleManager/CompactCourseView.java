@@ -488,11 +488,13 @@ public class CompactCourseView extends VBox {
 	    HBox  editRow      = new HBox();
 	    HBox  deleteRow    = new HBox();
 	    HBox  lockRow      = new HBox();
+	    HBox  undoRow 	   = new HBox();
 	    HBox  closeRow      = new HBox();
 	    Label listButton   = new Label("Class List");
 	    Label editButton   = new Label("Edit");
 	    Label deleteButton = new Label("Delete");
 	    Label lockButton   = new Label("Lock");
+	    Label undoButton   = new Label("Undo");
 	    Label closeButton   = new Label("Close");
 
 	    listRow.getChildren().add(listButton);
@@ -503,6 +505,8 @@ public class CompactCourseView extends VBox {
 	    deleteRow.alignmentProperty().set(Pos.CENTER);
 	    lockRow.getChildren().add(lockButton);
 	    lockRow.alignmentProperty().set(Pos.CENTER);
+	    undoRow.getChildren().add(undoButton);
+	    undoRow.alignmentProperty().set(Pos.CENTER);
 	    closeRow.getChildren().add(closeButton);
 	    closeRow.alignmentProperty().set(Pos.CENTER);
 
@@ -510,6 +514,7 @@ public class CompactCourseView extends VBox {
 	    editRow.getStyleClass().add("ScheduleCell");
 	    deleteRow.getStyleClass().add("ScheduleCell");
 	    lockRow.getStyleClass().add("ScheduleCell");
+	    undoRow.getStyleClass().add("ScheduleCell");
 	    closeRow.getStyleClass().add("ScheduleCell");
 
 	    listRow.setOnMouseEntered(new EventHandler<MouseEvent> () {
@@ -703,6 +708,91 @@ public class CompactCourseView extends VBox {
 				}
 
 				classPopupVisible = false;
+				popupStage.close();
+				event.consume();
+			}
+	    });
+
+	    undoRow.setOnMouseEntered(new EventHandler<MouseEvent> () {
+			@Override
+			public void handle(MouseEvent event) {
+				undoRow.getStyleClass().remove("PopupButton");
+				undoRow.getStyleClass().add("PopupButtonHighlight");
+				event.consume();
+			}
+	    });
+	    undoRow.setOnMouseExited(new EventHandler<MouseEvent> () {
+			@Override
+			public void handle(MouseEvent event) {
+				undoRow.getStyleClass().remove("PopupButtonHighlight");
+				undoRow.getStyleClass().add("PopupButton");
+				event.consume();
+			}
+	    });
+	    undoRow.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				Stage classListStage = new Stage();
+			    BorderPane classListRoot = new BorderPane();
+			    Scene classListScene = new Scene(classListRoot,200,400);
+			    classListStage.setScene(classListScene);
+			    classListStage.setTitle("Class List");
+			    classListStage.initModality(Modality.WINDOW_MODAL);
+			    classListStage.initOwner(Main.mainStage);
+
+			    classListStage.setOnCloseRequest((new EventHandler<WindowEvent>() {
+					@Override
+					public void handle(WindowEvent event) {
+						classListStage.close();
+						event.consume();
+					}
+
+			    }));
+
+			    ListView<String> classList = new ListView<String>();
+
+			    String classListStringList = "";
+			    if (ToolBarView.filter != null) {
+			    	int timeSlot = (CompactCourseView.this.getStartTime()) - (CompactCourseView.this.getStartTime() % 60);
+			    	HashSet<String> classListHashList = ToolBarView.filter.daySearch(CompactCourseView.this.getDay(), timeSlot);
+
+			    	for (String cid : classListHashList) {
+			    		classListStringList += cid + ";";
+			    	}
+			    }
+
+			    ObservableList<String> items = FXCollections.observableArrayList(classListStringList.split(";"));
+			    classList.setItems(items);
+
+			    classList.setOnMouseClicked(new EventHandler<MouseEvent> () {
+					@Override
+					public void handle(MouseEvent event) {
+						String classId = classList.getSelectionModel().getSelectedItem();
+						classId = classId.replaceAll("\\.", "");
+
+						for (int i = 0; i < 6; i++) {
+					    	Pane tempPane = (Pane)ToolBarView.tracks.getChildren().get(i+1 + 2);
+					    	for (int n = 0; n < tempPane.getChildren().size(); n++) {
+					    		CompactCourseView tempCourse = (CompactCourseView)tempPane.getChildren().get(n);
+
+					    		if (tempCourse.getCid().equals(classId)) {
+					    			tempPane.getChildren().remove(tempCourse);
+					    			tempPane.getChildren().add(tempCourse);
+					    		}
+					    	}
+					    }
+
+						event.consume();
+					}
+			    });
+
+			    classList.setStyle("-fx-font-family: 'monospace';");
+
+			    classListRoot.setCenter(classList);
+
+			    classListStage.show();
+
+			    classPopupVisible = false;
 				popupStage.close();
 				event.consume();
 			}

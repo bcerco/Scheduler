@@ -29,8 +29,8 @@ public class ClassNode{
         String [] args = line.split(",");
         startTime = new int[7];
         endTime = new int[7];
-        course = args[0];
-        number = args[1];
+        course = args[0].replaceAll(" ", "");
+        number = args[1].replaceAll(" ", "");
         section = Short.parseShort(args[2]);
         credits = Float.parseFloat(args[3]);
         createId();

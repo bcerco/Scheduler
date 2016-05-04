@@ -239,6 +239,7 @@ public class CompactCourseView extends VBox {
 			public void handle(MouseEvent event) {
 				CompactCourseView.this.isRightClicked = false;
 				CompactCourseView.this.isDragging = false;
+				ClassParser.classList.get(cid).savePrevTime();
 
 				if (event.getButton() == MouseButton.PRIMARY) {
 					//ClassParser.classList.get(cid).startTime[CompactCourseView.this.day] = startTime;

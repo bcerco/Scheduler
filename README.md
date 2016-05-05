@@ -11,6 +11,10 @@ After cloning the repo, you can import the project into Eclipse and either run i
 
 ### Importing Schedules
 
-The Scheduler assumes that the file to be imported is in comma separated format (CSV) and that it has been sanitized to remove any 
-headers and or blank lines.  The expected number of commas per line is described in the ClassParser.java and ClassNode.java files.  
+The Scheduler assumes that the file to be imported is in comma separated format (CSV) and that it has been sanitized to
+remove any headers and or blank lines.  The expected number of commas per line is described in the ClassParser.java and
+ClassNode.java files.  
 
+The import button is at the top left of the application window:
+
+![alt text](https://github.com/bcerco/Scheduler/blob/master/Documentation/Images/import_sc.png)

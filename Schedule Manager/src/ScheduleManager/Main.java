@@ -59,6 +59,15 @@ public class Main extends Application {
 			}
 		}
 
+		if (!(new File("SMConfig/paths.txt").exists())) {
+			File pathsFile = new File("SMConfig/paths.txt");
+			try {
+				pathsFile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
 		try {
 			primaryStage.setMinWidth(1024);
 			primaryStage.setMinHeight(768);

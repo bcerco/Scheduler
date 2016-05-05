@@ -38,6 +38,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -47,6 +48,7 @@ import javafx.stage.WindowEvent;
 public class ToolBarView extends ToolBar {
 	public static ClassParser parser;
 	private FileChooser chooserImport = new FileChooser();
+	private DirectoryChooser directoryChooser = new DirectoryChooser();
 	public static HashMap<String, String> colorMap = new HashMap<String, String>();
 
 	private Button      btImport;
@@ -54,6 +56,7 @@ public class ToolBarView extends ToolBar {
 	public static Button      btConflict;
 	private Button      btCredits;
 	private Button		btColors;
+	private Button		btPaths;
 	public static TextField	tfFilterEdit;
 
 	private BorderPane  conflictRoot;
@@ -65,6 +68,8 @@ public class ToolBarView extends ToolBar {
 
 	public static Filter      filter;
 	public static Conflict    conflict;
+
+	private File initialDirectory;
 
 	ColorPicker   colorPicker = new ColorPicker();
 
@@ -99,6 +104,33 @@ public class ToolBarView extends ToolBar {
 		}
 		catch (IOException ioe) {
 			ioe.printStackTrace();
+		}
+
+		BufferedReader pathsFile;
+		in        = "";
+		String[] currentPath;
+		try {
+			pathsFile = new BufferedReader(new FileReader("SMConfig/paths.txt"));
+			if (pathsFile != null) {
+				while ((in = pathsFile.readLine()) != null) {
+					if (in != null && !in.equals("") && !in.equals("\n")) {
+						currentPath = in.split(";");
+						switch (currentPath[0]) {
+						case "CSVPATH":
+							initialDirectory = new File(currentPath[1]);
+							break;
+						}
+					}
+				}
+			}
+		}
+		catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+
+		if (initialDirectory != null) {
+			chooserImport.setInitialDirectory(initialDirectory);
+			directoryChooser.setInitialDirectory(initialDirectory);
 		}
 
 		btImport = new Button("Import");
@@ -717,6 +749,8 @@ public class ToolBarView extends ToolBar {
 						boolean shouldAdd = true;
 						String toFile = "";
 
+						colorListing.getSelectionModel().clearSelection();
+
 			    		if (!courseField.getText().toString().equals("") && !colorField.getText().toString().equals("")) {
 			    			if (colorMap.containsKey(courseField.getText().toString())) {
 			    				shouldAdd = false;
@@ -840,6 +874,19 @@ public class ToolBarView extends ToolBar {
 				colorListing.setItems(items);
 				colorListing.setStyle("-fx-font-family: 'monospace';");
 
+				colorListing.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+				    @Override
+				    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				        // Your action here
+				    	if (newValue != null) {
+					        String[] selectedValues = newValue.split(";");
+					        colorMap.put(selectedValues[0], selectedValues[1]);
+					        courseField.setText(selectedValues[0]);
+					        colorField.setText(selectedValues[1]);
+				    	}
+				    }
+				});
+
 				colorChooserBox.getChildren().add(colorField);
 				colorChooserBox.getChildren().add(colorPicker);
 				colorParameterBox.getChildren().add(courseField);
@@ -854,9 +901,99 @@ public class ToolBarView extends ToolBar {
 				HBox.setHgrow(colorParameterBox, Priority.ALWAYS);
 				HBox.setHgrow(colorField, Priority.ALWAYS);
 
-				// TODO: Change all classes to their new colors
 			    colorsStage.show();
 			    colorsStage.setResizable(false);
+		    }
+		});
+
+		btPaths = new Button("Paths");
+		btPaths.setOnAction(new EventHandler<ActionEvent>() {
+			String toFile = "";
+
+		    @Override public void handle(ActionEvent e) {
+		    	Stage pathsStage = new Stage();
+		    	BorderPane pathsRoot = new BorderPane();
+			    Scene pathsScene = new Scene(pathsRoot,800,400);
+			    pathsStage.setScene(pathsScene);
+			    pathsStage.setTitle("Paths");
+			    pathsStage.initModality(Modality.WINDOW_MODAL);
+			    pathsStage.initOwner(
+			        ((Node)e.getSource()).getScene().getWindow() );
+
+			    VBox      pathsBox        = new VBox();
+			    HBox      csvDirectoryBox = new HBox();
+			    HBox      actionBox		  = new HBox();
+			    Label     csvDirectoryLabel = new Label("Default CSV Directory");
+			    TextField csvDirectoryField = new TextField();
+			    csvDirectoryField.setPromptText("Directory Path");
+			    csvDirectoryField.setEditable(false);
+			    Button    selectCsvDirectory = new Button("...");
+			    Button	  saveDirectories = new Button("Save");
+
+			    if (initialDirectory != null) {
+			    	csvDirectoryField.setText(initialDirectory.getAbsolutePath());
+			    }
+
+			    selectCsvDirectory.setOnAction(new EventHandler<ActionEvent>() {
+				    @Override public void handle(ActionEvent e) {
+				    	chooserImport.setTitle("File Import");
+						chooserImport.getExtensionFilters().addAll(
+								new ExtensionFilter("Text CSV", "*.csv"));
+				    	File tempDir = directoryChooser.showDialog(pathsStage);
+				    	if (tempDir != null) {
+				    		csvDirectoryField.setText(tempDir.getAbsolutePath());
+				    	}
+				    	e.consume();
+				    }
+			    });
+
+			    pathsStage.setOnCloseRequest((new EventHandler<WindowEvent>() {
+					@Override
+					public void handle(WindowEvent event) {
+						conflictsVisible = false;
+						pathsStage.close();
+						event.consume();
+					}
+			    }));
+
+			    saveDirectories.setOnAction(new EventHandler<ActionEvent>() {
+				    @Override public void handle(ActionEvent e) {
+				    	toFile = "CSVPATH;" + csvDirectoryField.getText().toString() + "\n";
+				    	PrintWriter tempConfFile;
+						try {
+							tempConfFile = new PrintWriter("SMConfig/paths.txt");
+							if (tempConfFile != null) {
+								tempConfFile.print(toFile);
+								tempConfFile.close();
+
+								initialDirectory = new File(csvDirectoryField.getText().toString());
+
+								if (initialDirectory != null) {
+									chooserImport.setInitialDirectory(initialDirectory);
+									directoryChooser.setInitialDirectory(initialDirectory);
+								}
+							}
+						}
+						catch (IOException ioe) {
+							ioe.printStackTrace();
+						}
+				    	e.consume();
+				    }
+			    });
+
+			    VBox.setVgrow(csvDirectoryBox, Priority.ALWAYS);
+			    HBox.setHgrow(csvDirectoryLabel, Priority.NEVER);
+			    HBox.setHgrow(csvDirectoryField, Priority.ALWAYS);
+
+			    csvDirectoryBox.getChildren().add(csvDirectoryLabel);
+			    csvDirectoryBox.getChildren().add(csvDirectoryField);
+			    csvDirectoryBox.getChildren().add(selectCsvDirectory);
+			    actionBox.getChildren().add(saveDirectories);
+			    pathsBox.getChildren().add(csvDirectoryBox);
+			    pathsBox.getChildren().add(actionBox);
+			    pathsRoot.setCenter(pathsBox);
+
+			    pathsStage.show();
 		    }
 		});
 
@@ -865,6 +1002,7 @@ public class ToolBarView extends ToolBar {
 		this.getItems().add(btConflict);
 		this.getItems().add(btCredits);
 		this.getItems().add(btColors);
+		this.getItems().add(btPaths);
 		filterBox.getChildren().add(tfFilterEdit);
 		this.getItems().add(filterBox);
 		HBox.setHgrow(filterBox, Priority.ALWAYS);

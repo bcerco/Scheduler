@@ -736,6 +736,7 @@ public class CompactCourseView extends VBox {
 				/*double heightOfCell = (WeeklyScheduleCourseTracks.height) / (WeeklyScheduleView.endHour - WeeklyScheduleView.startHour);
 	    		double pixelMinutes = (heightOfCell / 60);
 
+				// TODO: Make this for-loop position the classes instead of relying on Main.toolBarView.PopulateTracks();
 				for (int i = 0; i < 6; i++) {
 			    	Pane tempPane = (Pane)ToolBarView.tracks.getChildren().get(i+1 + 2);
 			    	for (int n = 0; n < tempPane.getChildren().size(); n++) {

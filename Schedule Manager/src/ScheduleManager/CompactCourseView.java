@@ -218,7 +218,6 @@ public class CompactCourseView extends VBox {
 
 			@Override
 			public void handle(MouseEvent event) {
-
 				if (event.getButton() == MouseButton.SECONDARY && isRightClicked == false) {
 					isRightClicked = true;
 					classPopupVisible = true;
@@ -239,11 +238,11 @@ public class CompactCourseView extends VBox {
 			public void handle(MouseEvent event) {
 				CompactCourseView.this.isRightClicked = false;
 				CompactCourseView.this.isDragging = false;
-				ClassParser.classList.get(cid).savePrevTime();
 
 				if (event.getButton() == MouseButton.PRIMARY) {
 					//ClassParser.classList.get(cid).startTime[CompactCourseView.this.day] = startTime;
 					//ClassParser.classList.get(cid).endTime[CompactCourseView.this.day] = endTime;
+					ClassParser.classList.get(CompactCourseView.this.cid).savePrevTime();
 
 					if ((CompactCourseView.this.day + 3) != ((CompactCourseView.this.day + CompactCourseView.this.track + 3))) {
 		    			Pane fromTrackPane = (Pane)ToolBarView.tracks.getChildren().get(CompactCourseView.this.day + 3);
@@ -299,7 +298,7 @@ public class CompactCourseView extends VBox {
 						}
 					}
 
-					System.out.println(ToolBarView.conflict.professorCheck(ClassParser.classList.get(cid).getInstructor()));
+					//System.out.println(ToolBarView.conflict.professorCheck(ClassParser.classList.get(cid).getInstructor()));
 					//ToolBarView.conflict.timeCheck(cid);
 				}
 
@@ -732,34 +731,26 @@ public class CompactCourseView extends VBox {
 	    undoRow.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				int[]	startTimes = ClassParser.classList.get(CompactCourseView.this.getCid()).startTime;
-				int[]	endTimes   = ClassParser.classList.get(CompactCourseView.this.getCid()).endTime;
-
 				ClassParser.classList.get(CompactCourseView.this.getCid()).restorePrevTime();
 
-				double heightOfCell = (WeeklyScheduleCourseTracks.height) / (WeeklyScheduleView.endHour - WeeklyScheduleView.startHour);
+				/*double heightOfCell = (WeeklyScheduleCourseTracks.height) / (WeeklyScheduleView.endHour - WeeklyScheduleView.startHour);
 	    		double pixelMinutes = (heightOfCell / 60);
 
-				// TODO:
 				for (int i = 0; i < 6; i++) {
 			    	Pane tempPane = (Pane)ToolBarView.tracks.getChildren().get(i+1 + 2);
 			    	for (int n = 0; n < tempPane.getChildren().size(); n++) {
 			    		CompactCourseView tempCourse = (CompactCourseView)tempPane.getChildren().get(n);
+			    	}
+			    }*/
 
-			    		if (tempCourse.getCid().equals(CompactCourseView.this.getCid())) {
-			    			tempCourse.setStartTime(ClassParser.classList.get(tempCourse.getCid()).startTime[i]);
-			    			tempCourse.setEndTime(ClassParser.classList.get(tempCourse.getCid()).endTime[i]);
-			    			double positionOfClass = pixelMinutes * (tempCourse.getStartTime() - startTimes[i]);
+				Main.toolBarView.PopulateTracks();
 
-			    			//tempCourse.setPrefHeight(Math.round((endTimes[i] - startTimes[i]) * pixelMinutes));
-			    			// TODO: This doesnt seem to be working just yet?
-			    			tempCourse.setMinHeight((endTimes[i] - startTimes[i]) * pixelMinutes);
-			    			tempCourse.setMaxHeight((endTimes[i] - startTimes[i]) * pixelMinutes);
-
-			    			tempCourse.setLayoutY(positionOfClass);
-
-			    			tempCourse.calculateDisplayTime();
-			    		}
+				for (int i = 0; i < 6; i++) {
+			    	Pane tempPane = (Pane)ToolBarView.tracks.getChildren().get(i+1 + 2);
+			    	for (int n = 0; n < tempPane.getChildren().size(); n++) {
+			    		CompactCourseView tempCourse = (CompactCourseView)tempPane.getChildren().get(n);
+			    		tempPane.getChildren().remove(tempCourse);
+			    		tempPane.getChildren().add(tempCourse);
 			    	}
 			    }
 

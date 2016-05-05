@@ -91,8 +91,14 @@ public class ClassNode{
 
     }
     public void savePrevTime(){
-    	int [] prevStart = startTime;
-    	int [] prevEnd = endTime;
+    	int [] prevStart = new int[7];
+    	int [] prevEnd = new int[7];
+
+    	for (int i = 0; i < 7; i++) {
+    		prevStart[i] = startTime[i];
+    		prevEnd[i]   = endTime[i];
+    	}
+
     	prevStartStack.push(prevStart);
     	prevEndStack.push(prevEnd);
     }
@@ -100,8 +106,13 @@ public class ClassNode{
     	if (prevStartStack.isEmpty()){
     		return;
     	}
-    	startTime = prevStartStack.pop();
-    	endTime = prevEndStack.pop();
+    	int [] prevStart = prevStartStack.pop();
+    	int [] prevEnd   = prevEndStack.pop();
+
+    	for (int i = 0; i < 7; i++) {
+    		startTime[i] = prevStart[i];
+    		endTime[i]   = prevEnd[i];
+    	}
     }
     public String exportClassNode(){
         generateLinks();

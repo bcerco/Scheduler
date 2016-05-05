@@ -1,1 +1,1 @@
-CSVPATH;/home/nad5209/cmpsc/IndependentStudy/Scheduler/Schedule Manager/SMConfig
+CSVPATH;/home/nad5209/cmpsc/IndependentStudy/Scheduler

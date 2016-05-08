@@ -101,6 +101,7 @@ public class Main extends Application {
 			root.setTop(toolBarView);
 			//System.out.println(weeklyTracks.getPrefHeight());
 
+			// TODO: Fixes startup bug in some OSs - Start of code
 			schedule.setPrefWidth((double)1024);
 	        weeklySchedule.setPrefWidth((double)1024);
 	        weeklyTracks.setPrefWidth((double)1024);
@@ -118,6 +119,7 @@ public class Main extends Application {
 	        appHeight = (double)730;
 	        minAppHeight = 0 + toolBarView.getHeight() + topLabel.getHeight();
 	        //System.out.println(WeeklyScheduleCourseTracks.height);
+	        // TODO: Fixes startup bug in some OSs - End of code
 
 			scene.widthProperty().addListener(new ChangeListener<Number>() {
 			    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {

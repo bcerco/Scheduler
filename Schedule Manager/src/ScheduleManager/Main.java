@@ -73,7 +73,7 @@ public class Main extends Application {
 			primaryStage.setMinHeight(768);
 			primaryStage.setTitle("Penn State Schedule Manager");
 			BorderPane root = new BorderPane();
-			Scene scene = new Scene(root,800,600);
+			Scene scene = new Scene(root,1024,768);
 
 			GridPane schedulePane = new GridPane();
 			ColumnConstraints ccColGrow;
@@ -100,6 +100,25 @@ public class Main extends Application {
 			root.setCenter(schedulePane);
 			root.setTop(toolBarView);
 			//System.out.println(weeklyTracks.getPrefHeight());
+
+			schedule.setPrefWidth((double)1024);
+	        weeklySchedule.setPrefWidth((double)1024);
+	        weeklyTracks.setPrefWidth((double)1024);
+	        Label leftLabel = (Label)weeklyTracks.getChildren().get(0);
+	        WeeklyScheduleCourseTracks.width = ((double)1024 - leftLabel.getWidth()) / 7;
+	        WeeklyScheduleCourseTracks.leftOffset = leftLabel.getWidth();
+	        //System.out.println(WeeklyScheduleCourseTracks.width);
+	        appWidth = (double)1024;
+
+	        schedule.setPrefHeight((double)730);
+	        weeklySchedule.setPrefHeight((double)730 - toolBarView.getHeight());
+	        weeklyTracks.setPrefHeight((double)730 - toolBarView.getHeight());
+	        Label topLabel = (Label)weeklyTracks.getChildren().get(1);
+	        WeeklyScheduleCourseTracks.height = (double)730 - toolBarView.getHeight() - topLabel.getHeight();
+	        appHeight = (double)730;
+	        minAppHeight = 0 + toolBarView.getHeight() + topLabel.getHeight();
+	        //System.out.println(WeeklyScheduleCourseTracks.height);
+
 			scene.widthProperty().addListener(new ChangeListener<Number>() {
 			    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
 			        schedule.setPrefWidth((double)newSceneWidth);

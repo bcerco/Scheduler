@@ -13,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -381,6 +382,16 @@ public class CompactCourseView extends VBox {
 		sectionLabel = new Label(Short.toString(this.section));
 		sectionLabel.getStyleClass().add("CompactCourseText");
 		information.getChildren().addAll(courseLabel, numberLabel, dividerLabel, sectionLabel);
+
+		String tooltipText = "Name: " + ClassParser.classList.get(this.getCid()).getTitle() + "\n" +
+							 "Prof: " + ClassParser.classList.get(this.getCid()).getInstructor() + "\n" +
+							 "Room: " + ClassParser.classList.get(this.getCid()).getRoom() + "\n" +
+							 "Seat: S:" + ClassParser.classList.get(this.getCid()).getSoft() + " H:" + ClassParser.classList.get(this.getCid()).getHard() + "\n" +
+							 "Cred: " + ClassParser.classList.get(this.getCid()).getCredit();
+		courseLabel.setTooltip(new Tooltip(tooltipText));
+		numberLabel.setTooltip(new Tooltip(tooltipText));
+		dividerLabel.setTooltip(new Tooltip(tooltipText));
+		sectionLabel.setTooltip(new Tooltip(tooltipText));
 
 		HBox startTimeInformation = new HBox();
 		Label startLabel = new Label("S: ");

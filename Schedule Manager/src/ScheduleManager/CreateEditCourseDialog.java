@@ -295,8 +295,14 @@ public class CreateEditCourseDialog {
 									Integer.parseInt(dayStartMinutesArray[i].getText().toString());
 						}
 						else if (dayStartAMPM[i].getValue().toString().equals("PM")) {
-							tempStartTime = ((Integer.parseInt(dayStartHoursArray[i].getText().toString()) + 12) * 60) +
-									Integer.parseInt(dayStartMinutesArray[i].getText().toString());
+							if (!dayStartHoursArray[i].getText().toString().equals("12")) {
+								tempStartTime = ((Integer.parseInt(dayStartHoursArray[i].getText().toString()) + 12) * 60) +
+										Integer.parseInt(dayStartMinutesArray[i].getText().toString());
+							}
+							else {
+								tempStartTime = (Integer.parseInt(dayStartHoursArray[i].getText().toString()) * 60) +
+										Integer.parseInt(dayStartMinutesArray[i].getText().toString());
+							}
 						}
 
 						if (dayEndAMPM[i].getValue().toString().equals("AM")) {
@@ -304,8 +310,14 @@ public class CreateEditCourseDialog {
 									Integer.parseInt(dayEndMinutesArray[i].getText().toString());
 						}
 						else if (dayEndAMPM[i].getValue().toString().equals("PM")) {
-							tempEndTime = ((Integer.parseInt(dayEndHoursArray[i].getText().toString()) + 12) * 60) +
-									Integer.parseInt(dayEndMinutesArray[i].getText().toString());
+							if (!dayEndHoursArray[i].getText().toString().equals("12")) {
+								tempEndTime = ((Integer.parseInt(dayEndHoursArray[i].getText().toString()) + 12) * 60) +
+										Integer.parseInt(dayEndMinutesArray[i].getText().toString());
+							}
+							else {
+								tempEndTime = (Integer.parseInt(dayEndHoursArray[i].getText().toString()) * 60) +
+										Integer.parseInt(dayEndMinutesArray[i].getText().toString());
+							}
 						}
 
 						if (tempEndTime <= tempStartTime) {
@@ -841,8 +853,14 @@ public class CreateEditCourseDialog {
 									Integer.parseInt(dayStartMinutesArray[i].getText().toString());
 						}
 						else if (dayStartAMPM[i].getValue().toString().equals("PM")) {
-							tempStartTime = ((Integer.parseInt(dayStartHoursArray[i].getText().toString()) + 12) * 60) +
-									Integer.parseInt(dayStartMinutesArray[i].getText().toString());
+							if (!dayStartHoursArray[i].getText().toString().equals("12")) {
+								tempStartTime = ((Integer.parseInt(dayStartHoursArray[i].getText().toString()) + 12) * 60) +
+										Integer.parseInt(dayStartMinutesArray[i].getText().toString());
+							}
+							else {
+								tempStartTime = (Integer.parseInt(dayStartHoursArray[i].getText().toString()) * 60) +
+										Integer.parseInt(dayStartMinutesArray[i].getText().toString());
+							}
 						}
 
 						if (dayEndAMPM[i].getValue().toString().equals("AM")) {
@@ -850,8 +868,14 @@ public class CreateEditCourseDialog {
 									Integer.parseInt(dayEndMinutesArray[i].getText().toString());
 						}
 						else if (dayEndAMPM[i].getValue().toString().equals("PM")) {
-							tempEndTime = ((Integer.parseInt(dayEndHoursArray[i].getText().toString()) + 12) * 60) +
-									Integer.parseInt(dayEndMinutesArray[i].getText().toString());
+							if (!dayEndHoursArray[i].getText().toString().equals("12")) {
+								tempEndTime = ((Integer.parseInt(dayEndHoursArray[i].getText().toString()) + 12) * 60) +
+										Integer.parseInt(dayEndMinutesArray[i].getText().toString());
+							}
+							else {
+								tempEndTime = (Integer.parseInt(dayEndHoursArray[i].getText().toString()) * 60) +
+										Integer.parseInt(dayEndMinutesArray[i].getText().toString());
+							}
 						}
 
 						if (tempEndTime <= tempStartTime) {

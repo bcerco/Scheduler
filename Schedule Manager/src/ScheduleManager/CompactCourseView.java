@@ -51,6 +51,7 @@ public class CompactCourseView extends VBox {
 	public Label courseLabel;
 	public Label numberLabel;
 	public Label sectionLabel;
+	public Label lockLabel;
 
 
 	private int    track;
@@ -381,7 +382,9 @@ public class CompactCourseView extends VBox {
 		dividerLabel.getStyleClass().add("CompactCourseText");
 		sectionLabel = new Label(Short.toString(this.section));
 		sectionLabel.getStyleClass().add("CompactCourseText");
-		information.getChildren().addAll(courseLabel, numberLabel, dividerLabel, sectionLabel);
+		lockLabel = new Label(" L ");
+		lockLabel.getStyleClass().add("CompactCourseText");
+		information.getChildren().addAll(courseLabel, numberLabel, dividerLabel, sectionLabel, lockLabel);
 
 		String tooltipText = "Name: " + ClassParser.classList.get(this.getCid()).getTitle() + "\n" +
 							 "Prof: " + ClassParser.classList.get(this.getCid()).getInstructor() + "\n" +
@@ -503,7 +506,7 @@ public class CompactCourseView extends VBox {
 	    Label listButton   = new Label("Class List");
 	    Label editButton   = new Label("Edit");
 	    Label deleteButton = new Label("Delete");
-	    Label lockButton   = new Label("Lock");
+	    Label lockButton   = new Label("Lock/Unlock");
 	    Label undoButton   = new Label("Undo");
 	    Label closeButton   = new Label("Close");
 
@@ -713,8 +716,21 @@ public class CompactCourseView extends VBox {
 				isLocked = !isLocked;
 				System.out.println(isLocked);
 
+				if (isLocked) {
+					lockLabel.setText(" L ");
+				}
+				else {
+					lockLabel.setText(" U ");
+				}
+
 				for (CompactCourseView cv: sameCourses) {
 		    		cv.isLocked = isLocked;
+		    		if (cv.isLocked) {
+						cv.lockLabel.setText(" L ");
+					}
+					else {
+						cv.lockLabel.setText(" U ");
+					}
 				}
 
 				classPopupVisible = false;

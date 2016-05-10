@@ -60,12 +60,19 @@ public class Filter{
     }
     private HashSet<String> atomicSearch(String query){
         HashSet<String> result = new HashSet<String>();
+        if (query.equals("?")){
+            for (String cur: ClassParser.instructorList.keySet()){
+            	if (cur.contains("?")){
+            		result.addAll(ClassParser.instructorList.get(cur));
+            	}
+            }
+            return result;
+        }
         for (String cur: ClassParser.instructorList.keySet()){
         	if (query.equalsIgnoreCase(cur)){
         		result.addAll(ClassParser.instructorList.get(cur));
         	}
         }
-
         if (ClassParser.classList.containsKey(query.toUpperCase())){
             result.add(query.toUpperCase());
         }

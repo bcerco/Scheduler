@@ -142,8 +142,10 @@ public class Conflict{
 		if (instructor.contains("?"))
 			return null;
 		if (creditNum.containsKey(instructor)){
-			if (ClassParser.instructorCredit.get(instructor) != creditNum.get(instructor)){
-				return "WARNING: " + instructor + " has " + ClassParser.instructorCredit.get(instructor) +
+			if (ClassParser.instructorCredit.get(instructor) 
+					!= creditNum.get(instructor)){
+				return "WARNING: " + instructor + " has " + 
+					ClassParser.instructorCredit.get(instructor) +
 					" instead of " + creditNum.get(instructor);
 			}
 		}
@@ -164,9 +166,12 @@ public class Conflict{
 								(other.startTime[i] <= cur.endTime[i] &&
 								other.endTime[i] >= cur.endTime[i])){
 							if (!tmp){
-								ret += "\nTIME: " + cur.getCourse() + "." + cur.getNumber() +
-										"." + cur.getSection() + " overlaps with " + other.getCourse() +
-										"." + other.getNumber() + "." + other.getSection() +
+								ret += "\nTIME: " + cur.getCourse() + "." 
+									+ cur.getNumber() +
+										"." + cur.getSection() + 
+										" overlaps with " + other.getCourse() +
+										"." + other.getNumber() + "." + 
+										other.getSection() +
 										" on day " + getDay(i);
 								tmp = !tmp;
 							}

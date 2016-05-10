@@ -30,6 +30,7 @@ public class ClassParser{
         tierList.put(3, new HashSet<String>());
         tierList.put(4, new HashSet<String>());
         tierList.put(5, new HashSet<String>());
+        tierList.put(6, new HashSet<String>());
     }
     public int countCommas(String line){
         int comma = 0;
@@ -187,20 +188,17 @@ public class ClassParser{
     		if (!cur.contains("?")){
     			buffer.append(cur);
     			for (int i = 0; i < (20 - cur.length()); i++){
-    				//buffer.append("\t");
     				buffer.append(" ");
     			}
     			buffer.append(instructorCredit.get(cur));
     			if (credits.containsKey(cur)){
     				for (int i = 0; i < (20 - instructorCredit.get(cur).toString().length()); i++){
-    					//buffer.append("\t");
     					buffer.append(" ");
     				}
     				buffer.append(credits.get(cur));
     			}
     			else{
     				for (int i = 0; i < (20 - instructorCredit.get(cur).toString().length()); i++){
-    					//buffer.append("\t");
     					buffer.append(" ");
     				}
     				buffer.append("0.0");
@@ -210,4 +208,90 @@ public class ClassParser{
     	}
     	return buffer.toString();
     }
+	public static String generateOverloadList(HashMap<String, Float> credit){
+		StringBuffer buffer = new StringBuffer();
+		ArrayList<String> temp = new ArrayList<String>();
+		temp.addAll(instructorCredit.keySet());
+		Collections.sort(temp);
+		for (String cur: temp){
+			if (!cur.contains("?")){
+				if (credit.containsKey(cur) && 
+						instructorCredit.get(cur) > credit.get(cur)){
+					buffer.append(cur);
+					for (int i = 0; i < (20 - cur.length()); i++){
+						buffer.append(" ");
+					}
+					buffer.append(instructorCredit.get(cur));
+    				for (int i = 0; i < (20 - instructorCredit.get(cur).toString().length()); i++){
+    					buffer.append(" ");
+    				}
+    				buffer.append(credit.get(cur));
+    				buffer.append("\n");
+				}
+			}
+		}
+		return buffer.toString();
+	}
+	public static String generateUnderloadList(HashMap<String, Float> credit){
+		StringBuffer buffer = new StringBuffer();
+		ArrayList<String> temp = new ArrayList<String>();
+		temp.addAll(instructorCredit.keySet());
+		Collections.sort(temp);
+		for (String cur: temp){
+			if (!cur.contains("?")){
+				if (credit.containsKey(cur) && 
+						instructorCredit.get(cur) < credit.get(cur)){
+					buffer.append(cur);
+					for (int i = 0; i < (20 - cur.length()); i++){
+						buffer.append(" ");
+					}
+					buffer.append(instructorCredit.get(cur));
+    				for (int i = 0; i < (20 - instructorCredit.get(cur).toString().length()); i++){
+    					buffer.append(" ");
+    				}
+    				buffer.append(credit.get(cur));
+    				buffer.append("\n");
+				}
+			}
+		}
+		return buffer.toString();
+	}
+	public static void writeListToFile(String path, String [] list){
+        File outFile = new File(path);
+        BufferedWriter writer = null;
+        StringBuffer header = new StringBuffer();
+        header.append("Professor");
+        for (int i = 0; i < 11; i++){
+        	header.append(" ");
+        }
+        header.append("Current");
+        for (int i = 0; i < 13; i++){
+        	header.append(" ");
+        }
+        header.append("Expected\n");
+        try { 
+        	writer = new BufferedWriter(new FileWriter(outFile.getAbsoluteFile()));
+            writer.write(header.toString());
+            writer.flush();
+        	for (int i = 0; i < list.length; i++){
+            	writer.write(list[i] + "\n");
+            	writer.flush();
+            }
+        }
+        catch (FileNotFoundException e){
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally{
+            try {
+                if (writer != null)
+                    writer.close();
+            }
+            catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+	}
 }

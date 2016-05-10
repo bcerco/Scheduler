@@ -48,6 +48,7 @@ import javafx.stage.WindowEvent;
 public class ToolBarView extends ToolBar {
 	public static ClassParser parser;
 	private FileChooser chooserImport = new FileChooser();
+	private FileChooser chooserCredits = new FileChooser();
 	private DirectoryChooser directoryChooser = new DirectoryChooser();
 	public static HashMap<String, String> colorMap = new HashMap<String, String>();
 
@@ -137,6 +138,8 @@ public class ToolBarView extends ToolBar {
 
 		chooserImport.getExtensionFilters().addAll(
 				new ExtensionFilter("Text CSV", "*.csv"));
+		chooserCredits.getExtensionFilters().addAll(
+				new ExtensionFilter("Text TXT", "*.txt"));
 
 		btImport = new Button("Import");
 		btImport.setOnAction(new EventHandler<ActionEvent>() {
@@ -731,18 +734,16 @@ public class ToolBarView extends ToolBar {
 			    creditsUnderloadExport.setOnAction(new EventHandler<ActionEvent>() {
 				    @Override public void handle(ActionEvent e) {
 				    	chooserImport.setTitle("File Export");
-				    	File checkFile = chooserImport.showSaveDialog(stage);
+				    	File checkFile = chooserCredits.showSaveDialog(stage);
 				    	if (checkFile != null) {
-				    		String filePath = checkFile.getAbsolutePath().replaceAll("\\.csv", "");
+				    		String filePath = checkFile.getAbsolutePath().replaceAll("\\.txt", "");
 				    		// Rewrite color file
 		    				PrintWriter tempConfFile;
 							try {
-								tempConfFile = new PrintWriter(filePath + ".csv");
+								tempConfFile = new PrintWriter(filePath + ".txt");
 								if (tempConfFile != null) {
-									for (String out : creditsUnderloadList.getItems()) {
-										String output = out.replaceAll(" [ ]+", ",");
-										tempConfFile.println(output);
-									}
+									tempConfFile.println(creditsHeader.getText().toString().replaceFirst("[ ]", ""));
+									tempConfFile.println(ClassParser.generateUnderloadList(conflict.creditNum));
 									tempConfFile.close();
 								}
 							}
@@ -756,18 +757,16 @@ public class ToolBarView extends ToolBar {
 			    creditsOverloadExport.setOnAction(new EventHandler<ActionEvent>() {
 				    @Override public void handle(ActionEvent e) {
 				    	chooserImport.setTitle("File Export");
-				    	File checkFile = chooserImport.showSaveDialog(stage);
+				    	File checkFile = chooserCredits.showSaveDialog(stage);
 				    	if (checkFile != null) {
-				    		String filePath = checkFile.getAbsolutePath().replaceAll("\\.csv", "");
+				    		String filePath = checkFile.getAbsolutePath().replaceAll("\\.txt", "");
 				    		// Rewrite color file
 		    				PrintWriter tempConfFile;
 							try {
-								tempConfFile = new PrintWriter(filePath + ".csv");
+								tempConfFile = new PrintWriter(filePath + ".txt");
 								if (tempConfFile != null) {
-									for (String out : creditsOverloadList.getItems()) {
-										String output = out.replaceAll(" [ ]+", ",");
-										tempConfFile.println(output);
-									}
+									tempConfFile.println(creditsHeader.getText().toString().replaceFirst("[ ]", ""));
+									tempConfFile.println(ClassParser.generateOverloadList(conflict.creditNum));
 									tempConfFile.close();
 								}
 							}

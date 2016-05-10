@@ -40,6 +40,102 @@ public class ClassParser{
         }
         return comma;
     }
+    public void alternateFillclassList(){
+        try {
+            reader = new BufferedReader(new FileReader(inFile));
+            String line = null;
+            StringBuffer buffer = new StringBuffer();
+			while ((line = reader.readLine()) != null){
+				buffer.append(line + ",");
+            }
+			/* now whole file is in buffer */
+			String [] CSV = buffer.toString().split(",");
+			StringBuffer cur = new StringBuffer();
+			int field = 0;
+			boolean lineBreak = false;
+			for (String token: CSV){
+				if (lineBreak){
+					if(!token.equals("")){
+						cur.append(token + ",");
+						lineBreak = false;
+					}
+					continue;
+				}
+				switch(field){
+					case 0:
+						if (!token.equals("") && allUpper(token)){
+							cur.append(token + ",");
+							field++;
+						}
+						break;
+					case 1:
+					case 2:
+					case 3:
+						if (Character.isDigit(token.charAt(0))){
+							cur.append(token + ",");
+							field++;
+						}
+						break;
+					case 4:
+						if (token.charAt(0) == '"'){
+							cur.append(token + ",");
+							field++;
+							lineBreak = true;
+						}
+						else if(!token.equals("")){
+							cur.append(token + ",");
+							field++;
+						}
+						break;
+					case 5:
+					case 6:
+						if (Character.isDigit(token.charAt(0))){
+							cur.append(token + ",");
+							field++;
+						}
+						break;
+					case 7:
+						if (token.charAt(0) == '"'){
+							cur.append(token + ",");
+							field++;
+							lineBreak = true;
+						}
+						else if (!token.equals("")){
+							cur.append(token + ",");
+							field++;
+						}
+					case 8:
+						cur.append(token + ",");
+						field++;
+						break;
+					case 9:
+						cur.append(token);
+						field = 0;
+						ClassNode curNode = new ClassNode(cur.toString(),
+								countCommas(cur.toString()));
+						updateMapping(curNode);
+						break;
+					default:
+						break;
+				}
+			}
+        }
+        catch(FileNotFoundException e){
+            e.printStackTrace();
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if (reader != null)
+                    reader.close();
+            }
+            catch(IOException e){
+                e.printStackTrace();
+            }
+        }
+    }
     public void fillclassList(){
         try {
             reader = new BufferedReader(new FileReader(inFile));
@@ -293,5 +389,12 @@ public class ClassParser{
                 e.printStackTrace();
             }
         }
+	}
+	public boolean allUpper(String test){
+		for (int i = 0; i < test.length(); i++){
+			if (!Character.isUpperCase(test.charAt(i)))
+				return false;
+		}
+		return true;
 	}
 }

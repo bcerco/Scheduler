@@ -687,8 +687,12 @@ public class ToolBarView extends ToolBar {
 
 			    }));
 
-			    Label header = new Label(" Instructor          Current             Expected");
-			    header.setStyle("-fx-font-family: 'monospace';");
+			    Label creditsHeader = new Label(" Instructor          Current             Expected");
+			    creditsHeader.setStyle("-fx-font-family: 'monospace';");
+			    Label underloadHeader = new Label(" Instructor          Current             Expected");
+			    underloadHeader.setStyle("-fx-font-family: 'monospace';");
+			    Label overloadHeader = new Label(" Instructor          Current             Expected");
+			    overloadHeader.setStyle("-fx-font-family: 'monospace';");
 
 			    // TODO: NEW
 			    TabPane creditsTabPane      = new TabPane();
@@ -709,31 +713,33 @@ public class ToolBarView extends ToolBar {
 			    creditsList.setStyle("-fx-font-family: 'monospace';");
 
 			    creditsUnderloadList = new ListView<String>();
-			    ArrayList<String> tempArrayList   = new ArrayList<String>();
 			    if (ClassParser.instructorCredit != null) {
-			    	String creditStringList = ClassParser.exportInstructorCredits(conflict.creditNum);
-			    	String tempList = creditStringList.replaceAll(" ( )+", ";");
-			    	String[] tempListArray = tempList.split("\n");
-			    	for (String item : tempListArray) {
-			    		String[] tempItem = item.split(";");
-			    		if (Double.parseDouble(tempItem[1]) < Double.parseDouble(tempItem[2])) {
-			    			tempArrayList.add(item);
-			    		}
-			    	}
-			    	String listItems = tempArrayList.toString().replaceAll("[\\[\\]]", "");
-			    	ObservableList<String> items = FXCollections.observableArrayList(listItems.split("\n"));
+			    	String creditStringList = ClassParser.generateUnderloadList(conflict.creditNum);
+			    	ObservableList<String> items = FXCollections.observableArrayList(creditStringList.split("\n"));
 			    	creditsUnderloadList.setItems(items);
 			    }
 			    creditsUnderloadList.setStyle("-fx-font-family: 'monospace';");
 
-			    creditsBox.getChildren().add(header);
+			    creditsOverloadList = new ListView<String>();
+			    if (ClassParser.instructorCredit != null) {
+			    	String creditStringList = ClassParser.generateOverloadList(conflict.creditNum);
+			    	ObservableList<String> items = FXCollections.observableArrayList(creditStringList.split("\n"));
+			    	creditsOverloadList.setItems(items);
+			    }
+			    creditsOverloadList.setStyle("-fx-font-family: 'monospace';");
+
+			    creditsBox.getChildren().add(creditsHeader);
 			    creditsBox.getChildren().add(creditsList);
 			    creditsTab.setContent(creditsBox);
 			    creditsTabPane.getTabs().add(creditsTab);
-			    creditsUnderloadBox.getChildren().add(header);
+			    creditsUnderloadBox.getChildren().add(underloadHeader);
 			    creditsUnderloadBox.getChildren().add(creditsUnderloadList);
 			    creditsUnderloadTab.setContent(creditsUnderloadBox);
 			    creditsTabPane.getTabs().add(creditsUnderloadTab);
+			    creditsOverloadBox.getChildren().add(overloadHeader);
+			    creditsOverloadBox.getChildren().add(creditsOverloadList);
+			    creditsOverloadTab.setContent(creditsOverloadBox);
+			    creditsTabPane.getTabs().add(creditsOverloadTab);
 			    ToolBarView.this.creditsRoot.setCenter(creditsTabPane);
 
 			    creditsStage.show();

@@ -155,7 +155,7 @@ public class ToolBarView extends ToolBar {
 		    		Main.spreadsheet = checkFile;
 		    		String pathString = Main.spreadsheet.getAbsolutePath();
 		        	parser = new ClassParser(pathString);
-		        	parser.fillclassList();
+		        	parser.alternateFillclassList();
 
 		        	PopulateTracks();
 		    	}

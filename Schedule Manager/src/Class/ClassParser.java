@@ -71,13 +71,13 @@ public class ClassParser{
 					case 1:
 					case 2:
 					case 3:
-						if (Character.isDigit(token.charAt(0))){
+						if (!token.equals("") && Character.isDigit(token.charAt(0))){
 							cur.append(token + ",");
 							field++;
 						}
 						break;
 					case 4:
-						if (token.charAt(0) == '"'){
+						if (!token.equals("") && token.charAt(0) == '"'){
 							cur.append(token + ",");
 							field++;
 							lineBreak = true;
@@ -89,13 +89,13 @@ public class ClassParser{
 						break;
 					case 5:
 					case 6:
-						if (Character.isDigit(token.charAt(0))){
+						if (!token.equals("") && Character.isDigit(token.charAt(0))){
 							cur.append(token + ",");
 							field++;
 						}
 						break;
 					case 7:
-						if (token.charAt(0) == '"'){
+						if (!token.equals("") && token.charAt(0) == '"'){
 							cur.append(token + ",");
 							field++;
 							lineBreak = true;
@@ -104,16 +104,29 @@ public class ClassParser{
 							cur.append(token + ",");
 							field++;
 						}
+						break;
 					case 8:
+						if (!token.equals("") && token.charAt(0) == '"'){
+							cur.append(token + ",");
+							field++;
+							lineBreak = true;
+						}
+						else if (!token.equals("")){
+							cur.append(token + ",");
+							field++;
+						}
+						break;					
+					case 9:
 						cur.append(token + ",");
 						field++;
 						break;
-					case 9:
+					case 10:
 						cur.append(token);
 						field = 0;
 						ClassNode curNode = new ClassNode(cur.toString(),
 								countCommas(cur.toString()));
 						updateMapping(curNode);
+						cur.setLength(0);
 						break;
 					default:
 						break;
@@ -135,6 +148,7 @@ public class ClassParser{
                 e.printStackTrace();
             }
         }
+        //System.out.println(classList.size());
     }
     public void fillclassList(){
         try {
@@ -192,6 +206,7 @@ public class ClassParser{
                 e.printStackTrace();
             }
         }
+        //System.out.println(classList.size());
     }
 
     public void exportClassList(String path){
@@ -392,7 +407,7 @@ public class ClassParser{
 	}
 	public boolean allUpper(String test){
 		for (int i = 0; i < test.length(); i++){
-			if (!Character.isUpperCase(test.charAt(i)))
+			if (test.charAt(i) != ' ' && !Character.isUpperCase(test.charAt(i)))
 				return false;
 		}
 		return true;

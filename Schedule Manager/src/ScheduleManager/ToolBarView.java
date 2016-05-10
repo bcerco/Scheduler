@@ -61,11 +61,11 @@ public class ToolBarView extends ToolBar {
 	public static TextField	tfFilterEdit;
 
 	private BorderPane  conflictRoot;
-	ListView<String>    conflictList;
+	ListView<String>    conflictList = new ListView<String>();
 	private boolean		conflictsVisible;
 
 	private BorderPane  creditsRoot;
-	ListView<String>    creditsList;
+	ListView<String>    creditsList = new ListView<String>();
 	ListView<String>    creditsUnderloadList;
 	ListView<String>    creditsOverloadList;
 
@@ -292,6 +292,7 @@ public class ToolBarView extends ToolBar {
 				    Tab     conflictTab      = new Tab("Conflicts");
 				    Tab     conflictEditTab  = new Tab("Editor");
 
+				    // TODO
 				    VBox             conflictEditPane = new VBox();
 				    HBox             conflictEditRow  = new HBox();
 
@@ -701,11 +702,28 @@ public class ToolBarView extends ToolBar {
 			    VBox    creditsBox          = new VBox();
 			    VBox    creditsUnderloadBox = new VBox();
 			    VBox    creditsOverloadBox  = new VBox();
+			    VBox    creditsEditBox      = new VBox();
+			    HBox    creditsEditRow      = new HBox();
 			    Tab		creditsUnderloadTab = new Tab("Underload");
 			    Tab     creditsOverloadTab  = new Tab("Overload");
 			    Tab     creditsEditTab      = new Tab("Editor");
 			    Button  creditsUnderloadExport = new Button("Export");
 			    Button  creditsOverloadExport  = new Button("Export");
+			    Button  creditsEditRemove      = new Button("Remove");
+			    Button  creditsEditSave        = new Button("Save");
+
+			    ObservableList<String> conflictTypes =
+			    	    FXCollections.observableArrayList(
+			    	        "Time",
+			    	        "Credit"
+			    	    );
+			    ComboBox<String> conflictType     = new ComboBox<String>(conflictTypes);
+			    TextField        conflictParam1   = new TextField();
+			    TextField        conflictParam2   = new TextField();
+			    creditsEditRow.getChildren().add(conflictType);
+			    creditsEditRow.getChildren().add(conflictParam1);
+			    creditsEditRow.getChildren().add(conflictParam2);
+			    creditsEditRow.getChildren().add(creditsEditSave);
 
 			    creditsList = new ListView<String>();
 			    if (ClassParser.instructorCredit != null) {
@@ -777,6 +795,196 @@ public class ToolBarView extends ToolBar {
 				    }
 			    });
 
+			    // Populate conflict file list
+			    ListView<String> localConflictList = new ListView<String>();
+			    String   conflictFileContents = "";
+			    String   in        = "";
+				BufferedReader tempConfFile;
+				try {
+					tempConfFile = new BufferedReader(new FileReader("SMConfig/conflicts.txt"));
+					if (tempConfFile != null) {
+						while ((in = tempConfFile.readLine()) != null) {
+							conflictFileContents += in + "\n";
+						}
+					}
+				}
+				catch (IOException ioe) {
+					ioe.printStackTrace();
+				}
+
+			    ObservableList<String> items = FXCollections.observableArrayList(conflictFileContents.split("\n"));
+
+			    localConflictList.setItems(items);
+
+			    HBox.setHgrow(conflictParam1, Priority.ALWAYS);
+			    HBox.setHgrow(conflictParam2, Priority.ALWAYS);
+
+			    creditsEditRemove.setOnMouseClicked(new EventHandler<MouseEvent> () {
+					@Override
+					public void handle(MouseEvent event) {
+						localConflictList.getItems().remove(localConflictList.getSelectionModel().getSelectedItem());
+						String toFile = "";
+						for (String item : localConflictList.getItems()) {
+							toFile += item + "\n";
+						}
+						// TODO: Rewrite conflict file
+						PrintWriter tempConfFile;
+						try {
+							tempConfFile = new PrintWriter("SMConfig/conflicts.txt");
+							if (tempConfFile != null) {
+								tempConfFile.print(toFile);
+								tempConfFile.close();
+							}
+						}
+						catch (IOException ioe) {
+							ioe.printStackTrace();
+						}
+
+						conflict = new Conflict("SMConfig/conflicts.txt");
+
+						creditsList = new ListView<String>();
+					    if (ClassParser.instructorCredit != null) {
+					    	String creditStringList = ClassParser.exportInstructorCredits(conflict.creditNum);
+					    	ObservableList<String> items = FXCollections.observableArrayList(creditStringList.split("\n"));
+					    	creditsList.setItems(items);
+					    }
+					    creditsList.setStyle("-fx-font-family: 'monospace';");
+
+					    creditsUnderloadList = new ListView<String>();
+					    if (ClassParser.instructorCredit != null) {
+					    	String creditStringList = ClassParser.generateUnderloadList(conflict.creditNum);
+					    	ObservableList<String> items = FXCollections.observableArrayList(creditStringList.split("\n"));
+					    	creditsUnderloadList.setItems(items);
+					    }
+					    creditsUnderloadList.setStyle("-fx-font-family: 'monospace';");
+
+					    creditsOverloadList = new ListView<String>();
+					    if (ClassParser.instructorCredit != null) {
+					    	String creditStringList = ClassParser.generateOverloadList(conflict.creditNum);
+					    	ObservableList<String> items = FXCollections.observableArrayList(creditStringList.split("\n"));
+					    	creditsOverloadList.setItems(items);
+					    }
+					    creditsOverloadList.setStyle("-fx-font-family: 'monospace';");
+
+					    creditsBox.getChildren().clear();
+					    creditsBox.getChildren().add(creditsHeader);
+					    creditsBox.getChildren().add(creditsList);
+					    creditsUnderloadBox.getChildren().clear();
+					    creditsUnderloadBox.getChildren().add(underloadHeader);
+					    creditsUnderloadBox.getChildren().add(creditsUnderloadList);
+					    creditsUnderloadBox.getChildren().add(creditsUnderloadExport);
+					    creditsOverloadBox.getChildren().clear();
+					    creditsOverloadBox.getChildren().add(overloadHeader);
+					    creditsOverloadBox.getChildren().add(creditsOverloadList);
+					    creditsOverloadBox.getChildren().add(creditsOverloadExport);
+
+						event.consume();
+					}
+			    });
+
+			    creditsEditSave.setOnMouseClicked(new EventHandler<MouseEvent> () {
+					@Override
+					public void handle(MouseEvent event) {
+						String item = conflictType.getSelectionModel().getSelectedItem();
+						String conf = "";
+						if (item.equals("Time")) {
+							if (!conflictParam1.getText().toString().equals("") &&
+								!conflictParam2.getText().toString().equals("")) {
+								conf += "time;" + conflictParam1.getText().toString() + ";" + conflictParam2.getText().toString();
+								boolean shouldAdd = true;
+								for (String c : localConflictList.getItems()) {
+									String[] ca = c.split(";");
+									if ((ca[1].equals(conflictParam1.getText().toString()) && ca[2].equals(conflictParam2.getText().toString())) ||
+										(ca[1].equals(conflictParam2.getText().toString()) && ca[2].equals(conflictParam1.getText().toString()))) {
+										shouldAdd = false;
+									}
+								}
+								if (shouldAdd) {
+									conflict.appendConflict(conf);
+									conflict.fillConflict();
+								}
+							}
+						}
+						else if (item.equals("Credit")) {
+							if (!conflictParam1.getText().toString().equals("") &&
+								!conflictParam2.getText().toString().equals("")) {
+								conf += "credit;" + conflictParam1.getText().toString() + ";" + conflictParam2.getText().toString();
+								boolean shouldAdd = true;
+								for (String c : localConflictList.getItems()) {
+									String[] ca = c.split(";");
+									if (ca[1].equals(conflictParam1.getText().toString())) {
+										shouldAdd = false;
+									}
+								}
+								if (shouldAdd) {
+									conflict.appendConflict(conf);
+									conflict.fillConflict();
+								}
+							}
+						}
+
+						String conflictFileContents = "";
+
+					    String   in        = "";
+						BufferedReader tempConfFile;
+						try {
+							tempConfFile = new BufferedReader(new FileReader("SMConfig/conflicts.txt"));
+							if (tempConfFile != null) {
+								while ((in = tempConfFile.readLine()) != null) {
+									conflictFileContents += in + "\n";
+								}
+							}
+						}
+						catch (IOException ioe) {
+							ioe.printStackTrace();
+						}
+
+					    ObservableList<String> items = FXCollections.observableArrayList(conflictFileContents.split("\n"));
+
+					    localConflictList.setItems(items);
+
+					    conflict = new Conflict("SMConfig/conflicts.txt");
+
+						creditsList = new ListView<String>();
+					    if (ClassParser.instructorCredit != null) {
+					    	String creditStringList = ClassParser.exportInstructorCredits(conflict.creditNum);
+					    	ObservableList<String> items2 = FXCollections.observableArrayList(creditStringList.split("\n"));
+					    	creditsList.setItems(items2);
+					    }
+					    creditsList.setStyle("-fx-font-family: 'monospace';");
+
+					    creditsUnderloadList = new ListView<String>();
+					    if (ClassParser.instructorCredit != null) {
+					    	String creditStringList = ClassParser.generateUnderloadList(conflict.creditNum);
+					    	ObservableList<String> items2 = FXCollections.observableArrayList(creditStringList.split("\n"));
+					    	creditsUnderloadList.setItems(items2);
+					    }
+					    creditsUnderloadList.setStyle("-fx-font-family: 'monospace';");
+
+					    creditsOverloadList = new ListView<String>();
+					    if (ClassParser.instructorCredit != null) {
+					    	String creditStringList = ClassParser.generateOverloadList(conflict.creditNum);
+					    	ObservableList<String> items2 = FXCollections.observableArrayList(creditStringList.split("\n"));
+					    	creditsOverloadList.setItems(items2);
+					    }
+					    creditsOverloadList.setStyle("-fx-font-family: 'monospace';");
+
+					    creditsBox.getChildren().clear();
+					    creditsBox.getChildren().add(creditsHeader);
+					    creditsBox.getChildren().add(creditsList);
+					    creditsUnderloadBox.getChildren().clear();
+					    creditsUnderloadBox.getChildren().add(underloadHeader);
+					    creditsUnderloadBox.getChildren().add(creditsUnderloadList);
+					    creditsUnderloadBox.getChildren().add(creditsUnderloadExport);
+					    creditsOverloadBox.getChildren().clear();
+					    creditsOverloadBox.getChildren().add(overloadHeader);
+					    creditsOverloadBox.getChildren().add(creditsOverloadList);
+					    creditsOverloadBox.getChildren().add(creditsOverloadExport);
+
+						event.consume();
+					}
+			    });
+
 			    creditsBox.getChildren().add(creditsHeader);
 			    creditsBox.getChildren().add(creditsList);
 			    creditsTab.setContent(creditsBox);
@@ -791,6 +999,13 @@ public class ToolBarView extends ToolBar {
 			    creditsOverloadBox.getChildren().add(creditsOverloadExport);
 			    creditsOverloadTab.setContent(creditsOverloadBox);
 			    creditsTabPane.getTabs().add(creditsOverloadTab);
+			    // TODO: START  Add tab contents here!
+			    creditsEditBox.getChildren().add(creditsEditRow);
+			    creditsEditBox.getChildren().add(localConflictList);
+			    creditsEditBox.getChildren().add(creditsEditRemove);
+			    // TODO: FINISH Add tab contents here!
+			    creditsEditTab.setContent(creditsEditBox);
+			    creditsTabPane.getTabs().add(creditsEditTab);
 			    ToolBarView.this.creditsRoot.setCenter(creditsTabPane);
 
 			    creditsStage.show();

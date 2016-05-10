@@ -2,6 +2,9 @@ ignore;time;MATH2322;MATH2312
 ignore;time;MATH2322;MATH2302
 ignore;time;MATH2312;MATH2302
 ignore;time;MATH2513;MATH2503
-credit;Blum;100.0
-credit;El Ariss;9.0
 credit;Dudding;10.0
+credit;Blum;3.0
+credit;Null;1.0
+credit;Chang;25.0
+credit;Bui;15.0
+credit;El Ariss;3.0

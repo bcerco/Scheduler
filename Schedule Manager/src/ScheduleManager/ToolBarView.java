@@ -135,12 +135,13 @@ public class ToolBarView extends ToolBar {
 			directoryChooser.setInitialDirectory(initialDirectory);
 		}
 
+		chooserImport.getExtensionFilters().addAll(
+				new ExtensionFilter("Text CSV", "*.csv"));
+
 		btImport = new Button("Import");
 		btImport.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override public void handle(ActionEvent e) {
 		    	chooserImport.setTitle("File Import");
-				chooserImport.getExtensionFilters().addAll(
-						new ExtensionFilter("Text CSV", "*.csv"));
 		    	File tempFile = chooserImport.showOpenDialog(stage);
 
 		    	if (tempFile != null) {
@@ -202,8 +203,6 @@ public class ToolBarView extends ToolBar {
 		btExport.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override public void handle(ActionEvent e) {
 		    	chooserImport.setTitle("File Export");
-				chooserImport.getExtensionFilters().addAll(
-						new ExtensionFilter("Text CSV", "*.csv"));
 		    	File checkFile = chooserImport.showSaveDialog(stage);
 		    	if (checkFile != null) {
 		    		String filePath = checkFile.getAbsolutePath().replaceAll("\\.csv", "");
@@ -694,7 +693,6 @@ public class ToolBarView extends ToolBar {
 			    Label overloadHeader = new Label(" Instructor          Current             Expected");
 			    overloadHeader.setStyle("-fx-font-family: 'monospace';");
 
-			    // TODO: NEW
 			    TabPane creditsTabPane      = new TabPane();
 			    Tab     creditsTab          = new Tab("Credits");
 			    VBox    creditsBox          = new VBox();
@@ -703,6 +701,8 @@ public class ToolBarView extends ToolBar {
 			    Tab		creditsUnderloadTab = new Tab("Underload");
 			    Tab     creditsOverloadTab  = new Tab("Overload");
 			    Tab     creditsEditTab      = new Tab("Editor");
+			    Button  creditsUnderloadExport = new Button("Export");
+			    Button  creditsOverloadExport  = new Button("Export");
 
 			    creditsList = new ListView<String>();
 			    if (ClassParser.instructorCredit != null) {
@@ -728,16 +728,68 @@ public class ToolBarView extends ToolBar {
 			    }
 			    creditsOverloadList.setStyle("-fx-font-family: 'monospace';");
 
+			    creditsUnderloadExport.setOnAction(new EventHandler<ActionEvent>() {
+				    @Override public void handle(ActionEvent e) {
+				    	chooserImport.setTitle("File Export");
+				    	File checkFile = chooserImport.showSaveDialog(stage);
+				    	if (checkFile != null) {
+				    		String filePath = checkFile.getAbsolutePath().replaceAll("\\.csv", "");
+				    		// Rewrite color file
+		    				PrintWriter tempConfFile;
+							try {
+								tempConfFile = new PrintWriter(filePath + ".csv");
+								if (tempConfFile != null) {
+									for (String out : creditsUnderloadList.getItems()) {
+										String output = out.replaceAll(" [ ]+", ",");
+										tempConfFile.println(output);
+									}
+									tempConfFile.close();
+								}
+							}
+							catch (IOException ioe) {
+								ioe.printStackTrace();
+							}
+				    	}
+				    }
+			    });
+
+			    creditsOverloadExport.setOnAction(new EventHandler<ActionEvent>() {
+				    @Override public void handle(ActionEvent e) {
+				    	chooserImport.setTitle("File Export");
+				    	File checkFile = chooserImport.showSaveDialog(stage);
+				    	if (checkFile != null) {
+				    		String filePath = checkFile.getAbsolutePath().replaceAll("\\.csv", "");
+				    		// Rewrite color file
+		    				PrintWriter tempConfFile;
+							try {
+								tempConfFile = new PrintWriter(filePath + ".csv");
+								if (tempConfFile != null) {
+									for (String out : creditsOverloadList.getItems()) {
+										String output = out.replaceAll(" [ ]+", ",");
+										tempConfFile.println(output);
+									}
+									tempConfFile.close();
+								}
+							}
+							catch (IOException ioe) {
+								ioe.printStackTrace();
+							}
+				    	}
+				    }
+			    });
+
 			    creditsBox.getChildren().add(creditsHeader);
 			    creditsBox.getChildren().add(creditsList);
 			    creditsTab.setContent(creditsBox);
 			    creditsTabPane.getTabs().add(creditsTab);
 			    creditsUnderloadBox.getChildren().add(underloadHeader);
 			    creditsUnderloadBox.getChildren().add(creditsUnderloadList);
+			    creditsUnderloadBox.getChildren().add(creditsUnderloadExport);
 			    creditsUnderloadTab.setContent(creditsUnderloadBox);
 			    creditsTabPane.getTabs().add(creditsUnderloadTab);
 			    creditsOverloadBox.getChildren().add(overloadHeader);
 			    creditsOverloadBox.getChildren().add(creditsOverloadList);
+			    creditsOverloadBox.getChildren().add(creditsOverloadExport);
 			    creditsOverloadTab.setContent(creditsOverloadBox);
 			    creditsTabPane.getTabs().add(creditsOverloadTab);
 			    ToolBarView.this.creditsRoot.setCenter(creditsTabPane);

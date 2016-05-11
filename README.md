@@ -174,3 +174,15 @@ Once the user has entered all the required information for a new class, that cla
 user has not entered enough information, the field(s) in question will be highlighted in red.  
 
 ### Exporting Schedules
+
+Once the user is done editing the schedule, they may export it to a file by clicking on the Export button located at the 
+top of the main window:
+
+![alt text](https://github.com/bcerco/Scheduler/blob/master/Documentation/Images/export_sc.png)
+
+Clicking on the Export button displays the following window:
+
+![alt text](https://github.com/bcerco/Scheduler/blob/master/Documentation/Images/export_window_sc.png)
+
+Once the user has named the file and selected it's location, the schedule will be written to a CSV file with the selected
+path.

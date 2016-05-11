@@ -1440,4 +1440,49 @@ public class ToolBarView extends ToolBar {
 		    }
 		}
 	}
+	public void drawClass(ClassNode cur){
+		ArrayList<CompactCourseView> workingSet = new ArrayList<CompactCourseView>();
+		String workingCourseId = "";
+		String currentCourseId = "";
+		    int[] sTimes = cur.getStartTime();
+		    int[] eTimes = cur.getEndTime();
+		    for (int i = 0; i < 6; i++) {
+		    	if (sTimes[i] != 0 ) {
+		    		Pane tempPane = (Pane)tracks.getChildren().get(i + 1 + 2);
+		    		String color = "";
+
+		    		if (colorMap.containsKey(cur.getCourse())) {
+		    			color = colorMap.get(cur.getCourse());
+		    		}
+		    		else {
+		    			color = "#777777";
+		    		}
+
+		    		double heightOfCell = (WeeklyScheduleCourseTracks.height)/(WeeklyScheduleView.endHour - WeeklyScheduleView.startHour);
+		    		double pixelMinutes = (heightOfCell / 60);
+		    		double positionOfClass = pixelMinutes * (sTimes[i] - (WeeklyScheduleView.startHour * 60));
+		    		CompactCourseView curCourseView = new CompactCourseView(cur.getCourse(),  cur.getNumber(),  cur.getSection(), i, sTimes[i], eTimes[i], color);
+
+		    		currentCourseId = cur.getCourse() + cur.getNumber() + cur.getSection();
+		    		if (!currentCourseId.equals(workingCourseId)) {
+		    			workingCourseId = currentCourseId;
+		    			workingSet.clear();
+		    			workingSet.add(curCourseView);
+		    		}
+		    		else {
+		    			for (CompactCourseView cv: workingSet) {
+		    				cv.sameCourses.add(curCourseView);
+		    				curCourseView.sameCourses.add(cv);
+		    			}
+		    			workingSet.add(curCourseView);
+		    		}
+
+		    		curCourseView.setTranslateY(positionOfClass);
+		    		curCourseView.setMinWidth(WeeklyScheduleCourseTracks.width - 6);
+		    		curCourseView.setMaxWidth(WeeklyScheduleCourseTracks.width - 6);
+		    		curCourseView.setLayoutX(3);
+		    		tempPane.getChildren().add(curCourseView);
+		    	}
+		    }
+	    }
 }

@@ -47,12 +47,12 @@ clicking on the Editor tab in the conflicts window:</p>
 <p><img src="https://github.com/bcerco/Scheduler/blob/master/Documentation/Images/conflict_editor_sc.png" alt="alt text" title="" /></p>
 
 <p>Ignore lines are created by ignoring conflicts in the previous window.  New time conflicts are created with the form:
-<code>sh
+<code>
 time;&lt;class1&gt;;&lt;class&gt;
 </code>
 This states that class1 should not occure at the same time as class2, if it does then the user will be notified.
 Credit conflicts are created with the form:
-<code>sh
+<code>
 credit;&lt;professor&gt;;&lt;float&gt;
 </code>
 This states the expected number of credits for the given professor.  If the professor is under or overloaded, the user will
@@ -112,7 +112,7 @@ by entering a filter query in the text field at the top of the main window:</p>
 CMPSC prefix.</p>
 
 <p>The filter uses the following logical operators:
-<code>sh
+<code>
 ! -- NOT
 &amp; -- AND
 | -- OR
@@ -122,12 +122,12 @@ CMPSC prefix.</p>
 NOT, AND, OR.  The user can filter on: course prefix, course prefix and number, number, professor name.  So for example if 
 the user wanted to see all the 400 level CMPSC courses taught by Dr. Null OR all 500 level courses taught by Dr. Blum
 the filter query would be:
-<code>sh
+<code>
 cmpsc&amp;4&amp;null|5&amp;blum
 </code>
 The filter is not case sensitive, however, spaces should only be included if they appear in a professor's name.  To display
 all CMPSC460 sections taught by Dr. El Ariss the filter query would be:
-<code>sh
+<code>
 cmpsc460&amp;el ariss
 </code></p>
 

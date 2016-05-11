@@ -15,7 +15,9 @@ public class ClassParser{
     public static HashMap<Integer, HashSet<String> > tierList;
     private BufferedReader reader = null;
     private BufferedWriter writer = null;
-    public ClassParser(String fileToRead){
+    
+	/* Constructor initializes the needed variables */
+	public ClassParser(String fileToRead){
         classOrder = new ArrayList<String>();
         inFile = new File(fileToRead);
         classList = new HashMap<String, ClassNode>();
@@ -32,6 +34,7 @@ public class ClassParser{
         tierList.put(5, new HashSet<String>());
         tierList.put(6, new HashSet<String>());
     }
+	/* Counts the number of commas in a string */
     public int countCommas(String line){
         int comma = 0;
         for (int i = 0; i < line.length(); i++){
@@ -40,6 +43,9 @@ public class ClassParser{
         }
         return comma;
     }
+	/* Constructs the classList by reading the entire schedule file into memory
+	 * and then tokenizes it in order to iterate over it and creates classes
+	 */
     public void alternateFillclassList(){
         try {
             reader = new BufferedReader(new FileReader(inFile));
@@ -148,8 +154,10 @@ public class ClassParser{
                 e.printStackTrace();
             }
         }
-        //System.out.println(classList.size());
     }
+	/* Creates the classList by reading the schedule file line by line and reads
+	 * additional lines as needed 
+	 */
     public void fillclassList(){
         try {
             reader = new BufferedReader(new FileReader(inFile));
@@ -206,9 +214,9 @@ public class ClassParser{
                 e.printStackTrace();
             }
         }
-        //System.out.println(classList.size());
     }
 
+	/* Writes the classList to the specifiec file */
     public void exportClassList(String path){
     	classOrder.addAll(classList.keySet());
         outFile = new File(path);
@@ -241,6 +249,7 @@ public class ClassParser{
             }
         }
     }
+	/* Updates all the HashMaps */
     public void updateMapping(ClassNode cur){
         classList.put(cur.getId(),cur);
         updateInstructorList(cur.getInstructor(), cur.getId());
@@ -252,6 +261,7 @@ public class ClassParser{
         updateTierList(cur.getNumber(), cur.getId());
         //classOrder.add(cur.getId());
     }
+	/* Updates the sectionList HashMap */
     public void updateSectionList(String courseNumber, String id){
         if (sectionList.containsKey(courseNumber)){
             sectionList.get(courseNumber).add(id);
@@ -261,6 +271,7 @@ public class ClassParser{
             sectionList.get(courseNumber).add(id);
         }
     }
+	/* Updates the departmentList HashMap */
     public void updateDepartmentList(String course, String id){
         if (departmentList.containsKey(course)){
             departmentList.get(course).add(id);
@@ -270,6 +281,7 @@ public class ClassParser{
             departmentList.get(course).add(id);
         }
     }
+	/* Updates the instructorList HashMap */
     public void updateInstructorList(String instructor, String id){
         if (instructorList.containsKey(instructor)){
             instructorList.get(instructor).add(id);
@@ -279,6 +291,7 @@ public class ClassParser{
             instructorList.get(instructor).add(id);
         }
     }
+	/* Updates the instructorCredit HashMap */
     public void updateInstructorCredit(String instructor, float credit){
         if (instructorCredit.containsKey(instructor)){
             instructorCredit.put(instructor, instructorCredit.get(instructor) + credit);
@@ -287,9 +300,11 @@ public class ClassParser{
             instructorCredit.put(instructor, credit);
         }
     }
+	/* Updates the tireList HashMap */
     public void updateTierList(String number, String id){
     	tierList.get(Character.getNumericValue(number.charAt(0))).add(id);
     }
+	/* Creates the instructor credit listing */
     public static String exportInstructorCredits(HashMap<String, Float> credits){
     	StringBuffer buffer = new StringBuffer();
     	ArrayList<String> temp = new ArrayList<String>();
@@ -319,6 +334,7 @@ public class ClassParser{
     	}
     	return buffer.toString();
     }
+	/* Generates the isntructor overload credit list */
 	public static String generateOverloadList(HashMap<String, Float> credit){
 		StringBuffer buffer = new StringBuffer();
 		ArrayList<String> temp = new ArrayList<String>();
@@ -343,6 +359,7 @@ public class ClassParser{
 		}
 		return buffer.toString();
 	}
+	/* Generates the isntructor underload credit list */
 	public static String generateUnderloadList(HashMap<String, Float> credit){
 		StringBuffer buffer = new StringBuffer();
 		ArrayList<String> temp = new ArrayList<String>();
@@ -367,6 +384,7 @@ public class ClassParser{
 		}
 		return buffer.toString();
 	}
+	/* Writes the specified list to a file */
 	public static void writeListToFile(String path, String [] list){
         File outFile = new File(path);
         BufferedWriter writer = null;
@@ -405,6 +423,7 @@ public class ClassParser{
             }
         }
 	}
+	/* Checks if all the characters in a string are upper case */
 	public boolean allUpper(String test){
 		for (int i = 0; i < test.length(); i++){
 			if (test.charAt(i) != ' ' && !Character.isUpperCase(test.charAt(i)))

@@ -21,6 +21,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -386,15 +387,19 @@ public class CompactCourseView extends VBox {
 		lockLabel.getStyleClass().add("CompactCourseText");
 		information.getChildren().addAll(courseLabel, numberLabel, dividerLabel, sectionLabel, lockLabel);
 
-		String tooltipText = "Name: " + ClassParser.classList.get(this.getCid()).getTitle() + "\n" +
+		String tooltipText = "Title: " + ClassParser.classList.get(this.getCid()).getTitle() + "\n" +
 							 "Prof: " + ClassParser.classList.get(this.getCid()).getInstructor() + "\n" +
 							 "Room: " + ClassParser.classList.get(this.getCid()).getRoom() + "\n" +
 							 "Seat: S:" + ClassParser.classList.get(this.getCid()).getSoft() + " H:" + ClassParser.classList.get(this.getCid()).getHard() + "\n" +
 							 "Cred: " + ClassParser.classList.get(this.getCid()).getCredit();
 		courseLabel.setTooltip(new Tooltip(tooltipText));
+		courseLabel.getTooltip().setFont(new Font("monospace",14));
 		numberLabel.setTooltip(new Tooltip(tooltipText));
+		numberLabel.getTooltip().setFont(new Font("monospace",14));
 		dividerLabel.setTooltip(new Tooltip(tooltipText));
+		dividerLabel.getTooltip().setFont(new Font("monospace",14));
 		sectionLabel.setTooltip(new Tooltip(tooltipText));
+		sectionLabel.getTooltip().setFont(new Font("monospace",14));
 
 		HBox startTimeInformation = new HBox();
 		Label startLabel = new Label("S: ");

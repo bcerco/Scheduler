@@ -132,6 +132,11 @@ cmpsc460&el ariss
 
 ### Course Interaction
 
+#### Course Tooltip
+
+Hovering over a course will display a tooltip with additional infromation about that course such as professor, soft, hard,
+etc.
+
 #### Course Movement
 
 Courses can be dragged to different schedule times.  They will snap to the day(s) they are closest to.  Clicking and 

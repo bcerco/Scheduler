@@ -73,3 +73,64 @@ generated: underload and overload.  Clicking on one of those tabes will display 
 ![alt text](https://github.com/bcerco/Scheduler/blob/master/Documentation/Images/credits_export_sc.png)
 
 Clicking on the export button in that window will allow the user to write the respective list to a file of their choosing.
+
+### Colors
+
+There is a Colors button at the top of the main window which allows the user to change the class colors:
+
+![alt text](https://github.com/bcerco/Scheduler/blob/master/Documentation/Images/color_sc.png)
+
+Clicking on the Colors button will display the following window:
+
+![alt text](https://github.com/bcerco/Scheduler/blob/master/Documentation/Images/color_window_sc.png)
+
+In the above window, the user is allowed to either alter a current color selection or create a new one by entering the 
+cource prefix and selecting a color from the color picker.
+
+### Path
+
+We allow the user to select a default path, done with the Paths button at the top of the main window:
+
+![alt text](https://github.com/bcerco/Scheduler/blob/master/Documentation/Images/path_sc.png)
+
+Once the Paths button is clicked, the following window is displayed:
+
+![alt text](https://github.com/bcerco/Scheduler/blob/master/Documentation/Images/path_window_sc.png)
+
+In the above window, the user can select the default path by cling on the "..." button.  Once set, the scheduler will look
+there for schedule files by default.
+
+### Filter
+
+The filter function allows the user to filter out the courses to only see what they want to at a given time.  It is done
+by entering a filter query in the text field at the top of the main window:
+
+![alt text](https://github.com/bcerco/Scheduler/blob/master/Documentation/Images/filter_sc.png)
+
+In the above window, the query "stat|cmpsc" has been entered.  This will display all the courses with either a STAT or 
+CMPSC prefix.
+
+The filter uses the following logical operators:
+```sh
+! -- NOT
+& -- AND
+| -- OR
+```
+
+Filter queries are split in the following order: OR, AND, NOT.  The resulting course set is built recursivly in the order:
+NOT, AND, OR.  The user can filter on: course prefix, course prefix and number, number, professor name.  So for example if 
+the user wanted to see all the 400 level CMPSC courses taught by Dr. Null OR all 500 level courses taught by Dr. Blum
+the filter query would be:
+```sh
+cmpsc&4&null|5&blum
+```
+The filter is not case sensitive, however, spaces should only be included if they appear in a professor's name.  To display
+all CMPSC460 sections taught by Dr. El Ariss the filter query would be:
+```sh
+cmpsc460&el ariss
+```
+
+### Course Movement
+
+If a course spans multiple days, it can be in one of two states: locked or unlocked.  If is it locked, dragging one course 
+cell will also drag the others.  If a course is unlocked, course cells can be moved independantly of one another.  

@@ -130,7 +130,47 @@ all CMPSC460 sections taught by Dr. El Ariss the filter query would be:
 cmpsc460&el ariss
 ```
 
-### Course Movement
+### Course Interaction
+
+#### Course Movement
+
+Courses can be dragged to different schedule times.  They will snap to the day(s) they are closest to.  Clicking and 
+dragging on the near the bottom of a class will extend that classes time period.
+
+#### Course Right Click Menu
+
+Right clicking on a course displays the following menu:
+
+![alt text](https://github.com/bcerco/Scheduler/blob/master/Documentation/Images/course_right_click_sc.png)
+
+Clicking on Class List will display all the classes that are in the same time slot as the class clicked on:
+
+![alt text](https://github.com/bcerco/Scheduler/blob/master/Documentation/Images/class_list_sc.png)
+
+Clicking on Edit will display the edit window allowing the user to edit that classes information:
+
+![alt text](https://github.com/bcerco/Scheduler/blob/master/Documentation/Images/course_edit_sc.png)
+
+Clicking on Delete will remove that course from the schedule.
 
 If a course spans multiple days, it can be in one of two states: locked or unlocked.  If is it locked, dragging one course 
-cell will also drag the others.  If a course is unlocked, course cells can be moved independantly of one another.  
+cell will also drag the others.  If a course is unlocked, course cells can be moved independantly of one another.  Clicking
+on Lock/Unlock will toggle this state.  
+
+Clicking on Undo will move the course to where it previously was before it was last moved.  This includes dragging to
+extend a class.
+
+#### Open Cell Right Click Menu
+
+Right clicking on an open cell in the schedule will display the following menu:
+
+![alt text](https://github.com/bcerco/Scheduler/blob/master/Documentation/Images/open_cell_right_click_sc.png)
+
+Clicking on Create will display the course creation window:
+
+![alt text](https://github.com/bcerco/Scheduler/blob/master/Documentation/Images/course_create_sc.png)
+
+Once the user has entered all the required information for a new class, that class will be added to the schedule.  If the
+user has not entered enough information, the field(s) in question will be highlighted in red.  
+
+### Exporting Schedules

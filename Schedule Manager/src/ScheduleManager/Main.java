@@ -73,7 +73,7 @@ public class Main extends Application {
 			primaryStage.setMinHeight(768);
 			primaryStage.setTitle("Penn State Schedule Manager");
 			BorderPane root = new BorderPane();
-			Scene scene = new Scene(root,1023,767);
+			Scene scene = new Scene(root,1000,700);
 
 			GridPane schedulePane = new GridPane();
 			ColumnConstraints ccColGrow;

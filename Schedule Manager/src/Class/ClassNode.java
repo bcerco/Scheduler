@@ -15,19 +15,20 @@ public class ClassNode{
     private String room;
     private String id;
     private ArrayList<String> links;
-    //arrays for days and times, may change later
     private Stack<int []> prevStartStack;
     private Stack<int []> prevEndStack;
     public int [] startTime;
     public int [] endTime;
 
-    public ClassNode(){
+    /* Constructor called by GUI class creation */
+	public ClassNode(){
     	links = new ArrayList<String>();
         startTime = new int[7];
         endTime = new int[7];
         prevStartStack = new Stack<int []>();
         prevEndStack = new Stack<int []>();
     }
+	/* Constructor called by ClassParser */
     public ClassNode(String line, int comma){
         links = new ArrayList<String>();
         String [] args = line.split(",");
@@ -40,7 +41,9 @@ public class ClassNode{
         section = Short.parseShort(args[2]);
         credits = Float.parseFloat(args[3]);
         createId();
-        switch(comma) {
+        /* the line parameter is parsed differently depending on the number
+		 * of commas. */
+		switch(comma) {
             case 10:
                 title = args[4];
                 try {soft = Short.parseShort(args[5]);}
@@ -63,8 +66,6 @@ public class ClassNode{
                 instructor = args[12];
                 break;
             case 13:
-                //make sure the title it correct
-                //might need to remove excess quotes
                 title = args[4] + "," + args[5];
                 try {soft = Short.parseShort(args[6]);}
                 catch (NumberFormatException e) {soft = 0;}
@@ -90,6 +91,7 @@ public class ClassNode{
         }
 
     }
+	/* Store the current time arrays before they are updated */
     public void savePrevTime(){
     	int [] prevStart = new int[7];
     	int [] prevEnd = new int[7];
@@ -102,6 +104,7 @@ public class ClassNode{
     	prevStartStack.push(prevStart);
     	prevEndStack.push(prevEnd);
     }
+	/* Restore the time arrays to what they previously were */
     public void restorePrevTime(){
     	if (prevStartStack.isEmpty()){
     		return;
@@ -114,6 +117,7 @@ public class ClassNode{
     		endTime[i]   = prevEnd[i];
     	}
     }
+	/* Called by ClassParser to write the classList to a file*/
     public String exportClassNode(){
         generateLinks();
         String ret = "";
@@ -248,19 +252,20 @@ public class ClassNode{
                 return -1;
         }
     }
+	/* Create the courses unique ID */
     public void createId(){
         id = course + number + section;
     }
     public String getId(){
         return id;
     }
+	/* Fill the time arrays */
     public void fillDays(String day, String time){
         int start, end;
         day = day.replace("\"","");
         time = time.replace("\"","");
         time = time.replace(" ","");
         String [] times = time.split("-");
-        //System.out.println(times[0]+times[1]);
         if (times[0].contains(":")){
             start = (Integer.parseInt(times[0].split(":")[0]) * 60) +
                 Integer.parseInt(times[0].split(":")[1]);
@@ -280,7 +285,6 @@ public class ClassNode{
             if (end < 720) end += 720;
             if (start < 540) start += 720;
         }
-        //System.out.printf("%d, %d\n",start,end);
         for (int i = 0; i < day.length(); i++) {
             switch(day.charAt(i)){
                 case 'M':
@@ -318,6 +322,7 @@ public class ClassNode{
     public int[] getEndTime(){
         return endTime;
     }
+	/* Changes this classes instructor and updates the appropriate maps */
     public void setInstructor(String ins){
     	ClassParser.instructorList.get(instructor).remove(id);
     	ClassParser.instructorCredit.put(instructor,
@@ -375,6 +380,7 @@ public class ClassNode{
     public float getCredit(){
         return credits;
     }
+	/* Changes the classes credit number and updates the appropriate maps */
     public void setCredit(float f){
     	float cur = ClassParser.instructorCredit.get(instructor);
     	cur -= credits;
@@ -382,6 +388,7 @@ public class ClassNode{
     	ClassParser.instructorCredit.put(instructor, cur);
         credits = f;
     }
+	/* Changes this classes course prefix and updates the appropriate maps */
     public void setCourse(String c){
     	String prevId = getId();
     	String prevCourse = course;
@@ -413,6 +420,7 @@ public class ClassNode{
     		ClassParser.sectionList.get(course + number).add(curId);
     	}
     }
+	/* Changes this classes course number and updates the appropriate maps */
     public void setNumber(String num){
     	String prevNum = number;
     	String prevId = getId();
@@ -447,6 +455,7 @@ public class ClassNode{
     		ClassParser.tierList.get(tier).add(curId);
     	}
     }
+	/* Changes this classes section and updates the appropriate maps */
     public void setSection(short s){
     	String prevId = getId();
     	section = s;
@@ -465,6 +474,7 @@ public class ClassNode{
     	ClassParser.sectionList.get(course + number).remove(prevId);
     	ClassParser.sectionList.get(course + number).add(curId);
     }
+	/* Removes this class from all maps */
     public void removeClass(){
     	ClassParser.classList.remove(getId());
     	ClassParser.instructorList.get(instructor).remove(getId());

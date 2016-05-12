@@ -4,9 +4,11 @@ import java.util.*;
 
 public class Filter{
 
+	/* Empty constructor */
     public Filter(){
 
     }
+	/* Returns a set of classes that occure at the supplied day and time */
     public HashSet<String> daySearch(int day, int time){
     	HashSet<String> result = new HashSet<String>();
     	for (String cur: ClassParser.classList.keySet()){
@@ -21,9 +23,11 @@ public class Filter{
     	}
     	return result;
     }
+	/* Called by the GUI to perform a filter */
     public HashSet<String> search(String query){
         return recursiveSearch(query);
     }
+	/* Recursivly search the classList by the supplied query */
     private HashSet<String> recursiveSearch(String query){
         HashSet<String> result = new HashSet<String>();
         String [] searchTerms = query.split("\\|");
@@ -58,23 +62,28 @@ public class Filter{
         result.addAll(atomicSearch(query));
         return result;
     }
+	/* Search the HashMaps for the supplied term */
     private HashSet<String> atomicSearch(String query){
         HashSet<String> result = new HashSet<String>();
+        if (query.equals("?")){
+            for (String cur: ClassParser.instructorList.keySet()){
+            	if (cur.contains("?")){
+            		result.addAll(ClassParser.instructorList.get(cur));
+            	}
+            }
+            return result;
+        }
         for (String cur: ClassParser.instructorList.keySet()){
         	if (query.equalsIgnoreCase(cur)){
         		result.addAll(ClassParser.instructorList.get(cur));
         	}
         }
-
         if (ClassParser.classList.containsKey(query.toUpperCase())){
             result.add(query.toUpperCase());
         }
         else if(ClassParser.departmentList.containsKey(query.toUpperCase())){
             result.addAll(ClassParser.departmentList.get(query.toUpperCase()));
         }
-        /*else if(ClassParser.instructorList.containsKey(query)){
-            result.addAll(ClassParser.instructorList.get(query));
-        }*/
         else if(ClassParser.sectionList.containsKey(query.toUpperCase())){
             result.addAll(ClassParser.sectionList.get(query.toUpperCase()));
         }

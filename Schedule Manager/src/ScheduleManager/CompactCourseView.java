@@ -21,6 +21,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -383,15 +384,19 @@ public class CompactCourseView extends VBox {
 		lockLabel.getStyleClass().add("CompactCourseText");
 		information.getChildren().addAll(courseLabel, numberLabel, dividerLabel, sectionLabel, lockLabel);
 
-		String tooltipText = "Name: " + ClassParser.classList.get(this.getCid()).getTitle() + "\n" +
+		String tooltipText = "Title: " + ClassParser.classList.get(this.getCid()).getTitle() + "\n" +
 							 "Prof: " + ClassParser.classList.get(this.getCid()).getInstructor() + "\n" +
 							 "Room: " + ClassParser.classList.get(this.getCid()).getRoom() + "\n" +
 							 "Seat: S:" + ClassParser.classList.get(this.getCid()).getSoft() + " H:" + ClassParser.classList.get(this.getCid()).getHard() + "\n" +
 							 "Cred: " + ClassParser.classList.get(this.getCid()).getCredit();
 		courseLabel.setTooltip(new Tooltip(tooltipText));
+		courseLabel.getTooltip().setFont(new Font("monospace",14));
 		numberLabel.setTooltip(new Tooltip(tooltipText));
+		numberLabel.getTooltip().setFont(new Font("monospace",14));
 		dividerLabel.setTooltip(new Tooltip(tooltipText));
+		dividerLabel.getTooltip().setFont(new Font("monospace",14));
 		sectionLabel.setTooltip(new Tooltip(tooltipText));
+		sectionLabel.getTooltip().setFont(new Font("monospace",14));
 
 		HBox startTimeInformation = new HBox();
 		Label startLabel = new Label("S: ");
@@ -761,16 +766,25 @@ public class CompactCourseView extends VBox {
 
 				/*double heightOfCell = (WeeklyScheduleCourseTracks.height) / (WeeklyScheduleView.endHour - WeeklyScheduleView.startHour);
 	    		double pixelMinutes = (heightOfCell / 60);
-
+	    		double positionOfClass;*/
 				// TODO: Make this for-loop position the classes instead of relying on Main.toolBarView.PopulateTracks();
 				for (int i = 0; i < 6; i++) {
 			    	Pane tempPane = (Pane)ToolBarView.tracks.getChildren().get(i+1 + 2);
 			    	for (int n = 0; n < tempPane.getChildren().size(); n++) {
 			    		CompactCourseView tempCourse = (CompactCourseView)tempPane.getChildren().get(n);
-			    	}
-			    }*/
 
-				Main.toolBarView.PopulateTracks();
+			    		if (tempCourse.getCid().equals(CompactCourseView.this.getCid())) {
+			    			//positionOfClass = pixelMinutes * (ClassParser.classList.get(CompactCourseView.this.getCid()).startTime[i] - (WeeklyScheduleView.startHour * 60));
+			    			tempPane.getChildren().remove(tempCourse);
+			    			/*tempCourse.setLayoutY(0);
+			    			tempCourse.setTranslateY(positionOfClass);
+			    			tempPane.getChildren().add(tempCourse);*/
+			    		}
+			    	}
+			    }
+				Main.toolBarView.drawClass(ClassParser.classList.get(CompactCourseView.this.getCid()));
+
+				/*Main.toolBarView.PopulateTracks();
 
 				for (int i = 0; i < 6; i++) {
 			    	Pane tempPane = (Pane)ToolBarView.tracks.getChildren().get(i+1 + 2);
@@ -779,7 +793,7 @@ public class CompactCourseView extends VBox {
 			    		tempPane.getChildren().remove(tempCourse);
 			    		tempPane.getChildren().add(tempCourse);
 			    	}
-			    }
+			    }*/
 
 			    classPopupVisible = false;
 				popupStage.close();

@@ -10,6 +10,7 @@ public class Conflict{
 	private HashMap<String, HashSet<String> > ignoreTimeConflict;
 	public  HashMap<String, Float> creditNum;
 
+	/* Constructor called by the GUI */
 	public Conflict(String fileToRead){
 		inFile = new File(fileToRead);
 		timeConflict = new HashMap<String, HashSet<String> >();
@@ -18,6 +19,7 @@ public class Conflict{
 		fillConflict();
 	}
 
+	/* Reads the conflict file and stores the contents in memory */
 	public void fillConflict(){
 		try {
 			reader = new BufferedReader(new FileReader(inFile));
@@ -25,7 +27,6 @@ public class Conflict{
 			String [] params;
 			while((line = reader.readLine()) != null){
 				params = line.split(";");
-				//TODO should probably change this to switch
 				if (params[0].equals("ignore")){
 					switch(params[1]){
 					case "time":
@@ -35,7 +36,6 @@ public class Conflict{
 						addCreditNum(params);
 						break;
 					default:
-						//TODO throw error
 						break;
 					}
 				}
@@ -63,9 +63,11 @@ public class Conflict{
 			}
 		}
 	}
+	/* Adds a credit listing conflict */
 	public void addCreditNum(String [] params){
 		creditNum.put(params[1], Float.parseFloat(params[2]));
 	}
+	/* Appends a new conflict to the conflict file */
 	public void appendConflict(String conf){
 		PrintWriter out = null;
 		try{
@@ -84,6 +86,7 @@ public class Conflict{
 				out.close();
 		}
 	}
+	/* Adds a time conflict */
 	public void addTimeConflict(String [] params){
 		if (timeConflict.containsKey(params[1])){
 			for (int i = 2; i < params.length; i++){
@@ -111,6 +114,7 @@ public class Conflict{
 			}
 		}
 	}
+	/* Adds an ignore time conflict */
 	public void addTimeIgnore(String [] params){
 		if (ignoreTimeConflict.containsKey(params[2])){
 			for (int i = 3; i < params.length; i++){
@@ -138,6 +142,7 @@ public class Conflict{
 			}
 		}
 	}
+	/* Was previously used to generate warnings for credits */	
 	public String creditCheck(String instructor){
 		if (instructor.contains("?"))
 			return null;
@@ -151,6 +156,7 @@ public class Conflict{
 		}
 		return null;
 	}
+	/* Checks if there is a time conflict with the specified course */
 	public String timeCheck(String courseId){
 		String ret = null;
 		ClassNode cur = ClassParser.classList.get(courseId);
@@ -185,6 +191,7 @@ public class Conflict{
 		}
 		return ret;
 	}
+	/* Checks if there is a conflict with the specified professor */
 	public String professorCheck(String prof){
 		String ret = null;
 		boolean con = false;
@@ -207,10 +214,6 @@ public class Conflict{
 					boolean tmp = false;
 					for (int i = 0; i < 6; i++){
 						if (inner.startTime[i] > 0){
-							/*if (ignoreTimeConflict.containsKey(inner.getId())){
-								if (ignoreTimeConflict.get(inner.getId()).contains(outer.getId()))
-									break;
-							}*/
 							if (ignoreTimeConflict.containsKey(outer.getId())){
 								if (ignoreTimeConflict.get(outer.getId()).contains(inner.getId()))
 									break;
@@ -219,9 +222,6 @@ public class Conflict{
 									inner.startTime[i] >= outer.startTime[i]) ||
 									(outer.startTime[i] <= inner.endTime[i] &&
 									outer.startTime[i] >= inner.startTime[i])){
-								/*ret += "\nPROFESSOR: "+ prof + " is double booked with " +
-										outer.getId() + " and " + inner.getId() +
-										" on " + getDay(i);*/
 								if (!tmp){
 									ret += "\nPROFESSOR: "+ prof + " is double booked with " +
 											outer.getCourse() + "." + outer.getNumber() + "." +

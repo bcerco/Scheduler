@@ -45,6 +45,8 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+// ToolBarView
+// Manages display and functionality of the toolbar at the top.
 public class ToolBarView extends ToolBar {
 	public static ClassParser parser;
 	private FileChooser chooserImport = new FileChooser();
@@ -81,6 +83,7 @@ public class ToolBarView extends ToolBar {
 
 	public static WeeklyScheduleCourseTracks tracks;
 
+	// Constructor
 	public ToolBarView (Stage stage, WeeklyScheduleCourseTracks scheduleTracks) {
 		conflictsVisible = false;
 
@@ -707,6 +710,7 @@ public class ToolBarView extends ToolBar {
 			    Tab		creditsUnderloadTab = new Tab("Underload");
 			    Tab     creditsOverloadTab  = new Tab("Overload");
 			    Tab     creditsEditTab      = new Tab("Editor");
+			    Button  creditsExport          = new Button("Export");
 			    Button  creditsUnderloadExport = new Button("Export");
 			    Button  creditsOverloadExport  = new Button("Export");
 			    Button  creditsEditRemove      = new Button("Remove");
@@ -748,6 +752,29 @@ public class ToolBarView extends ToolBar {
 			    	creditsOverloadList.setItems(items);
 			    }
 			    creditsOverloadList.setStyle("-fx-font-family: 'monospace';");
+
+			    creditsExport.setOnAction(new EventHandler<ActionEvent>() {
+				    @Override public void handle(ActionEvent e) {
+				    	chooserImport.setTitle("File Export");
+				    	File checkFile = chooserCredits.showSaveDialog(stage);
+				    	if (checkFile != null) {
+				    		String filePath = checkFile.getAbsolutePath().replaceAll("\\.txt", "");
+				    		// Rewrite color file
+		    				PrintWriter tempConfFile;
+							try {
+								tempConfFile = new PrintWriter(filePath + ".txt");
+								if (tempConfFile != null) {
+									tempConfFile.println(creditsHeader.getText().toString().replaceFirst("[ ]", ""));
+									tempConfFile.println(ClassParser.exportInstructorCredits(conflict.creditNum));
+									tempConfFile.close();
+								}
+							}
+							catch (IOException ioe) {
+								ioe.printStackTrace();
+							}
+				    	}
+				    }
+			    });
 
 			    creditsUnderloadExport.setOnAction(new EventHandler<ActionEvent>() {
 				    @Override public void handle(ActionEvent e) {
@@ -869,6 +896,7 @@ public class ToolBarView extends ToolBar {
 					    creditsBox.getChildren().clear();
 					    creditsBox.getChildren().add(creditsHeader);
 					    creditsBox.getChildren().add(creditsList);
+					    creditsBox.getChildren().add(creditsExport);
 					    creditsUnderloadBox.getChildren().clear();
 					    creditsUnderloadBox.getChildren().add(underloadHeader);
 					    creditsUnderloadBox.getChildren().add(creditsUnderloadList);
@@ -972,6 +1000,7 @@ public class ToolBarView extends ToolBar {
 					    creditsBox.getChildren().clear();
 					    creditsBox.getChildren().add(creditsHeader);
 					    creditsBox.getChildren().add(creditsList);
+					    creditsBox.getChildren().add(creditsExport);
 					    creditsUnderloadBox.getChildren().clear();
 					    creditsUnderloadBox.getChildren().add(underloadHeader);
 					    creditsUnderloadBox.getChildren().add(creditsUnderloadList);
@@ -987,6 +1016,7 @@ public class ToolBarView extends ToolBar {
 
 			    creditsBox.getChildren().add(creditsHeader);
 			    creditsBox.getChildren().add(creditsList);
+			    creditsBox.getChildren().add(creditsExport);
 			    creditsTab.setContent(creditsBox);
 			    creditsTabPane.getTabs().add(creditsTab);
 			    creditsUnderloadBox.getChildren().add(underloadHeader);
@@ -1317,6 +1347,7 @@ public class ToolBarView extends ToolBar {
 		HBox.setHgrow(tfFilterEdit, Priority.ALWAYS);
 	}
 
+	// Build the tracks with classes based on classListing in ClassParser
 	public void PopulateTracks() {
 	    for (int i = 0; i < 6; i++) {
 	    	Pane tempPane = (Pane)tracks.getChildren().get(i+1 + 2);

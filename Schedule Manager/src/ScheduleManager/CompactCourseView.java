@@ -26,14 +26,9 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
-/*
- * Dragging gets lost when the mouse leaves the class view area. Make this work no matter what!
- */
 
-/*
- * Use WeeklyScheduleCourseTracks.leftOffset in checking if classes cross track boundaries
- */
-
+// CompactCourseView
+// Manages display and functionality of individual classes
 public class CompactCourseView extends VBox {
 	private String cid;
 
@@ -65,6 +60,7 @@ public class CompactCourseView extends VBox {
 
 	public ArrayList<CompactCourseView> sameCourses;
 
+	// Constructor
 	public CompactCourseView(String course, String number, short section, int day, int sTime, int eTime, String color) {
 		this.sameCourses = new ArrayList<CompactCourseView>();
 
@@ -371,6 +367,7 @@ public class CompactCourseView extends VBox {
 		BuildCompactCourseView();
 	}
 
+	// Build the physical view of the course
 	private void BuildCompactCourseView() {
 		HBox information = new HBox();
 		information.setAlignment(Pos.CENTER);
@@ -417,6 +414,7 @@ public class CompactCourseView extends VBox {
 		return cid;
 	}
 
+	// Calculate the display time and change the display to reflect new format
 	public void calculateDisplayTime() {
 		int    startHour = (int)Math.floor(startTime/60);
 		String startAMPM = "";
@@ -473,6 +471,7 @@ public class CompactCourseView extends VBox {
 		return this.cid;
 	}
 
+	// The popup Dialog when you right click
 	public void showPopupDialog(double x, double y) {
 		// Popup dialog when right-clicking on a classview
     	Stage popupStage = new Stage(StageStyle.UNDECORATED);

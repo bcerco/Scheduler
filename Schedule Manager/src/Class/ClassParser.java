@@ -55,7 +55,6 @@ public class ClassParser{
 				if (line.length() > 0 &&
 						line.charAt(0) != ' ' && line.charAt(0) != ','){
 					buffer.append(line + ",");
-					System.out.println(line);
 				}
             }
 			/* now whole file is in buffer */

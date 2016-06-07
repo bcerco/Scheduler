@@ -509,9 +509,11 @@ public class ToolBarView extends ToolBar {
 									boolean shouldAdd = true;
 									for (String c : localConflictList.getItems()) {
 										String[] ca = c.split(";");
-										if ((ca[1].equals(conflictParam1.getText().toString()) && ca[2].equals(conflictParam2.getText().toString())) ||
-											(ca[1].equals(conflictParam2.getText().toString()) && ca[2].equals(conflictParam1.getText().toString()))) {
-											shouldAdd = false;
+										if (ca.length > 1){
+											if ((ca[1].equals(conflictParam1.getText().toString()) && ca[2].equals(conflictParam2.getText().toString())) ||
+												(ca[1].equals(conflictParam2.getText().toString()) && ca[2].equals(conflictParam1.getText().toString()))) {
+												shouldAdd = false;
+											}
 										}
 									}
 									if (shouldAdd) {
@@ -527,8 +529,10 @@ public class ToolBarView extends ToolBar {
 									boolean shouldAdd = true;
 									for (String c : localConflictList.getItems()) {
 										String[] ca = c.split(";");
-										if (ca[1].equals(conflictParam1.getText().toString())) {
-											shouldAdd = false;
+										if (ca.length > 1){
+											if (ca[1].equals(conflictParam1.getText().toString())) {
+												shouldAdd = false;
+											}
 										}
 									}
 									if (shouldAdd) {
@@ -939,9 +943,11 @@ public class ToolBarView extends ToolBar {
 								boolean shouldAdd = true;
 								for (String c : localConflictList.getItems()) {
 									String[] ca = c.split(";");
-									if ((ca[1].equals(conflictParam1.getText().toString()) && ca[2].equals(conflictParam2.getText().toString())) ||
-										(ca[1].equals(conflictParam2.getText().toString()) && ca[2].equals(conflictParam1.getText().toString()))) {
-										shouldAdd = false;
+									if (ca.length > 1){
+										if ((ca[1].equals(conflictParam1.getText().toString()) && ca[2].equals(conflictParam2.getText().toString())) ||
+											(ca[1].equals(conflictParam2.getText().toString()) && ca[2].equals(conflictParam1.getText().toString()))) {
+											shouldAdd = false;
+										}
 									}
 								}
 								if (shouldAdd) {
@@ -957,8 +963,10 @@ public class ToolBarView extends ToolBar {
 								boolean shouldAdd = true;
 								for (String c : localConflictList.getItems()) {
 									String[] ca = c.split(";");
-									if (ca[1].equals(conflictParam1.getText().toString())) {
-										shouldAdd = false;
+									if (ca.length > 1){
+										if (ca[1].equals(conflictParam1.getText().toString())) {
+											shouldAdd = false;
+										}
 									}
 								}
 								if (shouldAdd) {

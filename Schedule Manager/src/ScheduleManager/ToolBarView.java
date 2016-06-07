@@ -18,6 +18,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -74,6 +75,8 @@ public class ToolBarView extends ToolBar {
 	public static Filter      filter;
 	public static Conflict    conflict;
 
+    private String conflictFileContents = "";
+
 	private File initialDirectory;
 
 	ColorPicker   colorPicker = new ColorPicker();
@@ -95,7 +98,7 @@ public class ToolBarView extends ToolBar {
 
 		BufferedReader colorsFile;
 
-		String   in        = "";
+		String in        = "";
 		String[] colorsPair;
 		try {
 			colorsFile = new BufferedReader(new FileReader("SMConfig/colors.txt"));
@@ -288,6 +291,7 @@ public class ToolBarView extends ToolBar {
 					    conflictList.setItems(items);
 				    }
 
+
 				    HBox conflictCommandPanel = new HBox();
 				    VBox    conflictPane     = new VBox();
 
@@ -295,11 +299,12 @@ public class ToolBarView extends ToolBar {
 				    Tab     conflictTab      = new Tab("Conflicts");
 				    Tab     conflictEditTab  = new Tab("Editor");
 
+
 				    // TODO
 				    VBox             conflictEditPane = new VBox();
 				    HBox             conflictEditRow  = new HBox();
 
-				    String conflictFileContents = "";
+
 
 				    ListView<String> localConflictList = new ListView<String>();
 
@@ -637,24 +642,36 @@ public class ToolBarView extends ToolBar {
 				    conflictTab.setContent(conflictPane);
 				    conflictEditTab.setContent(conflictEditPane);
 
-				    // Populate conflict file list
-				    String   in        = "";
-					BufferedReader tempConfFile;
-					try {
-						tempConfFile = new BufferedReader(new FileReader("SMConfig/conflicts.txt"));
-						if (tempConfFile != null) {
-							while ((in = tempConfFile.readLine()) != null) {
-								conflictFileContents += in + "\n";
-							}
-						}
-					}
-					catch (IOException ioe) {
-						ioe.printStackTrace();
-					}
+				    conflictEditTab.setOnSelectionChanged(new EventHandler<Event>() {
+				    	@Override
+				    	public void handle(Event e){
+				    		if (conflictEditTab.isSelected()){
+				    			conflictFileContents = "";
+							    // Populate conflict file list
+							    String   in        = null;
+								BufferedReader tempConfFile = null;
+								try {
+									tempConfFile = new BufferedReader(new FileReader("SMConfig/conflicts.txt"));
+									if (tempConfFile != null) {
+										while ((in = tempConfFile.readLine()) != null) {
+											if (!in.equals("\n"))
+												conflictFileContents += in + "\n";
+										}
+										tempConfFile.close();
+									}
+								}
+								catch (IOException ioe) {
+									ioe.printStackTrace();
+								}
+								ObservableList<String> items = FXCollections.observableArrayList(conflictFileContents.split("\n"));
 
-				    ObservableList<String> items = FXCollections.observableArrayList(conflictFileContents.split("\n"));
+							    localConflictList.setItems(items);
+				    		}
+				    		e.consume();
+				    	}
+				    });
 
-				    localConflictList.setItems(items);
+
 
 				    conflictEditPane.getChildren().add(localConflictList);
 				    conflictEditPane.getChildren().add(conflictDelete);
